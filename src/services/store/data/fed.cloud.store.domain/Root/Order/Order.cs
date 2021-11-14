@@ -9,52 +9,29 @@ namespace fed.cloud.store.domain.Root.Order
     public class Order : IRoot
     {
         private readonly List<OrderItem> _items;
-        private Guid _orderId;
-        private DateTime _orderDate;
-        private int _receiptNumber;
-        private string _orderNumber;
-        private Guid _orderOwner;
-        private StatusType _status;
-        private string _statusInfo;
 
-        protected Order()
+        private Order()
         {
             _items = new List<OrderItem>();
         }
 
-        protected Order(Guid ownerId, int receiptNumber, string orderNumber, DateTime orderDate) : base()
-        {
-            _orderId = Guid.NewGuid();
-            _orderOwner = ownerId;
-            _receiptNumber = receiptNumber;
-            _orderNumber = orderNumber;
-            _orderDate = orderDate;
-            _statusInfo = string.Empty;
-            _status = StatusType.New;
-        }
+        public Guid Id { get; set; }
 
-        public Order(Guid orderId, DateTime orderDate, int receiptNumber, Guid orderOwner, StatusType status, string info) : base()
-        {
-            _orderId = orderId;
-            _orderDate = orderDate;
-            _receiptNumber = receiptNumber;
-            _orderOwner = orderOwner;
-            _status = status;
-            _statusInfo = info;
-        }
+        public DateTime StartedAt { get; set; }
+
+        public string OrderNumber { get; set; }
+
+        public Guid OrderOwner { get; set; }
+
+        public Guid StatusId { get; set; }
+
+        public OrderStatus Status { get; set; }
 
         public IReadOnlyCollection<OrderItem> Items => _items;
 
-        public DateTime GetOrderDate() => _orderDate;
-        public int GetReceiptNumber() => _receiptNumber;
-        public string GetOrderNumber() => _orderNumber;
-        public Guid GetOrderOwner() => _orderOwner;
-        public StatusType GetOrderStatus() => _status;
-        public string GetOrderStatusInfo() => _statusInfo;
-
-        public void AddLine(string lineName, Guid productId, decimal price, UnitType unitType, double unit)
+        public void AddLine(string lineName, long productNumber, decimal price, UnitType unitType, double unit)
         {
-            var existOrderItem = _items.FirstOrDefault(x => x.ProductId == productId);
+            var existOrderItem = _items.FirstOrDefault(x => x.ProductNumber == productNumber);
 
             if (existOrderItem != null)
             {
@@ -62,17 +39,17 @@ namespace fed.cloud.store.domain.Root.Order
                 return;
             }
 
-            _items.Add(OrderItem.Create(_orderId, lineName, productId, price, unitType, unit));
+            _items.Add(OrderItem.Create(Id, lineName, productNumber, price, unitType, unit));
         }
 
         public void ReconstructAndAddLine(Guid orderItemId,
                                             string itemName,
-                                            Guid productId,
+                                            long productNumber,
                                             decimal price,
                                             double unit,
                                             UnitType unitType)
         {
-            var existOrderItem = _items.FirstOrDefault(x => x.ProductId == productId);
+            var existOrderItem = _items.FirstOrDefault(x => x.ProductNumber == productNumber);
 
             if (existOrderItem != null)
             {
@@ -80,23 +57,21 @@ namespace fed.cloud.store.domain.Root.Order
                 return;
             }
 
-            _items.Add(OrderItem.Reconstruct(_orderId, orderItemId, itemName, productId, price, unit, unitType));
-        }
-
-        public void UpdateStatus(StatusType status, string info)
-        {
-            _status = status;
-            _statusInfo = info;
+            _items.Add(OrderItem.Reconstruct(Id, orderItemId, itemName, productNumber, price, unit, unitType));
         }
 
         public static Order Reconstruct(Guid orderId,
                                         DateTime orderDate,
-                                        int receiptNumber,
-                                        Guid orderOwner,
-                                        StatusType status,
-                                        string info)
+                                        string receiptNumber,
+                                        Guid orderOwner)
         {
-            return new Order(orderId, orderDate, receiptNumber, orderOwner, status, info);
+            return new Order
+            {
+                Id = orderId,
+                StartedAt = orderDate,
+                OrderNumber = receiptNumber,
+                OrderOwner = orderOwner
+            };
         }
 
         private static string CreateOrderNumber(DateTime time, int number)
@@ -106,9 +81,23 @@ namespace fed.cloud.store.domain.Root.Order
             return $"{time.Year}({time.Month}{time.Day})-{time.Hour}.{time.Minute} {todaysOrderNumber}";
         }
 
-        public static Order CreateNewOrder(Guid owner, int receiptNumber, DateTime orderDate)
+        public static Order CreateNewOrder(Guid owner, string receiptNumber, DateTime orderDate)
         {
-            return new Order(owner, receiptNumber, CreateOrderNumber(orderDate, receiptNumber), orderDate);
+            return new Order() 
+            {
+                Id = Guid.NewGuid(),
+                OrderOwner = owner,
+                OrderNumber = receiptNumber,
+                StartedAt = orderDate,
+            };
+        }
+
+        public static Order CreateEmptyOrder()
+        {
+            return new Order()
+            {
+                Id = Guid.Empty
+            };
         }
     }
 }

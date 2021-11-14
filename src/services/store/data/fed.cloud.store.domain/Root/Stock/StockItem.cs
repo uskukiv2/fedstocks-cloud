@@ -1,61 +1,43 @@
 using System;
+using fed.cloud.store.domain.Extras;
 
 namespace fed.cloud.store.domain.Root.Stock
 {
     public class StockItem
     {
-        public StockItem()
-        {
+        public Guid Id { get; set; }
 
-        }
+        public long Number { get; set; }
 
-        private StockItem(long number,
-                          string name,
-                          double quantity,
-                          int categoryId,
-                          int unitId,
-                          Guid stockId)
-        {
-            Id = Guid.NewGuid();
-            Number = number;
-            Name = name;
-            Quantity = quantity;
-            CategoryId = categoryId;
-            UnitId = unitId;
-            StockId = stockId;
-        }
-
-        public Guid Id { get; }
-
-        public long Number { get; }
-
-        public string Name { get; }
+        public string Name { get; set; }
 
         public double Quantity { get; set; }
 
-        public int CategoryId { get; }
+        public int CategoryId { get; set; }
 
-        public int UnitId { get; }
+        public  UnitType Unit { get; set; }
 
-        public Guid StockId { get; }
+        public Guid StockId { get; set; }
 
-        public StockCategory Category { get; }
-
-        public UnitType Unit { get; }
+        public StockCategory Category { get; set; }
 
         internal static StockItem Create(long number,
                                          string name,
-                                         double quantiy,
+                                         double quantity,
                                          int categoryId,
-                                         int unitId,
+                                         UnitType unitType,
                                          Guid stockId)
         {
-            return new StockItem(number,
-                                 name,
-                                 quantiy,
-                                 categoryId,
-                                 unitId,
-                                 stockId);
+            return new StockItem
+            {
+                Id = Guid.NewGuid(),
+                Number = number,
+                Name = name,
+                Quantity = quantity,
+                CategoryId = categoryId,
+                Unit = unitType,
+                StockId = stockId
+            };
         }
     }
 }

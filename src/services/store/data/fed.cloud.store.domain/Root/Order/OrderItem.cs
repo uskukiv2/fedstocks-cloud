@@ -6,74 +6,62 @@ namespace fed.cloud.store.domain.Root.Order
 {
     public class OrderItem
     {
-        private Guid _orderId;
-        private Guid _orderItemId;
-        private string _itemName;
-        private Guid _productId;
-        private decimal _price;
-        private double _unit;
-        private UnitType _unitType;
+        public Guid Id { get; set; }
 
-        private OrderItem(Guid orderId, string lineName, Guid productId, decimal price, UnitType unitType, double unit)
-        {
-            _orderId = orderId;
-            _orderItemId = Guid.NewGuid();
-            _itemName = lineName;
-            _productId = productId;
-            _price = price;
-            _unit = unit;
-            _unitType = unitType;
-        }
+        public Guid OrderId { get; set; }
 
-        public OrderItem(Guid orderId,
-                         Guid orderItemId,
-                         string itemName,
-                         Guid productId,
-                         decimal price,
-                         double unit,
-                         UnitType unitType)
-        {
-            _orderId = orderId;
-            _orderItemId = orderItemId;
-            _itemName = itemName;
-            _productId = productId;
-            _price = price;
-            _unit = unit;
-            _unitType = unitType;
-        }
+        public string ItemName { get; set; }
 
-        public Guid ProductId => _productId;
+        public long ProductNumber { get; set; }
+
+        public decimal ActualPrice { get; set; }
+
+        public decimal OriginalPrice { get; set; }
+
+        public double Unit { get; set; }
+
+        public UnitType UnitType { get; set; }
 
         /// <summary>
         /// Increasing current unit on one item
         /// </summary>
         public void IncreaseUnit()
         {
-            _unit++;
+            Unit++;
         }
 
-        public string GetName() => _itemName;
-
-        public decimal GetPrice() => _price;
-
-        public double GetUnit() => _unit;
-
-        public UnitType GetUnitType() => _unitType;
-
-        public static OrderItem Create(Guid orderId, string lineName, Guid productId, decimal price, UnitType unitType, double unit)
+        public static OrderItem Create(Guid orderId, string lineName, long productNumber, decimal price, UnitType unitType, double unit)
         {
-            return new OrderItem(orderId, lineName, productId, price, unitType, unit);
+            return new OrderItem
+            {
+                Id = Guid.NewGuid(),
+                OrderId = orderId,
+                ItemName = lineName,
+                ProductNumber = productNumber,
+                ActualPrice = price,
+                UnitType = unitType,
+                Unit = unit
+            };
         }
 
         public static OrderItem Reconstruct(Guid orderId,
                                             Guid orderItemId,
                                             string itemName,
-                                            Guid productId,
+                                            long productNumber,
                                             decimal price,
                                             double unit,
                                             UnitType unitType)
         {
-            return new OrderItem(orderId, orderItemId, itemName, productId, price, unit, unitType);
+            return new OrderItem
+            {
+                Id = orderItemId,
+                OrderId = orderId,
+                ItemName = itemName,
+                ProductNumber = productNumber,
+                ActualPrice = price,
+                UnitType = unitType,
+                Unit = unit
+            };
         }
     }
 }

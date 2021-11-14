@@ -1,0 +1,3 @@
+[submodule "src/shared/shared.items"]
+	path = src/shared/shared.items
+	url = https://gendsori@dev.azure.com/gendsori/shared.items/_git/shared.items

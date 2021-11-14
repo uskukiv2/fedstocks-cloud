@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using fed.cloud.store.domain.Abstract;
+using fed.cloud.store.domain.Extras;
 
 namespace fed.cloud.store.domain.Root.Stock
 {
@@ -8,9 +9,8 @@ namespace fed.cloud.store.domain.Root.Stock
     {
         private readonly List<StockItem> _stockItems;
 
-        public Stock()
+        private Stock()
         {
-            Id = Guid.NewGuid();
             _stockItems = new List<StockItem>();
         }
 
@@ -22,6 +22,8 @@ namespace fed.cloud.store.domain.Root.Stock
 
         public Guid GroupId { get; set; }
 
+        public bool IsDefault { get; set; }
+
         public IReadOnlyCollection<StockItem> StockItems => _stockItems;
 
         public void RemoveStockItem(Guid id)
@@ -30,12 +32,11 @@ namespace fed.cloud.store.domain.Root.Stock
             _stockItems.Remove(stockItemToRemove);
         }
 
-        public void AddStockItem(long number, string productName, int categoryId, int unitId, double qty)
+        public void AddStockItem(long number, string productName, int categoryId, UnitType unitId, double qty)
         {
             if (number < 1) throw new ArgumentOutOfRangeException(nameof(number));
             if (string.IsNullOrEmpty(productName)) throw new ArgumentOutOfRangeException(nameof(number));
             if (categoryId < 1) throw new ArgumentOutOfRangeException(nameof(categoryId));
-            if (unitId < 1) throw new ArgumentOutOfRangeException(nameof(unitId));
             if (qty < 1) throw new ArgumentOutOfRangeException(nameof(qty));
 
             _stockItems.Add(StockItem.Create(number,
@@ -44,6 +45,26 @@ namespace fed.cloud.store.domain.Root.Stock
                                              categoryId,
                                              unitId,
                                              Id));
+        }
+
+        public static Stock CreateUserStock(string name, Guid userId)
+        {
+            return new Stock()
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                UserId = userId
+            };
+        }
+
+        public static Stock CreateGroupStock(string name, Guid groupId)
+        {
+            return new Stock()
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                GroupId = groupId
+            };
         }
     }
 }

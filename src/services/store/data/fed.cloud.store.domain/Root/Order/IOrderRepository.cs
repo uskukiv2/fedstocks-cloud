@@ -7,9 +7,8 @@ namespace fed.cloud.store.domain.Root.Order
 {
     public interface IOrderRepository : IRepository<Order>
     {
-        void Add(Order order, CancellationToken token = default(CancellationToken));
-        void Update(Order order, CancellationToken token = default(CancellationToken)); 
         Task<Order> GetAsync(string orderNumber);
-        Task<Order> GetAsync(Guid orderId);
+        Task<OrderStatus> GetCompleteOrderStatusAsync(Guid owner);
+        Task<OrderStatus> GetStatusAsync(Guid owner, int orderStatusId);
     }
 }

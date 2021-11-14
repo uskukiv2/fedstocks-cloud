@@ -2,11 +2,11 @@ namespace fed.cloud.store.domain.Extras
 {
     public enum UnitType
     {
-        Gramms,
-        Kilogramms,
+        Grams,
+        Kilograms,
         Peace,
-        Litres,
-        MiliLitres,
+        Liters,
+        MiloLiters,
         CubicMeter,
         Kwh
     }
