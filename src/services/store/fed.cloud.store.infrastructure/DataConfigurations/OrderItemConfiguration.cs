@@ -31,7 +31,6 @@ namespace fed.cloud.store.infrastructure.DataConfigurations
                 .DbType(x => x.ActualPrice, System.Data.DbType.Decimal)
                 .Column(x => x.Unit, "Unit")
                 .DbType(x => x.Unit, System.Data.DbType.Double)
-                .Column(x => x.UnitType, "UnitType")
                 .PropertyHandler<UnitTypePropertyHandler>("_unitType");
         }
     }
