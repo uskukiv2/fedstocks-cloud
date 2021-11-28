@@ -41,6 +41,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "user", "user", "{6EF24887-0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "finances", "finances", "{6EECECCA-C76F-4E9B-93B6-CAFC4936371F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{392F5133-89DC-49CD-9423-5EA8C18AEE98}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fed.cloud.product.domain", "src\services\product\data\fed.cloud.product.domain\fed.cloud.product.domain.csproj", "{9BFD736B-6396-499A-83FE-5AAB7723AA91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fed.cloud.product.host", "src\services\product\fed.cloud.product.host\fed.cloud.product.host.csproj", "{D23FC37A-B965-44AC-9A08-0EB9DD165A2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fed.cloud.product.infrastructure", "src\services\product\fed.cloud.product.infrastructure\fed.cloud.product.infrastructure.csproj", "{C06E2DB4-4828-4B4E-A655-2B8E3CE422A0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "fed.cloud.product.application", "src\services\product\fed.cloud.product.application\fed.cloud.product.application.csproj", "{4B1EC7B3-C51F-4B80-94C0-65D89641635D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +85,22 @@ Global
 		{18265DD2-E670-4CB0-A797-B9A1FE7F4A83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18265DD2-E670-4CB0-A797-B9A1FE7F4A83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18265DD2-E670-4CB0-A797-B9A1FE7F4A83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BFD736B-6396-499A-83FE-5AAB7723AA91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFD736B-6396-499A-83FE-5AAB7723AA91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFD736B-6396-499A-83FE-5AAB7723AA91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFD736B-6396-499A-83FE-5AAB7723AA91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D23FC37A-B965-44AC-9A08-0EB9DD165A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D23FC37A-B965-44AC-9A08-0EB9DD165A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D23FC37A-B965-44AC-9A08-0EB9DD165A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D23FC37A-B965-44AC-9A08-0EB9DD165A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C06E2DB4-4828-4B4E-A655-2B8E3CE422A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C06E2DB4-4828-4B4E-A655-2B8E3CE422A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C06E2DB4-4828-4B4E-A655-2B8E3CE422A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C06E2DB4-4828-4B4E-A655-2B8E3CE422A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B1EC7B3-C51F-4B80-94C0-65D89641635D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B1EC7B3-C51F-4B80-94C0-65D89641635D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B1EC7B3-C51F-4B80-94C0-65D89641635D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B1EC7B3-C51F-4B80-94C0-65D89641635D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +121,11 @@ Global
 		{978986FE-F9B9-4730-916C-E4C0E047989B} = {26680523-8852-4612-8B01-2987C01C4F5E}
 		{6EF24887-0B56-4F1C-BD6B-03594C5A3C22} = {26680523-8852-4612-8B01-2987C01C4F5E}
 		{6EECECCA-C76F-4E9B-93B6-CAFC4936371F} = {26680523-8852-4612-8B01-2987C01C4F5E}
+		{392F5133-89DC-49CD-9423-5EA8C18AEE98} = {978986FE-F9B9-4730-916C-E4C0E047989B}
+		{9BFD736B-6396-499A-83FE-5AAB7723AA91} = {392F5133-89DC-49CD-9423-5EA8C18AEE98}
+		{D23FC37A-B965-44AC-9A08-0EB9DD165A2B} = {978986FE-F9B9-4730-916C-E4C0E047989B}
+		{C06E2DB4-4828-4B4E-A655-2B8E3CE422A0} = {978986FE-F9B9-4730-916C-E4C0E047989B}
+		{4B1EC7B3-C51F-4B80-94C0-65D89641635D} = {978986FE-F9B9-4730-916C-E4C0E047989B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A67CF9D-7447-4B58-93E0-0DD8AB708AF7}
