@@ -27,7 +27,7 @@ namespace fed.cloud.store.infrastructure
         {
             if (Transaction != null)
             {
-                return Task.FromException(new InvalidOperationException("Cannot create a new transaction wit existing one. Transaction already started"));
+                return Task.FromException(new InvalidOperationException("Cannot create a new transaction with existing one. Transaction already started"));
             }
 
             var connection = EnsureConnection();
