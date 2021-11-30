@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "fed.cloud.product.host.Protos";
+
+package seller;
+
+service Seller {
+	rpc GetSellersByCountry (SellerRequest) returns (SellersResultResponse);
+	rpc QuerySellers (SellerQueryRequest) returns (SellersResultResponse);
+}
+
+message SellerRequest {
+	string countryId = 1;
+	int32 county = 2;
+}
+
+message SellerQueryRequest {
+	string query = 1;
+	string countryId = 2;
+	int32 county = 3;
+}
+
+message SellersResultResponse {
+	repeated SellerData sellers = 1;
+}
+
+message SellerData {
+	string id = 1;
+	string name = 2;
+}

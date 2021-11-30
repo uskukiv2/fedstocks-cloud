@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\country.proto" />
     <None Remove="Protos\product.proto" />
+    <None Remove="Protos\seller.proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Protobuf Include="Protos\country.proto" />
     <Protobuf Include="Protos\product.proto" />
+    <Protobuf Include="Protos\seller.proto" />
   </ItemGroup>
 
 </Project>

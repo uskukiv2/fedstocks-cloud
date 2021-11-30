@@ -17,7 +17,7 @@ namespace fed.cloud.product.host.Services
         {
             _mediator = mediator;
             _productQuery = productQuery;
-            _logger=logger;
+            _logger = logger;
         }
 
         public override async Task<ResultResponse> QueryProduct(RequestProducts request, ServerCallContext context)
