@@ -10,6 +10,7 @@ namespace fed.cloud.product.domain.Repository
 {
     public interface ISellerCompanyRepository : IRepository<SellerCompany>
     {
+        Task<bool> IsCompanyExistsAsync(Guid sellerId);
         Task<IEnumerable<SellerCompany>> TTSearchAsync(string query, Guid countryId, CancellationToken token);
         Task<IEnumerable<SellerCompany>> TTSearchAsync(string query, Guid countryId, Guid countyId, CancellationToken token);
     }

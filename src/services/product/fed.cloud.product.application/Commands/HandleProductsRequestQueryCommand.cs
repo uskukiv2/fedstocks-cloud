@@ -38,11 +38,11 @@ namespace fed.cloud.product.application.Commands
             {
                 var result = await _productRepository.TTSearchAsync(request.Query, cancellationToken);
 
-                return result.Select(x => MapToDto(x));
+                return result.Select(MapToDto);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Cought error while getting products with {string}", request.Query);
+                _logger.LogError(ex, "Caught error while getting products with {string}", request.Query);
                 return new List<ProductSummaryDto>();
             }
         }
