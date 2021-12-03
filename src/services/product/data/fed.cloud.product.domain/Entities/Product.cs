@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using fed.cloud.product.domain.Abstraction;
+using NpgsqlTypes;
 
 namespace fed.cloud.product.domain.Entities
 {
@@ -24,5 +26,9 @@ namespace fed.cloud.product.domain.Entities
         public virtual ProductCategory Category { get; set; }
 
         public virtual ProductUnit Unit { get; set; }
+
+        public virtual IEnumerable<ProductSellerPrice> SellerPrices { get; set; }
+
+        public virtual NpgsqlTsVector SearchVector { get; set; }
     }
 }
