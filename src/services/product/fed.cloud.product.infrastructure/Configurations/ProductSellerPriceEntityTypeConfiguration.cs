@@ -25,6 +25,10 @@ public class ProductSellerPriceEntityTypeConfiguration : IEntityTypeConfiguratio
 
         builder.Property(x => x.Price)
             .HasColumnName("Price")
+            .IsRequired(false);
+
+        builder.Property(x => x.OriginalPrice)
+            .HasColumnName("OriginalPrice")
             .IsRequired();
 
         builder.HasOne(x => x.Product)

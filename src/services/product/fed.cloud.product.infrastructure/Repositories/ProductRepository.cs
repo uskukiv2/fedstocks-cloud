@@ -79,6 +79,7 @@ namespace fed.cloud.product.infrastructure.Repositories
             {
                 Id = Guid.NewGuid(),
                 Price = price,
+                OriginalPrice = originalPrice,
                 Product = product,
                 ProductId = product.Id,
                 Seller = seller,

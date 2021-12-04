@@ -78,7 +78,7 @@ public class CreateNewPurchaseLinesCommandHandler : IRequestHandler<CreateNewPur
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Unknown exception Additional: {exmessage}", purchaseLine.Number, e.Message);
+                _logger.LogError(e, "Unknown exception {number} Additional: {exmessage}", purchaseLine.Number, e.Message);
             }
         }
 

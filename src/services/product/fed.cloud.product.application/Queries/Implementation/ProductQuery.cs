@@ -23,18 +23,20 @@ namespace fed.cloud.product.application.Queries.Implementation
         {
             await using var conn = new NpgsqlConnection(_connection);
 
-            var product = (await conn.QueryAsync<Product>("products", new { GlobalNumber = number })).FirstOrDefault();
+            var product = (await conn.QueryAsync("products", new { GlobalNumber = number },
+                Field.From("GlobalNumber", "Brand", "Name", "CategoryId", "QuantityRate", "UnitId"))).FirstOrDefault();
             if (product == null)
             {
                 throw new InvalidOperationException($"Cannot get product with number {number}");
             }
             var productSellerPrices =
-                (await conn.QueryAsync<ProductSellerPrice>("productSellerPrices", new {ProductId = product.Id})).ToList();
+                (await conn.QueryAsync("productSellerPrices", new {ProductId = product.Id},
+                    Field.From("SellerId", "OriginalPrice", "OriginalCurrencyNumber"), top: 10)).ToList();
 
             return productSellerPrices.Any() ? CreateProductDto(product) : CreateProductDto(product, productSellerPrices);
         }
 
-        private static ProductDto CreateProductDto(Product product)
+        private static ProductDto CreateProductDto(dynamic product)
         {
             return new ProductDto
             {
@@ -47,7 +49,7 @@ namespace fed.cloud.product.application.Queries.Implementation
             };
         }
 
-        private static ProductDto CreateProductDto(Product product, IEnumerable<ProductSellerPrice> sellerPrices)
+        private static ProductDto CreateProductDto(Product product, IEnumerable<dynamic> sellerPrices)
         {
             return new ProductDto
             {
@@ -61,13 +63,13 @@ namespace fed.cloud.product.application.Queries.Implementation
             };
         }
 
-        private static ProductSellerPriceDto ToSellerPriceKeyValue(ProductSellerPrice arg)
+        private static ProductSellerPriceDto ToSellerPriceKeyValue(dynamic arg)
         {
             return new ProductSellerPriceDto
             {
                 SellerId = arg.SellerId,
                 CurrencyNumber = arg.OriginalCurrencyNumber,
-                Price = arg.Price
+                Price = arg.OriginalPrice
             };
         }
     }
