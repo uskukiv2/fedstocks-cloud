@@ -9,8 +9,4 @@
     <ProjectReference Include="..\..\..\..\shared\fed.cloud.common\fed.cloud.common.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Factories\" />
-  </ItemGroup>
-
 </Project>
