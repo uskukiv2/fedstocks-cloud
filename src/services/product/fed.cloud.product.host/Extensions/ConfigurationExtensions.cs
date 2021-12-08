@@ -8,7 +8,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("Database").Get<DatabaseSection>().Schema;
+            return configuration.GetSection("DatabaseSection").Get<DatabaseSection>().Schema;
         }
         catch
         {
@@ -20,7 +20,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("Database").Get<DatabaseSection>().ConnectionString;
+            return configuration.GetSection("DatabaseSection").Get<DatabaseSection>().ConnectionString;
         }
         catch
         {
@@ -32,7 +32,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("Database").Get<DatabaseSection>().DefaultSearchVectorConfig;
+            return configuration.GetSection("DatabaseSection").Get<DatabaseSection>().DefaultSearchVectorConfig;
         }
         catch
         {
@@ -44,7 +44,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventBus").Get<EventsSection>().BrokerName;
+            return configuration.GetSection("EventSection").Get<EventsSection>().BrokerName;
         }
         catch
         {
@@ -56,7 +56,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventBus").Get<EventsSection>().LocalEventsSource;
+            return configuration.GetSection("EventSection").Get<EventsSection>().LocalEventsSource;
         }
         catch
         {
@@ -68,7 +68,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventBus").Get<EventsSection>().QueueName;
+            return configuration.GetSection("EventSection").Get<EventsSection>().QueueName;
         }
         catch
         {
@@ -80,7 +80,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventBus").Get<EventsSection>();
+            return configuration.GetSection("EventSection").Get<EventsSection>();
         }
         catch
         {
