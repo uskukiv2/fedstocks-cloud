@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,16 +15,32 @@
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\shared\fed.cloud.common\fed.cloud.common.csproj" />
+    <ProjectReference Include="..\..\..\shared\fed.cloud.shared\fed.cloud.eventbus\fed.cloud.eventbus.csproj" />
+    <ProjectReference Include="..\data\fed.cloud.product.domain\fed.cloud.product.domain.csproj" />
     <ProjectReference Include="..\fed.cloud.product.application\fed.cloud.product.application.csproj" />
+    <ProjectReference Include="..\fed.cloud.product.infrastructure\fed.cloud.product.infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="Protos\country.proto" />
     <Protobuf Include="Protos\product.proto" />
     <Protobuf Include="Protos\seller.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+    <Folder Include="Models\Configurations\" />
+    <Folder Include="Middleware\" />
   </ItemGroup>
 
 </Project>

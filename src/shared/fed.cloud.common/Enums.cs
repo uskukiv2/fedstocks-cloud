@@ -6,6 +6,7 @@ namespace fed.cloud.common
 {
     public enum DatabaseType
     {
-        RepoDb
+        RepoDb,
+        Ef
     }
 }

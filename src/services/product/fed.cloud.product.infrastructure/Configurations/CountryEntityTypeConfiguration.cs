@@ -27,12 +27,6 @@ public class CountryEntityTypeConfiguration : IEntityTypeConfiguration<Country>
             .HasColumnName("GlobalId")
             .IsRequired();
 
-        builder.OwnsMany<County>(x => x.Counties, c =>
-        {
-            c.Property(x => x.CountryId);
-            c.WithOwner();
-        });
-
         builder.HasGeneratedTsVectorColumn(c => c.SearchVector,
                 _config.Database.VectorConfig,
                 c => new { c.Name, c.GlobalId })

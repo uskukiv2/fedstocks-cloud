@@ -19,11 +19,13 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("products", _config.GetSchema());
         builder.HasKey(x => x.Id);
-        builder.OwnsMany<ProductSellerPrice>(x => x.SellerPrices, sp =>
-        {
-            sp.Property(x => x.ProductId);
-            sp.WithOwner();
-        });
+        //builder.OwnsMany(x => x.SellerPrices, sp =>
+        //{
+        //    sp.Property(x => x.ProductId);
+        //    sp.UsePropertyAccessMode(PropertyAccessMode.Property);
+        //    sp.HasOne(x => x.Product);
+        //    sp.WithOwner();
+        //});
 
         builder.Property(x => x.Name)
             .HasColumnName("Name")
@@ -45,14 +47,22 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
             .HasColumnName("Manufacturer")
             .IsRequired(false);
 
-        builder.HasOne(x => x.Category)
-            .WithOne()
+        builder.Property(x => x.CategoryId)
+            .HasColumnName("CategoryId")
+            .IsRequired();
+
+        builder.Property(x => x.UnitId)
+            .HasColumnName("UnitId")
+            .IsRequired();
+
+        builder.HasOne<ProductCategory>()
+            .WithMany()
             .HasForeignKey("CategoryId")
             .IsRequired()
             .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasOne(x => x.Unit)
-            .WithOne()
+            .WithMany()
             .HasForeignKey("UnitId")
             .IsRequired()
             .OnDelete(DeleteBehavior.NoAction);

@@ -10,15 +10,15 @@ using System.Threading.Tasks;
 
 namespace fed.cloud.eventbus
 {
-    public class IntegarionEventLogService : IIntegrationEventLogService
+    public class IntegrationEventLogService : IIntegrationEventLogService
     {
         private readonly string _connectionString;
         private readonly List<Type> _eventTypes;
 
-        public IntegarionEventLogService(IEventServiceConfiguration configuration)
+        public IntegrationEventLogService(IEventServiceConfiguration configuration)
         {
             _connectionString = configuration.EventDatabase.Connection;
-            _eventTypes = Assembly.Load(Assembly.GetEntryAssembly().FullName)
+            _eventTypes = Assembly.Load(Assembly.GetEntryAssembly()?.FullName)
                 .GetTypes()
                 .Where(t => t.Name.EndsWith(nameof(IntegrationEvent)))
                 .ToList();
@@ -28,22 +28,20 @@ namespace fed.cloud.eventbus
         {
             return await Task.Factory.StartNew(() =>
             {
-                using (var db = new LiteRepository(_connectionString))
-                {
-                    var events = db.Query<IntegrationEventLogEntry>()
+                using var db = new LiteRepository(_connectionString);
+                var events = db.Query<IntegrationEventLogEntry>()
                     .Where(x => x.TransactionId == transactionId.ToString())
                     .Where(x => x.State == EventStateType.NotPublished)
                     .ToList();
 
-                    if (events != null && events.Any()) 
-                    {
-                        return events.OrderBy(x => x.CreationTime)
-                         .Select(e => e
-                         .Deserilize(_eventTypes.Find(x => x.Name == e.EventName)));
-                    }
-
-                    return new List<IntegrationEventLogEntry>();
+                if (events != null && events.Any()) 
+                {
+                    return events.OrderBy(x => x.CreationTime)
+                        .Select(e => e
+                            .Deserilize(_eventTypes.Find(x => x.Name == e.EventName)));
                 }
+
+                return new List<IntegrationEventLogEntry>();
             });
         }
 
@@ -69,27 +67,23 @@ namespace fed.cloud.eventbus
                 throw new ArgumentOutOfRangeException(nameof(transaction));
             }
 
-            return Task.Factory.StartNew(() => 
+            return Task.Factory.StartNew(() =>
             {
-                using (var db = new LiteRepository(_connectionString))
-                {
-                    var eventLogEntry = new IntegrationEventLogEntry(@event, transaction);
+                using var db = new LiteRepository(_connectionString);
+                var eventLogEntry = new IntegrationEventLogEntry(@event, transaction);
 
-                    db.Insert(eventLogEntry);
-                }
+                db.Insert(eventLogEntry);
             });
         }
 
         private Task InternalMarkEventNewStatus(Guid evenId, EventStateType eventState)
         {
-            return Task.Factory.StartNew(() => 
+            return Task.Factory.StartNew(() =>
             {
-                using (var db = new LiteRepository(_connectionString))
-                {
-                    var eventLogEntry = db.Query<IntegrationEventLogEntry>().Where(x => x.EventId == evenId).ForUpdate().Single();
-                    eventLogEntry.State = eventState;
-                    db.Update(eventLogEntry);
-                }
+                using var db = new LiteRepository(_connectionString);
+                var eventLogEntry = db.Query<IntegrationEventLogEntry>().Where(x => x.EventId == evenId).ForUpdate().Single();
+                eventLogEntry.State = eventState;
+                db.Update(eventLogEntry);
             });
         }
     }

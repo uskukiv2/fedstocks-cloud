@@ -19,24 +19,32 @@ public class SellerEntityTypeConfiguration : IEntityTypeConfiguration<SellerComp
         builder.ToTable("sellercompanies", _config.GetSchema());
         builder.HasKey(x => x.Id);
 
-        builder.OwnsMany<ProductSellerPrice>(x => x.SellerPrices, sp =>
-        {
-            sp.Property(x => x.SellerId);
-            sp.WithOwner();
-        });
+        //builder.OwnsMany<ProductSellerPrice>(x => x.SellerPrices, sp =>
+        //{
+        //    sp.Property(x => x.SellerId);
+        //    sp.WithOwner();
+        //});
 
         builder.Property(x => x.OriginalName)
             .HasColumnName("OriginalName")
             .IsRequired();
 
+        builder.Property(x => x.CountyId)
+            .HasColumnName("CountyId")
+            .IsRequired();
+
+        builder.Property(x => x.CountryId)
+            .HasColumnName("CountryId")
+            .IsRequired();
+
         builder.HasOne(x => x.Country)
-            .WithOne()
+            .WithMany()
             .HasForeignKey("CountryId")
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);
 
         builder.HasOne(x => x.County)
-            .WithOne()
+            .WithMany()
             .HasForeignKey("CountyId")
             .IsRequired()
             .OnDelete(DeleteBehavior.ClientCascade);

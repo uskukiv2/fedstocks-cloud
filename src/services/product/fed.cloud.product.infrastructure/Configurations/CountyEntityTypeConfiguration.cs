@@ -27,8 +27,12 @@ public class CountyEntityTypeConfiguration : IEntityTypeConfiguration<County>
             .HasColumnName("Number")
             .IsRequired();
 
+        builder.Property(x => x.CountryId)
+            .HasColumnName("CountryId")
+            .IsRequired();
+
         builder.HasOne(x => x.Country)
-            .WithOne()
+            .WithMany()
             .HasForeignKey("CountryId")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
