@@ -9,8 +9,12 @@ using fed.cloud.eventbus.RabbitMq;
 using fed.cloud.product.application.Behaviors;
 using fed.cloud.product.application.IntegrationEvents;
 using fed.cloud.product.application.IntegrationEvents.Handlers;
+using fed.cloud.product.application.Queries;
+using fed.cloud.product.application.Queries.Implementation;
+using fed.cloud.product.domain.Repository;
 using fed.cloud.product.host.Infrastructure;
 using fed.cloud.product.infrastructure;
+using fed.cloud.product.infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
@@ -100,6 +104,19 @@ internal static class ServiceCollectionExtensions
         service.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         service.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
         service.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
+
+        return service;
+    }
+
+    internal static IServiceCollection AddDbOperations(this IServiceCollection service)
+    {
+        service.AddSingleton<IProductQuery, ProductQuery>();
+        service.AddSingleton<ISellerQuery, SellerQuery>();
+        service.AddSingleton<ICountryQuery, CountryQuery>();
+
+        service.AddScoped<IProductRepository, ProductRepository>();
+        service.AddScoped<ISellerCompanyRepository, SellerCompanyRepository>();
+        service.AddScoped<ICountryRepository, CountryRepository>();
 
         return service;
     }

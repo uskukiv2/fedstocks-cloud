@@ -2,7 +2,6 @@ using fed.cloud.product.domain.Factories;
 using fed.cloud.product.host.Extensions;
 using fed.cloud.product.host.Services;
 using fed.cloud.product.infrastructure.Factories.Implementation;
-using MediatR;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +18,7 @@ builder.Services.AddServiceConfigurations(config);
 builder.Services.AddCustomDbContext(config);
 builder.Services.AddIntegrationEvent(config);
 builder.Services.AddEventBus(config);
+builder.Services.AddDbOperations();
 builder.Services.AddMediator();
 
 var app = builder.Build();
@@ -28,6 +28,10 @@ var app = builder.Build();
 app.MapGrpcService<ProductService>();
 app.MapGrpcService<SellerService>();
 app.MapGrpcService<CountryService>();
-app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+app.MapGet("/catalog", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+
+app.UseCors("Cors");
+
+app.ConfigureEventBus();
 
 app.Run();
