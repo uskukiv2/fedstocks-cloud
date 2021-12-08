@@ -17,7 +17,7 @@ namespace fed.cloud.product.infrastructure.Factories.Implementation
 
         public IUnitOfWork<TDbConnection> Create<TDbConnection>() where TDbConnection : DbConnection
         {
-            return (IUnitOfWork<TDbConnection>) _provider.GetRequiredService(typeof(IUnitOfWork<TDbConnection>));
+            return (IUnitOfWork<TDbConnection>) _provider.GetRequiredService(typeof(ProductContext));
         }
     }
 }

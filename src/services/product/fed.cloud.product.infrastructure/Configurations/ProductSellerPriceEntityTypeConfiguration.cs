@@ -27,18 +27,26 @@ public class ProductSellerPriceEntityTypeConfiguration : IEntityTypeConfiguratio
             .HasColumnName("Price")
             .IsRequired(false);
 
+        builder.Property(x => x.SellerId)
+            .HasColumnName("SellerId")
+            .IsRequired();
+
         builder.Property(x => x.OriginalPrice)
             .HasColumnName("OriginalPrice")
             .IsRequired();
 
+        builder.Property(x => x.ProductId)
+            .HasColumnName("ProductId")
+            .IsRequired();
+
         builder.HasOne(x => x.Product)
-            .WithOne()
+            .WithMany(x => x.SellerPrices)
             .HasForeignKey("ProductId")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(x => x.Seller)
-            .WithOne()
+            .WithMany(x => x.SellerPrices)
             .HasForeignKey("SellerId")
             .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);

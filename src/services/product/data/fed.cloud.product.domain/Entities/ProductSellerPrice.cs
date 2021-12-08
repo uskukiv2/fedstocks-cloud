@@ -11,11 +11,11 @@ namespace fed.cloud.product.domain.Entities
 
         public Guid SellerId { get; set; }
 
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
-        public decimal OriginalPrice { get; set; }
+        public decimal? OriginalPrice { get; set; }
 
-        public int OriginalCurrencyNumber { get; set; }
+        public int? OriginalCurrencyNumber { get; set; }
 
         public virtual Product Product { get; set; }
 

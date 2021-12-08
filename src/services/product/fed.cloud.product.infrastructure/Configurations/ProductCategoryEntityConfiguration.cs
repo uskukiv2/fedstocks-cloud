@@ -23,8 +23,12 @@ public class ProductCategoryEntityConfiguration : IEntityTypeConfiguration<Produ
             .HasColumnName("Name")
             .IsRequired();
 
+        builder.Property(x => x.ParentId)
+            .HasColumnName("ParentId")
+            .IsRequired(false);
+
         builder.HasOne(x => x.ParentCategory)
-            .WithOne()
+            .WithMany()
             .HasForeignKey("ParentId")
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
