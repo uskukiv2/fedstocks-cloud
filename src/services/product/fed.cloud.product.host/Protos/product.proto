@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "fed.cloud.product.host.Protos";
+
+package product;
+
+service Product {
+	rpc QueryProduct(RequestProducts) returns (ResultResponse);
+	rpc GetProduct (RequestProduct) returns (ProductData);
+}
+
+message RequestProducts {
+	string query = 1;
+}
+
+message ResultResponse {
+	repeated ProductSummary items = 1;
+}
+
+message ProductSummary {
+	int64 number = 1;
+	string brand = 2;
+	string name = 3;
+}
+
+message RequestProduct {
+	int64 number = 1;
+}
+
+message ProductData {
+	string brand = 1;
+	string name = 2;
+	double qty = 3;
+	int32 unit = 4;
+	int32 categrory = 5;
+	repeated SellerPrice sellers = 7;
+}
+
+message SellerPrice {
+	string sellerName = 1;
+	double price = 2;
+	int32 currency = 3;
+}

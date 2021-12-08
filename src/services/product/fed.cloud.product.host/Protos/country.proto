@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option csharp_namespace = "fed.cloud.product.host.Protos";
+
+package country;
+
+service Country {
+	rpc QueryCountries (CountryQueryRequest) returns (CountriesResultResponse);
+	rpc GetCounties (CountyRequest) returns (CountyResponse);
+}
+
+message CountryQueryRequest {
+	string query = 1;
+}
+
+message CountyRequest{
+	string countryId = 1;
+}
+
+message CountriesResultResponse {
+	repeated CountryMessageData items = 1;
+}
+
+message CountyResponse {
+	repeated CountyMessageData items = 1;
+}
+
+message CountryMessageData{
+	string id = 1;
+	string name = 2;
+}
+
+message CountyMessageData{
+	int32 id = 1;
+	string name = 2;
+}

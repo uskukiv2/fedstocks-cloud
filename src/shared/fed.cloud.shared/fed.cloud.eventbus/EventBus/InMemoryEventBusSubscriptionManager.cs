@@ -8,12 +8,12 @@ using System.Text;
 
 namespace fed.cloud.eventbus.EventBus
 {
-    class InMemoryEventBusSubscribtionManager : IEventBusSubscribeManager
+    public class InMemoryEventBusSubscriptionManager : IEventBusSubscribeManager
     {
         private readonly ConcurrentDictionary<string, List<SubscribtionInfo>> _handlers;
         private readonly List<Type> _knownEventTypes;
 
-        public InMemoryEventBusSubscribtionManager()
+        public InMemoryEventBusSubscriptionManager()
         {
             _handlers = new ConcurrentDictionary<string, List<SubscribtionInfo>>();
             _knownEventTypes = new List<Type>();
