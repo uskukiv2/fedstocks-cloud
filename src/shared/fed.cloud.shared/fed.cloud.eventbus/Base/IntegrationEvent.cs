@@ -10,7 +10,7 @@ namespace fed.cloud.eventbus.Base
         public IntegrationEvent()
         {
             Id = Guid.NewGuid();
-            CreationDate = DateTime.Now;
+            CreationDate = DateTime.UtcNow;
         }
 
         [JsonConstructor]
