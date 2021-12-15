@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option csharp_namespace = "fed.cloud.shopping.api.Protos";
+
+package shopping;
+
+service Shopping {
+	rpc GetShoppingLists(ListsRequest) returns (ListsResponse);
+	rpc CreateOrUpdate(List) returns (List);
+	rpc CheckoutList(CheckoutListRequest) returns(CheckoutResult);
+}
+
+message ListsRequest {
+	string user_id = 1;
+}
+
+message ListsResponse {
+	repeated List Lists = 1;
+}
+
+message List{
+	string guid = 1;
+	int32 id = 2;
+	string name = 3;
+	repeated Line Lines = 4;
+}
+
+message CheckoutListRequest {
+	string guid = 1;
+	int32 id = 2;
+	bool is_force_checkout = 3;
+}
+
+message CheckoutResult {
+	string name = 1;
+	int32 id = 2;
+	bool success = 3;
+}
+
+message Line {
+	bool checked = 1;
+	int64 number = 2;
+	string brand = 3;
+	string name = 4;
+	double quantity = 5;
+	double unit_price = 6;
+	Unit unit = 7;
+}
+
+message Unit {
+	int32 id = 1;
+	string name = 2;
+	double rate = 3;
+}
