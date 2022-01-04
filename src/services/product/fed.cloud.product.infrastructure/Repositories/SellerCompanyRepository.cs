@@ -49,9 +49,9 @@ public class SellerCompanyRepository : ISellerCompanyRepository
         return await _context.Companies.AnyAsync(x => x.Id == sellerId);
     }
 
-    public async Task<IEnumerable<SellerCompany>> TTSearchAsync(string query, Guid countryId, CancellationToken token)
+    public async Task<IEnumerable<SellerCompany>> TTSearchAsync(string query, Guid countyId, CancellationToken token)
     {
-        return await _context.Companies.Where(x => x.SearchVector.Matches(query) && x.CountryId == countryId)
+        return await _context.Companies.Where(x => x.SearchVector.Matches(query) && x.CountyId == countyId)
             .ToListAsync(token);
     }
 

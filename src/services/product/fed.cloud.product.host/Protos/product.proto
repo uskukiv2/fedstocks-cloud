@@ -31,8 +31,9 @@ message ProductData {
 	string brand = 1;
 	string name = 2;
 	double qty = 3;
-	int32 unit = 4;
-	int32 categrory = 5;
+	int64 number = 4;
+	int32 unit = 5;
+	int32 categrory = 6;
 	repeated SellerPrice sellers = 7;
 }
 

@@ -5,6 +5,7 @@ option csharp_namespace = "fed.cloud.shopping.api.Protos";
 package shopping;
 
 service Shopping {
+	rpc GetShoppingList(ListRequest) returns (ListsResponse);
 	rpc GetShoppingLists(ListsRequest) returns (ListsResponse);
 	rpc CreateOrUpdate(List) returns (List);
 	rpc CheckoutList(CheckoutListRequest) returns(CheckoutResult);
@@ -12,6 +13,11 @@ service Shopping {
 
 message ListsRequest {
 	string user_id = 1;
+}
+
+message ListRequest {
+	string user_id = 1;
+	int32 id = 2;
 }
 
 message ListsResponse {

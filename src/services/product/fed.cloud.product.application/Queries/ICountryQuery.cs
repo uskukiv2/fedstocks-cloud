@@ -10,5 +10,5 @@ public interface ICountryQuery
 {
     Task<IEnumerable<CountryDto>> GetCountriesAsync(int top = 10);
 
-    Task<IEnumerable<CountyDto>> GetCountyByCountryAsync(Guid companyId);
+    Task<CountryDto> GetCountryByIdAsync(Guid countryId);
 }

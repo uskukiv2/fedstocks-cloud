@@ -14,18 +14,15 @@ namespace fed.cloud.product.application.Commands;
 
 public class HandleSellersRequestQueryCommand : IRequest<IEnumerable<SellerSummaryDto>>
 {
-    public HandleSellersRequestQueryCommand(string query, Guid country, int county)
+    public HandleSellersRequestQueryCommand(string query, Guid country)
     {
         Query = query;
-        Country = country;
-        County = county;
+        County = country;
     }
 
     public string Query { get; }
 
-    public Guid Country { get; }
-
-    public int County { get; }
+    public Guid County { get; }
 }
 
 public class HandleSellersRequestQueryCommandHandler : IRequestHandler<HandleSellersRequestQueryCommand, IEnumerable<SellerSummaryDto>>
@@ -43,25 +40,14 @@ public class HandleSellersRequestQueryCommandHandler : IRequestHandler<HandleSel
 
     public async Task<IEnumerable<SellerSummaryDto>> Handle(HandleSellersRequestQueryCommand request, CancellationToken cancellationToken)
     {
-        if (request.Country == Guid.Empty)
+        if (request.County == Guid.Empty)
         {
             return new List<SellerSummaryDto>();
         }
 
         try
         {
-            if (request.County == 0)
-            {
-                _logger.LogInformation("Processing request for all counties of country {country}", request.Country);
-
-                var sellers1 =
-                    await _sellerCompanyRepository.TTSearchAsync(request.Query, request.Country, cancellationToken);
-
-                return sellers1.Select(MapSellerSummaryDto);
-            }
-
-            var county = await _countryRepository.GetCountyOfCountryAsync(request.Country, request.County);
-            var sellers = await _sellerCompanyRepository.TTSearchAsync(request.Query, request.Country, county.Id, cancellationToken);
+            var sellers = await _sellerCompanyRepository.TTSearchAsync(request.Query, request.County, cancellationToken);
 
             return sellers.Select(MapSellerSummaryDto);
         }

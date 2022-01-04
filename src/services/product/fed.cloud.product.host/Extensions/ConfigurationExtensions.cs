@@ -1,9 +1,15 @@
-﻿using fed.cloud.product.host.Models.Configurations;
+﻿using fed.cloud.common.Models;
+using fed.cloud.product.host.Models.Configurations;
 
 namespace fed.cloud.product.host.Extensions;
 
 internal static class ConfigurationExtensions
 {
+    internal static int GetPort(this ConfigurationManager configuration)
+    {
+        return int.Parse(configuration.GetSection("Port").Value);
+    }
+
     internal static string GetDatabaseSchema(this ConfigurationManager configuration)
     {
         try
@@ -44,7 +50,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>().BrokerName;
+            return configuration.GetSection("EventsSection").Get<EventsSection>().BrokerName;
         }
         catch
         {
@@ -56,7 +62,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>().LocalEventsSource;
+            return configuration.GetSection("EventsSection").Get<EventsSection>().LocalEventsSource;
         }
         catch
         {
@@ -68,7 +74,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>().QueueName;
+            return configuration.GetSection("EventsSection").Get<EventsSection>().QueueName;
         }
         catch
         {
@@ -76,11 +82,11 @@ internal static class ConfigurationExtensions
         }
     }
 
-    internal static EventsSection GetFullEventSection(this ConfigurationManager configuration)
+    internal static EventsSection GetFullEventsSection(this ConfigurationManager configuration)
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>();
+            return configuration.GetSection("EventsSection").Get<EventsSection>();
         }
         catch
         {
@@ -90,10 +96,46 @@ internal static class ConfigurationExtensions
                 HostName = "localhost",
                 HostLogin = "guest",
                 HostPassword = "guest",
+                HostPort = 5672,
                 LocalEventsSource = "events.db",
                 MaxRetryAllowed = 5,
-                MaxTimeout = 10000
+                MaxTimeout = 10000,
+                QueueName = "fed_product"
             };
         }
+    }
+
+    internal static string GetServicesCertPath(this ConfigurationManager configuration)
+    {
+        try
+        {
+            return configuration.GetSection("Certification").Get<Certification>().CertificatePath;
+        }
+        catch
+        {
+            return "f_service.pem";
+        }
+    }
+
+    internal static string GetServiceKeyCertPath(this ConfigurationManager configuration)
+    {
+        try
+        {
+            return configuration.GetSection("Certification").Get<Certification>().KeyCertificatePath;
+        }
+        catch
+        {
+            return "f_key";
+        }
+    }
+    
+    internal static LogLevel GetDefaultLogLevel(this ConfigurationManager configuration)
+    {
+        return configuration.GetSection("Logging").GetSection("LogLevel").GetValue<LogLevel>("Default");
+    }
+
+    internal static bool GetRegenerateDatabase(this IConfiguration configuration)
+    {
+        return configuration.GetSection("Specials").GetValue<bool>("RegenerateDatabase");
     }
 }

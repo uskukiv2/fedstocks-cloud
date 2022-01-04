@@ -10,6 +10,8 @@ public class EventsSection
 
     public string HostName { get; set; }
 
+    public int HostPort { get; set; }
+
     public string HostLogin { get; set; }
 
     public string HostPassword { get; set; }

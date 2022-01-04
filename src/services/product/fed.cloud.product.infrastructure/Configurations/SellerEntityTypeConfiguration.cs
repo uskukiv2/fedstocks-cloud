@@ -19,12 +19,6 @@ public class SellerEntityTypeConfiguration : IEntityTypeConfiguration<SellerComp
         builder.ToTable("sellercompanies", _config.GetSchema());
         builder.HasKey(x => x.Id);
 
-        //builder.OwnsMany<ProductSellerPrice>(x => x.SellerPrices, sp =>
-        //{
-        //    sp.Property(x => x.SellerId);
-        //    sp.WithOwner();
-        //});
-
         builder.Property(x => x.OriginalName)
             .HasColumnName("OriginalName")
             .IsRequired();

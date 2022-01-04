@@ -23,10 +23,10 @@ public class SellerQuery : ISellerQuery
     {
         await using var conn = new NpgsqlConnection(_connection);
 
-        var county = (await conn.QueryAsync("counties", new {CountryId = countryId, Number = countyNumber},
+        var county = (await conn.QueryAsync("product.counties", new {CountryId = countryId, Number = countyNumber},
             Field.From("Id", "Name"))).FirstOrDefault();
 
-        var counties = await conn.QueryAsync("sellers", new { CountryId = countryId, CountyId = county.Id },
+        var counties = await conn.QueryAsync("product.sellers", new { CountryId = countryId, CountyId = county.Id },
             Field.From("Id", "Name"));
 
         return counties.ToList().Select(CreateSellerDto);

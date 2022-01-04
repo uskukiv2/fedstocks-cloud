@@ -55,6 +55,14 @@ public class RedisShoppingListRepository : IShoppingListRepository
         return await _cacheClient.Database.HashDeleteAsync(new RedisKey($"shp:{userId}"), new RedisValue(listId.ToString()));
     }
 
+    public async Task<ShoppingList?> CreateShoppingListAsync(ShoppingList list)
+    {
+        var total = await _cacheClient.Database.HashGetAllAsync(new RedisKey($"shp:{list.UserId}"));
+        list.Id = total.Length + 1;
+
+        return await FullUpdateShoppingListAsync(list);
+    }
+
     private static ShoppingList? ParseEntry(RedisValue arg)
     {
         return JsonConvert.DeserializeObject<ShoppingList>(arg);

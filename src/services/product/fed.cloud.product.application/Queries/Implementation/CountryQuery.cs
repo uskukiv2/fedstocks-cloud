@@ -23,22 +23,33 @@ public class CountryQuery : ICountryQuery
         throw new NotSupportedException("Get top countries is not supported yet");
     }
 
-    public async Task<IEnumerable<CountyDto>> GetCountyByCountryAsync(Guid countryId)
+    public async Task<CountryDto> GetCountryByIdAsync(Guid countryId)
     {
         await using var conn = new NpgsqlConnection(_connection);
+        var country = (await conn.QueryAsync("product.countries", new { Id = countryId })).FirstOrDefault();
+        var counties = await conn.QueryAsync("product.counties", new { CountryId = country.Id });
 
-        var counties = await conn.QueryAsync("counties", new {CountryId = countryId},
-            Field.From("Number", "Name", "CountryId"));
-
-        return counties.ToList().Select(CreateCountyDto);
+        return MapToCountryDto(country, counties);
     }
 
+    private static CountryDto MapToCountryDto(dynamic country, IEnumerable<dynamic> counties)
+    {
+        return new CountryDto
+        {
+            Id = country.Id,
+            Name = country.Name,
+            Number = int.Parse(country.GlobalId),
+            CountyDtos = counties.Select(CreateCountyDto).ToArray()
+        };
+    }
+    
     private static CountyDto CreateCountyDto(dynamic county)
     {
         return new CountyDto
         {
+            Id = county.Id,
             Name = county.Name,
-            NumberInCountry = county.Number
+            Number = county.Number
         };
     }
 }

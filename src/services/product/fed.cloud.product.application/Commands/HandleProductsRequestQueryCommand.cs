@@ -37,6 +37,10 @@ namespace fed.cloud.product.application.Commands
             try
             {
                 var result = await _productRepository.TTSearchAsync(request.Query, cancellationToken);
+                if (result == null)
+                {
+                    return new List<ProductSummaryDto>();
+                }
 
                 return result.Select(MapToDto);
             }

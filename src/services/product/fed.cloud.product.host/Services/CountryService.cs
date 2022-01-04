@@ -32,11 +32,11 @@ public class CountryService : Country.CountryBase
 
         try
         {
-            var counties = (await _countryQuery.GetCountyByCountryAsync(countryId)).ToList();
-            if (counties.Any())
+            var country = (await _countryQuery.GetCountryByIdAsync(countryId));
+            if (country != null || country.CountyDtos.Any())
             {
                 context.Status = Status.DefaultSuccess;
-                return MapToResponse(counties);
+                return MapToResponse(country);
             }
 
             context.Status = new Status(StatusCode.NotFound, $"could not find counties for country {countryId}");
@@ -81,10 +81,13 @@ public class CountryService : Country.CountryBase
         return response;
     }
 
-    private static CountyResponse MapToResponse(IEnumerable<CountyDto> counties)
+    private static CountyResponse MapToResponse(CountryDto country)
     {
-        var response = new CountyResponse();
-        foreach (var countyDto in counties)
+        var response = new CountyResponse
+        {
+            Country = MapToResponseData(country)
+        };
+        foreach (var countyDto in country.CountyDtos)
         {
             response.Items.Add(MapToResponseData(countyDto));
         }
@@ -96,8 +99,9 @@ public class CountryService : Country.CountryBase
     {
         return new CountyMessageData
         {
-            Id = countyDto.NumberInCountry,
-            Name = countyDto.Name
+            Id = countyDto.Id.ToString(),
+            Name = countyDto.Name,
+            Number = countyDto.Number
         };
     }
 
@@ -106,7 +110,8 @@ public class CountryService : Country.CountryBase
         return new CountryMessageData
         {
             Id = countryDto.Id.ToString(),
-            Name = countryDto.Name
+            Name = countryDto.Name,
+            Number = countryDto.Number
         };
     }
 }

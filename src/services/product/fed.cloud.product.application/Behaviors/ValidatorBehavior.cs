@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using fed.cloud.product.domain.Exceptions;
@@ -10,10 +11,10 @@ namespace fed.cloud.product.application.Behaviors;
 
 public class ValidatorBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
 {
-    private readonly IValidator<TRequest>[] _validators;
+    private readonly IEnumerable<IValidator<TRequest>> _validators;
     private readonly ILogger<ValidatorBehavior<TRequest, TResponse>> _logger;
 
-    public ValidatorBehavior(IValidator<TRequest>[] validators, ILogger<ValidatorBehavior<TRequest, TResponse>> logger)
+    public ValidatorBehavior(IEnumerable<IValidator<TRequest>> validators, ILogger<ValidatorBehavior<TRequest, TResponse>> logger)
     {
         _validators = validators;
         _logger = logger;
