@@ -1,0 +1,453 @@
+{
+	"info": {
+		"_postman_id": "315f266e-120d-44a5-ac08-b20a2e6c50c2",
+		"name": "fedstocks_API (dev)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "country",
+			"item": [
+				{
+					"name": "get_by_query",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/country/search?query=russia",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"country",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "russia"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get full country by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/country/get/5f7662cc-333d-433e-8924-88ed0e0e4295",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"country",
+								"get",
+								"5f7662cc-333d-433e-8924-88ed0e0e4295"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product",
+			"item": [
+				{
+					"name": "Get products by query",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/product/search?query=шуп1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"product",
+								"search"
+							],
+							"query": [
+								{
+									"key": "query",
+									"value": "шуп1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get product by seller and number",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/product/get/123?seller=2b72c8a7-ab67-43be-ba1b-46ae17a4a225",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"product",
+								"get",
+								"123"
+							],
+							"query": [
+								{
+									"key": "seller",
+									"value": "2b72c8a7-ab67-43be-ba1b-46ae17a4a225"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "seller",
+			"item": [
+				{
+					"name": "Gety Sellers by county and query",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/seller/search?county=1af77f49-e615-4c01-be81-918c3bf86308&query=шуп",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"seller",
+								"search"
+							],
+							"query": [
+								{
+									"key": "county",
+									"value": "1af77f49-e615-4c01-be81-918c3bf86308"
+								},
+								{
+									"key": "query",
+									"value": "шуп"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "shopping",
+			"item": [
+				{
+					"name": "Get shopping lists",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/shopping/get",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"shopping",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create new shopping list",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"default\",\r\n  \"lines\": [\r\n    {\r\n      \"isChecked\": false,\r\n      \"productBrand\": \"Шупера\",\r\n      \"productName\": \"Шуп1\",\r\n      \"productNumber\": 123,\r\n      \"unitPrice\": 100,\r\n      \"quantity\": 1,\r\n      \"unit\": {\r\n        \"id\": 1,\r\n        \"name\": \"Peace\",\r\n        \"rate\": 1.0\r\n      },\r\n      \"seller\": {\r\n        \"id\": \"9d5323d8-5d84-44c0-8d39-fd6f12c44a06\",\r\n        \"name\": \"Шуп\",\r\n        \"countyId\": \"0d377998-0513-4546-8df0-01c28d993e76\"\r\n      }\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7252/api/shopping/new",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"shopping",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update shopping list",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 1,\r\n    \"name\": \"default\",\r\n    \"lines\": [\r\n        {\r\n            \"isChecked\": true,\r\n            \"productBrand\": \"Шупера\",\r\n            \"productName\": \"Шуп1\",\r\n            \"productNumber\": 123,\r\n            \"unitPrice\": 100,\r\n            \"quantity\": 1,\r\n            \"unit\": {\r\n                \"id\": 1,\r\n                \"name\": \"Peace\",\r\n                \"rate\": 1\r\n            },\r\n            \"seller\": {\r\n            \"id\": \"9d5323d8-5d84-44c0-8d39-fd6f12c44a06\",\r\n            \"name\": \"Шуп\",\r\n            \"countyId\": \"0d377998-0513-4546-8df0-01c28d993e76\"\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7252/api/shopping/update",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"shopping",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get shopping list",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://localhost:7252/api/shopping/get/1",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"shopping",
+								"get",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove shopping list",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7252/api/shopping/remove",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"shopping",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Checkout shopping list",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "x-client",
+								"value": "100",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"shoppingListId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7252/api/shopping/checkout",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7252",
+							"path": [
+								"api",
+								"shopping",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "swagger",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:7252/swagger/index.html",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "7252",
+					"path": [
+						"swagger",
+						"index.html"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "x-client",
+			"value": "100"
+		}
+	]
+}

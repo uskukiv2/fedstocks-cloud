@@ -7,16 +7,19 @@ using fed.cloud.eventbus.EventBus;
 using fed.cloud.eventbus.EventBus.Abstraction;
 using fed.cloud.eventbus.RabbitMq;
 using fed.cloud.product.application.Behaviors;
+using fed.cloud.product.application.Commands;
 using fed.cloud.product.application.IntegrationEvents;
 using fed.cloud.product.application.IntegrationEvents.Handlers;
 using fed.cloud.product.application.Queries;
 using fed.cloud.product.application.Queries.Implementation;
+using fed.cloud.product.domain.Abstraction;
 using fed.cloud.product.domain.Repository;
 using fed.cloud.product.host.Infrastructure;
 using fed.cloud.product.infrastructure;
 using fed.cloud.product.infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using RabbitMQ.Client;
 using ServiceConfiguration = fed.cloud.product.host.Infrastructure.ServiceConfiguration;
 
@@ -47,7 +50,7 @@ internal static class ServiceCollectionExtensions
                     options.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
                 });
             });
-
+        service.AddScoped<IUnitOfWork<NpgsqlConnection>>(sp => sp.GetRequiredService<ProductContext>());
         return service;
     }
 
@@ -58,7 +61,7 @@ internal static class ServiceCollectionExtensions
 
         service.AddTransient<IProductIntegrationEventService, ProductIntegrationEventService>();
 
-        var eventSettings = config.GetFullEventSection();
+        var eventSettings = config.GetFullEventsSection();
 
         service.AddSingleton<IRabbitMqClient>(sp =>
         {
@@ -99,7 +102,7 @@ internal static class ServiceCollectionExtensions
 
     internal static IServiceCollection AddMediator(this IServiceCollection service)
     {
-        service.AddMediatR(typeof(Program));
+        service.AddMediatR(typeof(HandleProductsRequestQueryCommandHandler));
 
         service.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
         service.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));

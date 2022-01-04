@@ -52,10 +52,10 @@ public class ShoppingService : Shopping.ShoppingBase
             };
         }
 
-        if (await _shoppingListRepository.DestroyListAsync(userId, request.Id))
+        if (!await _shoppingListRepository.DestroyListAsync(userId, request.Id))
         {
             context.Status = new Status(StatusCode.Aborted,
-                "could not perform operation, because is not all lines is done");
+                "could not perform operation, database restricted operation");
             return new CheckoutResult
             {
                 Id = shoppingList.Id,
@@ -88,6 +88,27 @@ public class ShoppingService : Shopping.ShoppingBase
         };
     }
 
+    public override async Task<ListsResponse> GetShoppingList(ListRequest request, ServerCallContext context)
+    {
+        if (!Guid.TryParse(request.UserId, out var guid) || guid == Guid.Empty)
+        {
+            context.Status = Status.DefaultCancelled;
+            return new ListsResponse();
+        }
+
+        var shoppingLists = await _shoppingListRepository.GetShoppingListAsync(guid, request.Id);
+        if (shoppingLists == null)
+        {
+            context.Status = new Status(StatusCode.NotFound, "list couldn't be found");
+            return new ListsResponse();
+        }
+
+        var listResponse = new ListsResponse();
+        listResponse.Lists.Add(MapToList(shoppingLists));
+
+        return listResponse;
+    }
+
     public override async Task<ListsResponse> GetShoppingLists(ListsRequest request, ServerCallContext context)
     {
         if (!Guid.TryParse(request.UserId, out var guid) || guid == Guid.Empty)
@@ -96,7 +117,7 @@ public class ShoppingService : Shopping.ShoppingBase
             return new ListsResponse();
         }
 
-        var shoppingLists = (await _shoppingListRepository.GetUserShoppingListsAsync(guid)).ToList();
+        var shoppingLists = await _shoppingListRepository.GetUserShoppingListsAsync(guid);
         if (shoppingLists == null || !shoppingLists.Any())
         {
             context.Status = new Status(StatusCode.NotFound, "list couldn't be found");
@@ -111,7 +132,16 @@ public class ShoppingService : Shopping.ShoppingBase
 
     public override async Task<List> CreateOrUpdate(List request, ServerCallContext context)
     {
-        var shopping = await _shoppingListRepository.FullUpdateShoppingListAsync(MapToShoppingList(request));
+        ShoppingList? shopping;
+        if (request.Id == 0)
+        {
+            shopping = await _shoppingListRepository.CreateShoppingListAsync(MapToShoppingList(request));
+        }
+        else
+        {
+            shopping = await _shoppingListRepository.FullUpdateShoppingListAsync(MapToShoppingList(request));
+        }
+
         if (shopping != null)
         {
             return MapToList(shopping);
@@ -158,7 +188,7 @@ public class ShoppingService : Shopping.ShoppingBase
             Unit = MapUnit(arg.Unit),
             ProductName = arg.Name,
             ProductNumber = arg.Number,
-            ProductBrand = arg.Brand
+            ProductBrand = arg.Brand,
         };
     }
 

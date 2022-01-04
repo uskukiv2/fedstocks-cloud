@@ -15,11 +15,11 @@ public class TransactionBehavior<TRequest, TResponse> : IPipelineBehavior<TReque
     private readonly ILogger<TransactionBehavior<TRequest, TResponse>> _logger;
     private readonly IUnitOfWork<NpgsqlConnection> _unitOfWork;
 
-    public TransactionBehavior(IUnitOfWorkFactory unitOfWorkFactory,
+    public TransactionBehavior(IUnitOfWork<NpgsqlConnection> unitOfWork,
         ILogger<TransactionBehavior<TRequest, TResponse>> logger)
     {
         _logger = logger;
-        _unitOfWork = unitOfWorkFactory.Create<NpgsqlConnection>();
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,

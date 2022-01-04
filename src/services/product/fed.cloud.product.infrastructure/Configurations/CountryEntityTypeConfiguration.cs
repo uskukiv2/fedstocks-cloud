@@ -25,6 +25,7 @@ public class CountryEntityTypeConfiguration : IEntityTypeConfiguration<Country>
 
         builder.Property(x => x.GlobalId)
             .HasColumnName("GlobalId")
+            .HasColumnType("text")
             .IsRequired();
 
         builder.HasGeneratedTsVectorColumn(c => c.SearchVector,

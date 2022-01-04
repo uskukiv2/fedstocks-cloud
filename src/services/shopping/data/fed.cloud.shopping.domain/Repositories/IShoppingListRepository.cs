@@ -8,4 +8,5 @@ public interface IShoppingListRepository
     Task<ShoppingList> GetShoppingListAsync(Guid id, int shoppingId);
     Task<ShoppingList?> FullUpdateShoppingListAsync(ShoppingList list);
     Task<bool> DestroyListAsync(Guid userId, int listId);
+    Task<ShoppingList?> CreateShoppingListAsync(ShoppingList list);
 }

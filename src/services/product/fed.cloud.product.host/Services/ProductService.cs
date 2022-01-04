@@ -29,8 +29,12 @@ namespace fed.cloud.product.host.Services
             }
 
             var command = new HandleProductsRequestQueryCommand(request.Query);
-            var products = (await _mediator.Send(command, context.CancellationToken)).ToList();
-
+            var result = await _mediator.Send(command, context.CancellationToken);
+            if (result == null)
+            {
+                return new ResultResponse();
+            }
+            var products = result.ToList();
             if (products.Any())
             {
                 return GetResponse(products);
@@ -51,7 +55,12 @@ namespace fed.cloud.product.host.Services
             try
             {
                 var product = await _productQuery.GetProductByNumberAsync(request.Number)!;
-                context.Status = new Status(StatusCode.NotFound, $"cannot get product with number {request.Number}");
+                if (product == null)
+                {
+                    context.Status = new Status(StatusCode.NotFound, $"cannot get product with number {request.Number}");
+                    return new ProductData();
+                }
+                context.Status = Status.DefaultSuccess;
                 return GetResponse(product);
             }
             catch (Exception ex)
@@ -71,7 +80,12 @@ namespace fed.cloud.product.host.Services
                 Qty = product.DefaultQty,
                 Categrory = product.Category,
                 Unit = product.Unit,
+                Number = product.Number
             };
+            if (product.SellerPrices == null)
+            {
+                return productData;
+            }
 
             foreach (var item in product.SellerPrices)
             {
@@ -79,6 +93,7 @@ namespace fed.cloud.product.host.Services
             }
 
             return productData;
+
         }
 
         private static SellerPrice ToResponse(ProductSellerPriceDto arg)

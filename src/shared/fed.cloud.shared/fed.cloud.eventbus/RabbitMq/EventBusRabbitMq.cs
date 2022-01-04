@@ -41,6 +41,7 @@ namespace fed.cloud.eventbus.RabbitMq
             _logger = logger;
             _queueName = queueName;
             _brokerName = eventServiceConfiguration.BrokerName;
+            _channel = CreateChannel();
             _subManager.OnEventRemoved += _subManager_OnEventRemoved;
             _retryCount = 5;
         }
@@ -69,29 +70,27 @@ namespace fed.cloud.eventbus.RabbitMq
 
             _logger.LogTrace($"Creating RabbitMQ channel to publish event: {@event.Id} ({eventName})");
 
-            using (var channel = _rabbitMqClient.CreateChannel())
+            using var channel = _rabbitMqClient.CreateChannel();
+            _logger.LogTrace($"Declaring RabbitMQ exchange to publish event: {@event.Id}");
+
+            channel.ExchangeDeclare(exchange: _brokerName, type: "direct");
+
+            var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event, Formatting.Indented));
+
+            policy.Execute(() =>
             {
-                _logger.LogTrace($"Declaring RabbitMQ exchange to publish event: {@event.Id}");
+                var properties = channel.CreateBasicProperties();
+                properties.DeliveryMode = 2;
 
-                channel.ExchangeDeclare(exchange: _brokerName, type: "direct");
+                _logger.LogTrace($"Publishing event to RabbitMQ: {@event.Id}");
 
-                var body = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event, Formatting.Indented));
-
-                policy.Execute(() =>
-                {
-                    var properties = channel.CreateBasicProperties();
-                    properties.DeliveryMode = 2;
-
-                    _logger.LogTrace($"Publishing event to RabbitMQ: {@event.Id}");
-
-                    channel.BasicPublish(
-                        exchange: _brokerName,
-                        routingKey: eventName,
-                        mandatory: true,
-                        basicProperties: properties,
-                        body: body);
-                });
-            }
+                channel.BasicPublish(
+                    exchange: _brokerName,
+                    routingKey: eventName,
+                    mandatory: true,
+                    basicProperties: properties,
+                    body: body);
+            });
         }
 
         public void Subscribe<T, TH>()

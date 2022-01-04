@@ -16,8 +16,7 @@ message SellerRequest {
 
 message SellerQueryRequest {
 	string query = 1;
-	string countryId = 2;
-	int32 county = 3;
+	string county = 2;
 }
 
 message SellersResultResponse {

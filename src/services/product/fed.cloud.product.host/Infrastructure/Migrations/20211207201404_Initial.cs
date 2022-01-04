@@ -21,7 +21,7 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    GlobalId = table.Column<int>(type: "integer", nullable: false),
+                    GlobalId = table.Column<int>(type: "text", nullable: false),
                     SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: false)
                         .Annotation("Npgsql:TsVectorConfig", "russian")
                         .Annotation("Npgsql:TsVectorProperties", new[] { "Name", "GlobalId" })
@@ -76,8 +76,7 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CountryId1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -89,12 +88,6 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                         principalTable: "countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_counties_countries_CountryId1",
-                        column: x => x.CountryId1,
-                        principalSchema: "product",
-                        principalTable: "countries",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +99,7 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Brand = table.Column<string>(type: "text", nullable: false),
                     Manufacturer = table.Column<string>(type: "text", nullable: true),
-                    GlobalNumber = table.Column<long>(type: "bigint", nullable: false),
+                    GlobalNumber = table.Column<long>(type: "text", nullable: false),
                     CategoryId = table.Column<int>(type: "integer", nullable: false),
                     QuantityRate = table.Column<double>(type: "double precision", nullable: false),
                     UnitId = table.Column<int>(type: "integer", nullable: false),
@@ -205,12 +198,6 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                 schema: "product",
                 table: "counties",
                 column: "CountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_counties_CountryId1",
-                schema: "product",
-                table: "counties",
-                column: "CountryId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_countries_SearchVector",

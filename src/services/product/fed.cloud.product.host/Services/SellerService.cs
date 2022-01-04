@@ -28,13 +28,13 @@ public class SellerService : Seller.SellerBase
             return new SellersResultResponse();
         }
 
-        if (!Guid.TryParse(request.CountryId, out var countryId))
+        if (!Guid.TryParse(request.County, out var countyId))
         {
             context.Status = Status.DefaultCancelled;
             return new SellersResultResponse();
         }
 
-        var command = new HandleSellersRequestQueryCommand(request.Query, countryId, request.County);
+        var command = new HandleSellersRequestQueryCommand(request.Query, countyId);
         var result = (await _mediator.Send(command, context.CancellationToken)).ToList();
         if (result.Any())
         {

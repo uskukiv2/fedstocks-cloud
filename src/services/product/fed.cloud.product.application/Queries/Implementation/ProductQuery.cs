@@ -23,17 +23,16 @@ namespace fed.cloud.product.application.Queries.Implementation
         {
             await using var conn = new NpgsqlConnection(_connection);
 
-            var product = (await conn.QueryAsync("products", new { GlobalNumber = number },
-                Field.From("GlobalNumber", "Brand", "Name", "CategoryId", "QuantityRate", "UnitId"))).FirstOrDefault();
+            var product = (await conn.QueryAsync("product.products", new { GlobalNumber = number.ToString() })).FirstOrDefault();
             if (product == null)
             {
                 throw new InvalidOperationException($"Cannot get product with number {number}");
             }
             var productSellerPrices =
-                (await conn.QueryAsync("productSellerPrices", new {ProductId = product.Id},
+                (await conn.QueryAsync("product.productsellerprices", new {ProductId = product.Id},
                     Field.From("SellerId", "OriginalPrice", "OriginalCurrencyNumber"), top: 10)).ToList();
 
-            return productSellerPrices.Any() ? CreateProductDto(product) : CreateProductDto(product, productSellerPrices);
+            return !productSellerPrices.Any() ? CreateProductDto(product) : CreateProductDto(product, productSellerPrices);
         }
 
         private static ProductDto CreateProductDto(dynamic product)
@@ -44,7 +43,7 @@ namespace fed.cloud.product.application.Queries.Implementation
                 Title = product.Name,
                 Category = product.CategoryId,
                 DefaultQty = product.QuantityRate,
-                Number = product.GlobalNumber,
+                Number = long.Parse(product.GlobalNumber),
                 Unit = product.UnitId,
             };
         }

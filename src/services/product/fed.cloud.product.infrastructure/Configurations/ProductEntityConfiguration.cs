@@ -19,13 +19,6 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
     {
         builder.ToTable("products", _config.GetSchema());
         builder.HasKey(x => x.Id);
-        //builder.OwnsMany(x => x.SellerPrices, sp =>
-        //{
-        //    sp.Property(x => x.ProductId);
-        //    sp.UsePropertyAccessMode(PropertyAccessMode.Property);
-        //    sp.HasOne(x => x.Product);
-        //    sp.WithOwner();
-        //});
 
         builder.Property(x => x.Name)
             .HasColumnName("Name")
@@ -37,6 +30,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(x => x.GlobalNumber)
             .HasColumnName("GlobalNumber")
+            .HasColumnType("text")
             .IsRequired();
 
         builder.Property(x => x.QuantityRate)
