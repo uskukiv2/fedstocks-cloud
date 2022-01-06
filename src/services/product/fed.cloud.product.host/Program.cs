@@ -2,10 +2,13 @@ using System.Net;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using fed.cloud.common.Helpers;
 using fed.cloud.product.application.Validation;
 using fed.cloud.product.host.Extensions;
 using fed.cloud.product.host.Grpc;
+using fed.cloud.product.host.Infrastructure;
 using fed.cloud.product.host.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.Certificate;
@@ -28,6 +31,9 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
         listenOptions.UseConnectionLogging();
     });
 });
+
+builder.WebHost.UseDefaultServiceProvider(o => o.ValidateScopes = false);
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 var config = builder.Configuration;
 
@@ -77,20 +83,25 @@ builder.Services.AddAuthentication(CertificateAuthenticationDefaults.Authenticat
 RepoDb.PostgreSqlBootstrap.Initialize();
 builder.Services.AddServiceConfigurations(config);
 builder.Services.AddCustomDbContext(config);
-builder.Services.AddIntegrationEvent(config);
-builder.Services.AddEventBus(config);
-builder.Services.AddDbOperations();
-builder.Services.AddMediator();
 builder.Services.AddGrpc(o =>
 {
     o.EnableDetailedErrors = true;
-    o.Interceptors.Add<GlobalLoggingInterceptor>();
 });
 builder.Services.AddValidatorsFromAssembly(typeof(HandleProductsRequestQueryCommandValidator).Assembly, includeInternalTypes: true);
 if (builder.Environment.IsDevelopment())
 {
     builder.Services.AddGrpcReflection();
 }
+
+// last
+builder.Services.AddIntegrationEvent(config);
+builder.Services.AddEventBus(config);
+
+builder.Host.ConfigureContainer<ContainerBuilder>(b =>
+{
+    b.RegisterModule(new MediatorModule());
+    b.RegisterModule(new ApplicationModule());
+});
 
 var app = builder.Build();
 

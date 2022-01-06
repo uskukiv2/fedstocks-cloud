@@ -10,5 +10,6 @@ namespace fed.cloud.common.Infrastructure
         Task BeginAsync();
         Task CommitAsync();
         Task RollbackAsync();
+        void DropTransaction();
     }
 }

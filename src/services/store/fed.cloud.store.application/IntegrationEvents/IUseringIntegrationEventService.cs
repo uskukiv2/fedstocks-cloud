@@ -13,7 +13,7 @@ public interface IStoreIntegrationEventService
 {
     Task<Guid> BeginLocalTransaction();
     Task CompleteTransaction(Guid transactionId);
-    Task CommitEventAsync(IntegrationEvent @event, Guid transactionId);
+    Task CommitEventAsync<T>(T @event, Guid transactionId) where T : IntegrationEvent;
 }
 
 public class StoreIntegrationEventService : IStoreIntegrationEventService
@@ -44,30 +44,30 @@ public class StoreIntegrationEventService : IStoreIntegrationEventService
     {
         if (_transactions.All(x => x.TransactionId != transactionId))
             await Task.FromException(new Exception($"Transaction with {transactionId} is not exist"));
-        var pendingEventLogs = (await _eventLogService.GetPendingEventLogsAsync(transactionId)).ToList();
+        var pendingEventLogs = (_eventLogService.GetPendingEventLogs(transactionId)).ToList();
         foreach (var @event in pendingEventLogs)
         {
             _logger.LogInformation($"Prepare event: {@event.EventId} - {@event.EventName}  {@event.IntegrationEvent}");
 
             try
             {
-                await _eventLogService.MarkEventAsInProgressAsync(@event.EventId);
+                _eventLogService.MarkEventAsInProgress(@event.EventId);
                 _eventBus.Publish(@event.IntegrationEvent);
-                await _eventLogService.MarkEventAsPublishedAsync(@event.EventId);
+                _eventLogService.MarkEventAsPublished(@event.EventId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex,
                     $"===== caught an error while try to publish event {@event.EventId} ===== \n {ex.Message}");
 
-                await _eventLogService.MarkEventAsFailedAsync(@event.EventId);
+                _eventLogService.MarkEventAsFailed(@event.EventId);
             }
         }
 
         try
         {
             var transactionToUpdate = _transactions.FirstOrDefault(x => x.TransactionId == transactionId);
-            pendingEventLogs = (await _eventLogService.GetPendingEventLogsAsync(transactionId)).ToList();
+            pendingEventLogs = _eventLogService.GetPendingEventLogs(transactionId).ToList();
             if (!pendingEventLogs.Any())
             {
                 _transactions.Remove(transactionToUpdate);
@@ -82,14 +82,14 @@ public class StoreIntegrationEventService : IStoreIntegrationEventService
         }
     }
 
-    public async Task CommitEventAsync(IntegrationEvent @event, Guid transactionId)
+    public async Task CommitEventAsync<T>(T @event, Guid transactionId) where T : IntegrationEvent
     {
         if (_transactions.All(x => x.TransactionId != transactionId))
             await Task.FromException(new Exception($"Transaction with {transactionId} is not exist"));
 
         _logger.LogInformation($"Commit event {@event.Id} with {@event}");
 
-        await _eventLogService.SaveEventToTransactionAsync(@event, transactionId);
+        _eventLogService.SaveEventToTransaction(@event, transactionId);
         _transactions.FirstOrDefault(x => x.TransactionId == transactionId)?.UpdateEventsCount(x => x++);
     }
 }

@@ -3,6 +3,8 @@
 public abstract class BaseShoppingList
 {
     public string Name { get; set; }
+    
+    public Seller Seller { get; set; }
 
     public IEnumerable<ShoppingListLine> Lines { get; set; }
 
@@ -37,24 +39,6 @@ public class ShoppingListLine
     public double Quantity { get; set; }
 
     public Unit Unit { get; set; }
-
-    public Seller Seller { get; set; }
-}
-
-public class Unit
-{
-    public int Id { get; set; }
-
-    public string Name { get; set; }
-
-    public double Rate { get; set; }
-}
-
-public class Seller
-{
-    public Guid Id { get; set; }
-
-    public string Name { get; set; }
-
-    public Guid CountyId { get; set; }
+    
+    public Category Category { get; set; }
 }

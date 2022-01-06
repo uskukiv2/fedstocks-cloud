@@ -1,11 +1,14 @@
 ﻿using fed.cloud.product.host.Protos;
 using fedstocks.cloud.web.api.Helpers;
 using fedstocks.cloud.web.api.Models;
+using Google.Protobuf.Collections;
 using Grpc.Core;
 using Newtonsoft.Json;
+using Category = fedstocks.cloud.web.api.Models.Category;
 using Product = fedstocks.cloud.web.api.Models.Product;
 using ProductSummary = fedstocks.cloud.web.api.Models.ProductSummary;
 using RemoteProduct = fed.cloud.product.host.Protos.Product;
+using Unit = fedstocks.cloud.web.api.Models.Unit;
 
 namespace fedstocks.cloud.web.api.Services.Implementation;
 
@@ -78,15 +81,42 @@ public class ProductService : IProductService
             Number = arg.Number
         };
     }
-
-    //TODO FED-127
+    
     private static Product MapToDto(ProductData response)
     {
         return new Product
         {
             Brand = response.Brand,
             Name = response.Name,
-            Number = response.Number
+            Number = response.Number,
+            Prices = MapToDto(response.Prices),
+            Unit = MapToDto(response.Unit),
+            Category = response.Category != null ? MapToDto(response.Category) : null,
         };
+    }
+
+    private static Category? MapToDto(fed.cloud.product.host.Protos.Category responseCategory)
+    {
+        return new Category
+        {
+            Id = responseCategory.Id,
+            Name = responseCategory.Name,
+            ParentCategory = responseCategory.Parent != null ? MapToDto(responseCategory.Parent) : null
+        };
+    }
+
+    private static Unit MapToDto(fed.cloud.product.host.Protos.Unit responsePrices)
+    {
+        return new Unit
+        {
+            Id = responsePrices.Id,
+            Name = responsePrices.Name,
+            Rate = responsePrices.Rate
+        };
+    }
+
+    private static IEnumerable<decimal> MapToDto(RepeatedField<SellerPrice> responsePrices)
+    {
+        return responsePrices.Select(x => (decimal)x.Price);
     }
 }

@@ -64,6 +64,11 @@ namespace fed.cloud.store.infrastructure
             return Task.CompletedTask;
         }
 
+        public void DropTransaction()
+        {
+            throw new NotImplementedException();
+        }
+
         private NpgsqlConnection EnsureConnection()
         {
             return Connection ??= new NpgsqlConnection(_configuration.Database.Connection);

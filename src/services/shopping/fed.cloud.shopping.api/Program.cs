@@ -78,7 +78,6 @@ builder.Services.AddDbOperations();
 builder.Services.AddGrpc(o =>
 {
     o.EnableDetailedErrors = true;
-    o.Interceptors.Add<GlobalLoggingInterceptor>();
 });
 
 var app = builder.Build();

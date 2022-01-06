@@ -1,4 +1,5 @@
 ﻿using fed.cloud.eventbus.Base;
+using MediatR;
 
 namespace fed.cloud.product.host.Infrastructure;
 

@@ -28,7 +28,8 @@ message List{
 	string guid = 1;
 	int32 id = 2;
 	string name = 3;
-	repeated Line Lines = 4;
+	Seller seller = 4;
+	repeated Line Lines = 5;
 }
 
 message CheckoutListRequest {
@@ -51,10 +52,23 @@ message Line {
 	double quantity = 5;
 	double unit_price = 6;
 	Unit unit = 7;
+	Category category = 8;
 }
 
 message Unit {
 	int32 id = 1;
 	string name = 2;
 	double rate = 3;
+}
+
+message Category{
+	int32 id = 1;
+	string name = 2;
+	Category parent = 3;
+}
+
+message Seller {
+	string id = 1;
+	string name = 2;
+	string county = 3;
 }

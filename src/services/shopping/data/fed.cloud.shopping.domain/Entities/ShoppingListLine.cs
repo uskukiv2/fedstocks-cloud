@@ -17,6 +17,6 @@ public class ShoppingListLine
     public double Quantity { get; set; }
 
     public Unit Unit { get; set; }
-
-    public Seller Seller { get; set; }
+    
+    public Category Category { get; set; }
 }

@@ -32,13 +32,24 @@ message ProductData {
 	string name = 2;
 	double qty = 3;
 	int64 number = 4;
-	int32 unit = 5;
-	int32 categrory = 6;
-	repeated SellerPrice sellers = 7;
+	Unit unit = 5;
+	Category category = 6;
+	repeated SellerPrice prices = 7;
 }
 
 message SellerPrice {
-	string sellerName = 1;
 	double price = 2;
 	int32 currency = 3;
+}
+
+message Unit {
+	int32 id = 1;
+	string name = 2;
+	double rate = 3;
+}
+
+message Category {
+	int32 id = 1;
+	string name = 2;
+	Category parent = 3;
 }

@@ -106,4 +106,15 @@ public class ProductContext : DbContext, IUnitOfWork<NpgsqlConnection>
             }
         }
     }
+
+    public void DropTransaction()
+    {
+        if (_currentTransaction == null)
+        {
+            return;
+        }
+
+        _currentTransaction.Dispose();
+        _currentTransaction = null;
+    }
 }
