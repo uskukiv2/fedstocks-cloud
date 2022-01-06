@@ -1,8 +1,11 @@
-﻿using fed.cloud.shopping.api.Protos;
+﻿using fed.cloud.product.application.Models;
+using fed.cloud.shopping.api.Protos;
 using fedstocks.cloud.web.api.Helpers;
 using fedstocks.cloud.web.api.Models;
 using Grpc.Core;
 using Newtonsoft.Json;
+using Category = fed.cloud.shopping.api.Protos.Category;
+using Seller = fed.cloud.shopping.api.Protos.Seller;
 using Unit = fed.cloud.shopping.api.Protos.Unit;
 
 namespace fedstocks.cloud.web.api.Services.Implementation;
@@ -59,6 +62,12 @@ public class ShoppingService : IShoppingService
             Id = 0,
             Guid = userId.ToString(),
             Name = newList.Name,
+            Seller = new Seller
+            {
+                Id = newList.Seller.Id.ToString(),
+                Name = newList.Seller.Name,
+                County = newList.Seller.CountyId.ToString()
+            }
         };
         newList.Lines.ToList().ForEach(x => request.Lines.Add(MapToRequest(x)));
 
@@ -189,7 +198,13 @@ public class ShoppingService : IShoppingService
         {
             Id = shoppingList.Id,
             Name = shoppingList.Name,
-            Guid = userId.ToString()
+            Guid = userId.ToString(),
+            Seller = new Seller
+            {
+                Id = shoppingList.Seller.Id.ToString(),
+                Name = shoppingList.Seller.Name,
+                County = shoppingList.Seller.CountyId.ToString()
+            }
         };
         shoppingList.Lines.ToList().ForEach(x => list.Lines.Add(MapToRequest(x)));
 
@@ -206,7 +221,18 @@ public class ShoppingService : IShoppingService
             Number = line.ProductNumber,
             Quantity = line.Quantity,
             UnitPrice = decimal.ToDouble(line.UnitPrice),
-            Unit = MapToRequest(line.Unit)
+            Unit = MapToRequest(line.Unit),
+            Category = MapToRequest(line.Category)
+        };
+    }
+
+    private static Category MapToRequest(fedstocks.cloud.web.api.Models.Category lineCategory)
+    {
+        return new Category
+        {
+            Id = lineCategory.Id,
+            Name = lineCategory.Name,
+            Parent = lineCategory.ParentCategory != null ? MapToRequest(lineCategory.ParentCategory) : null
         };
     }
 
@@ -226,6 +252,12 @@ public class ShoppingService : IShoppingService
         {
             Id = response.Id,
             Name = response.Name,
+            Seller = new Models.Seller
+            {
+                Id = Guid.Parse(response.Seller.Id),
+                Name = response.Seller.Name,
+                CountyId = Guid.Parse(response.Seller.County)
+            },
             Lines = response.Lines.Select(MapToDto)
         };
     }
@@ -240,7 +272,18 @@ public class ShoppingService : IShoppingService
             IsChecked = line.Checked,
             Quantity = line.Quantity,
             UnitPrice = (decimal) line.UnitPrice,
-            Unit = MapToDto(line.Unit)
+            Unit = MapToDto(line.Unit),
+            Category = MapToDto(line.Category)
+        };
+    }
+
+    private static Models.Category MapToDto(Category lineCategory)
+    {
+        return new Models.Category
+        {
+            Id = lineCategory.Id,
+            Name = lineCategory.Name,
+            ParentCategory = lineCategory.Parent is not null ? MapToDto(lineCategory.Parent) : null
         };
     }
 

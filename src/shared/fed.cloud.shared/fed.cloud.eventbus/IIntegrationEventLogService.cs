@@ -10,10 +10,10 @@ namespace fed.cloud.eventbus
 {
     public interface IIntegrationEventLogService
     {
-        Task SaveEventToTransactionAsync(IntegrationEvent @event, Guid transaction);
-        Task<IEnumerable<IntegrationEventLogEntry>> GetPendingEventLogsAsync(Guid transactionId);
-        Task MarkEventAsInProgressAsync(Guid eventId);
-        Task MarkEventAsPublishedAsync(Guid eventId);
-        Task MarkEventAsFailedAsync(Guid eventId);
+        void SaveEventToTransaction<T>(T @event, Guid transaction) where T : IntegrationEvent;
+        IEnumerable<IntegrationEventLogEntry> GetPendingEventLogs(Guid transactionId);
+        void MarkEventAsInProgress(Guid eventId);
+        void MarkEventAsPublished(Guid eventId);
+        void MarkEventAsFailed(Guid eventId);
     }
 }

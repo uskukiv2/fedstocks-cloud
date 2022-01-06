@@ -7,6 +7,8 @@ public class ShoppingList
     public Guid UserId { get; set; }
 
     public string Name { get; set; }
+    
+    public Seller Seller { get; set; }
 
     public IEnumerable<ShoppingListLine> Lines { get; set; }
 }

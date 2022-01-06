@@ -1,4 +1,7 @@
 ﻿using System.Reflection;
+using Autofac;
+using Autofac.Builder;
+using Autofac.Extensions.DependencyInjection;
 using fed.cloud.common;
 using fed.cloud.common.Infrastructure;
 using fed.cloud.eventbus;
@@ -9,6 +12,7 @@ using fed.cloud.eventbus.RabbitMq;
 using fed.cloud.product.application.Behaviors;
 using fed.cloud.product.application.Commands;
 using fed.cloud.product.application.IntegrationEvents;
+using fed.cloud.product.application.IntegrationEvents.Events;
 using fed.cloud.product.application.IntegrationEvents.Handlers;
 using fed.cloud.product.application.Queries;
 using fed.cloud.product.application.Queries.Implementation;
@@ -19,6 +23,7 @@ using fed.cloud.product.infrastructure;
 using fed.cloud.product.infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using RabbitMQ.Client;
 using ServiceConfiguration = fed.cloud.product.host.Infrastructure.ServiceConfiguration;
@@ -96,31 +101,6 @@ internal static class ServiceCollectionExtensions
 
         service.AddSingleton<IHandlerResolver, EventHandlerResolver>();
         service.AddSingleton<IEventBusSubscribeManager, InMemoryEventBusSubscriptionManager>();
-        service.AddTransient<AddProductPurchasesEventHandler>();
-        return service;
-    }
-
-    internal static IServiceCollection AddMediator(this IServiceCollection service)
-    {
-        service.AddMediatR(typeof(HandleProductsRequestQueryCommandHandler));
-
-        service.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
-        service.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-        service.AddScoped(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-
-        return service;
-    }
-
-    internal static IServiceCollection AddDbOperations(this IServiceCollection service)
-    {
-        service.AddSingleton<IProductQuery, ProductQuery>();
-        service.AddSingleton<ISellerQuery, SellerQuery>();
-        service.AddSingleton<ICountryQuery, CountryQuery>();
-
-        service.AddScoped<IProductRepository, ProductRepository>();
-        service.AddScoped<ISellerCompanyRepository, SellerCompanyRepository>();
-        service.AddScoped<ICountryRepository, CountryRepository>();
-
         return service;
     }
 }

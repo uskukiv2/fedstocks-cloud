@@ -4,6 +4,9 @@ using fed.cloud.shopping.api.Protos;
 using fed.cloud.shopping.domain.Entities;
 using fed.cloud.shopping.domain.Repositories;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authentication;
+using Category = fed.cloud.shopping.api.Protos.Category;
+using Seller = fed.cloud.shopping.api.Protos.Seller;
 using Unit = fed.cloud.shopping.domain.Entities.Unit;
 
 namespace fed.cloud.shopping.api.Services;
@@ -68,7 +71,7 @@ public class ShoppingService : Shopping.ShoppingBase
         
         var currentDate = DateTime.Now.ToUniversalTime();
         var productsPurchaseEvent =
-            new AddProductPurchasesEvent(currentDate, shoppingList.Lines.Select(MapToBoughtLine).ToArray());
+            new AddProductPurchasesEvent(currentDate, shoppingList.Lines.Select(x => MapToBoughtLine(x, shoppingList.Seller.Id)).ToArray());
 
         var createOrderEvent =
             new CreateOrderFromShoppingListEvent(userId, currentDate,
@@ -158,12 +161,23 @@ public class ShoppingService : Shopping.ShoppingBase
         {
             Id = shopping.Id,
             Guid = shopping.UserId.ToString(),
-            Name = shopping.Name
+            Name = shopping.Name,
+            Seller = MapToSeller(shopping.Seller)
         };
 
         list.Lines.AddRange(shopping.Lines.Select(MapToListLine));
 
         return list;
+    }
+
+    private static Seller MapToSeller(domain.Entities.Seller shoppingSeller)
+    {
+        return new Seller
+        {
+            Id = shoppingSeller.Id.ToString(),
+            Name = shoppingSeller.Name,
+            County = shoppingSeller.CountyId.ToString()
+        };
     }
 
     private static ShoppingList MapToShoppingList(List request)
@@ -173,6 +187,12 @@ public class ShoppingService : Shopping.ShoppingBase
             UserId = Guid.Parse(request.Guid),
             Id = request.Id,
             Name = request.Name,
+            Seller = new domain.Entities.Seller
+            {
+                Id = Guid.Parse(request.Seller.Id),
+                Name = request.Seller.Name,
+                CountyId = Guid.Parse(request.Seller.County)
+            },
             Lines = request.Lines.Select(MapToListLine)
         };
     }
@@ -189,6 +209,7 @@ public class ShoppingService : Shopping.ShoppingBase
             ProductName = arg.Name,
             ProductNumber = arg.Number,
             ProductBrand = arg.Brand,
+            Category = MapToCategory(arg.Category)
         };
     }
 
@@ -202,7 +223,28 @@ public class ShoppingService : Shopping.ShoppingBase
             Checked = listLine.IsChecked,
             Unit = MapToUnit(listLine.Unit),
             UnitPrice = decimal.ToDouble(listLine.UnitPrice),
-            Quantity = listLine.Quantity
+            Quantity = listLine.Quantity,
+            Category = MapToCategory(listLine.Category)
+        };
+    }
+
+    private static Category MapToCategory(domain.Entities.Category category)
+    {
+        return new Category
+        {
+            Id = category.Id,
+            Name = category.Name,
+            Parent = category.Parent != null ? MapToCategory(category.Parent) : null
+        };
+    }
+    
+    private static domain.Entities.Category MapToCategory(Category argCategory)
+    {
+        return new domain.Entities.Category
+        {
+            Id = argCategory.Id,
+            Name = argCategory.Name,
+            Parent = argCategory.Parent != null ? MapToCategory(argCategory.Parent) : null
         };
     }
 
@@ -226,7 +268,7 @@ public class ShoppingService : Shopping.ShoppingBase
         };
     }
 
-    private static BoughtProduct MapToBoughtLine(ShoppingListLine arg)
+    private static BoughtProduct MapToBoughtLine(ShoppingListLine arg, Guid sellerId)
     {
         return new BoughtProduct
         {
@@ -234,7 +276,9 @@ public class ShoppingService : Shopping.ShoppingBase
             Name = arg.ProductName,
             Number = arg.ProductNumber,
             OriginalPrice = arg.UnitPrice,
-            Seller = arg.Seller.Id
+            Seller = sellerId,
+            UnitId = arg.Unit.Id,
+            CategoryId = arg.Category.Id
         };
     }
 

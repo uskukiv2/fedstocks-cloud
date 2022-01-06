@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using fed.cloud.eventbus.Base;
 using fed.cloud.product.application.Commands;
 using fed.cloud.product.application.IntegrationEvents.Events;
+using fed.cloud.product.application.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
@@ -26,12 +27,20 @@ namespace fed.cloud.product.application.IntegrationEvents.Handlers
         {
             using (LogContext.PushProperty("IntegrationEventContext", $"{@event.Id}-Products"))
             {
-                _logger.LogInformation("---- Handle bought products originalDate: {eventDate}; {event}", @event.BoughtDate, @event);
+                try
+                {
+                    _logger.LogInformation("---- Handle bought products originalDate: {eventDate}; {event}",
+                        @event.BoughtDate, @event);
 
-                var command = new CreateNewPurchaseLinesCommand(MapToDto(@event.Lines).ToArray());
-                await _mediator.Send(command).ConfigureAwait(false);
+                    var command = new CreateNewPurchaseLinesCommand(MapToDto(@event.Lines).ToArray());
+                    await _mediator.Publish(command).ConfigureAwait(false);
 
-                _logger.LogInformation("---- Started operation on bought products");
+                    _logger.LogInformation("---- Started operation on bought products");
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "---- Exception caught while product handling");
+                }
             }
         }
 
@@ -49,7 +58,9 @@ namespace fed.cloud.product.application.IntegrationEvents.Handlers
                 Number = product.Number,
                 OriginalPrice = product.OriginalPrice,
                 Price = product.Price,
-                Seller = Guid.Parse(product.Seller)
+                Seller = Guid.Parse(product.Seller),
+                CategoryId = product.CategoryId,
+                UnitId = product.CategoryId
             };
         }
     }

@@ -4,6 +4,7 @@ using fed.cloud.product.application.Queries;
 using fed.cloud.product.host.Protos;
 using Grpc.Core;
 using MediatR;
+using Unit = fed.cloud.product.host.Protos.Unit;
 
 namespace fed.cloud.product.host.Services
 {
@@ -78,22 +79,42 @@ namespace fed.cloud.product.host.Services
                 Brand = product.Brand,
                 Name = product.Title,
                 Qty = product.DefaultQty,
-                Categrory = product.Category,
-                Unit = product.Unit,
+                Category = MapToResponse(product.Category),
+                Unit = MapToResponse(product.Unit),
                 Number = product.Number
             };
-            if (product.SellerPrices == null)
+            if (product.PriceDtos == null)
             {
                 return productData;
             }
 
-            foreach (var item in product.SellerPrices)
+            foreach (var item in product.PriceDtos)
             {
-                productData.Sellers.Add(ToResponse(item));
+                productData.Prices.Add(ToResponse(item));
             }
 
             return productData;
 
+        }
+
+        private static Unit MapToResponse(UnitDto unit)
+        {
+            return new Unit
+            {
+                Id = unit.Id,
+                Name = unit.Name,
+                Rate = unit.Rate
+            };
+        }
+
+        private static Category MapToResponse(CategoryDto category)
+        {
+            return new Category
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Parent = category.Parent != null ? MapToResponse(category.Parent) : new Category()
+            };
         }
 
         private static SellerPrice ToResponse(ProductSellerPriceDto arg)
@@ -101,7 +122,6 @@ namespace fed.cloud.product.host.Services
             return new SellerPrice
             {
                 Price = decimal.ToDouble(arg.Price),
-                SellerName = arg.SellerId.ToString(),
                 Currency = arg.CurrencyNumber
             };
         }

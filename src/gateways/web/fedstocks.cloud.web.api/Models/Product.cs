@@ -8,16 +8,9 @@ public class Product
 
     public string Name { get; set; }
 
-    public decimal UnitPrice { get; set; }
-
     public Unit Unit { get; set; }
 
-    public Category Category { get; set; }
-}
-
-public class Category
-{
-    public string Name { get; set; }
-
-    public Category ParentCategory { get; set; }
+    public Category? Category { get; set; }
+    
+    public IEnumerable<decimal> Prices { get; set; }
 }

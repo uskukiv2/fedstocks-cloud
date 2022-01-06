@@ -1,6 +1,7 @@
 ﻿using fed.cloud.eventbus.Base;
 using Newtonsoft.Json;
 using System;
+using LiteDB;
 
 namespace fed.cloud.eventbus.Data
 {
@@ -21,6 +22,26 @@ namespace fed.cloud.eventbus.Data
             TransactionId = transactionId.ToString();
         }
 
+        private IntegrationEventLogEntry(string content,
+            EventStateType state,
+            DateTime creationTime,
+            Guid eventId,
+            string eventName,
+            IntegrationEvent integrationEvent,
+            int timesSent,
+            string transactionId)
+        {
+            Content = content;
+            State = state;
+            CreationTime = creationTime;
+            EventId = eventId;
+            EventName = eventName;
+            IntegrationEvent = integrationEvent;
+            TimesSent = timesSent;
+            TransactionId = transactionId;
+        }
+
+        [BsonId]
         public Guid EventId { get; }
 
         public string EventName { get; }
@@ -36,5 +57,24 @@ namespace fed.cloud.eventbus.Data
         public string Content { get; }
         
         public string TransactionId { get; }
+
+        public static IntegrationEventLogEntry Restore(string content,
+            EventStateType state,
+            DateTime creationTime,
+            Guid eventId,
+            string eventName,
+            IntegrationEvent integrationEvent,
+            int timesSent,
+            string transactionId)
+        {
+            return new IntegrationEventLogEntry(content,
+                state,
+                creationTime,
+                eventId,
+                eventName,
+                integrationEvent,
+                timesSent,
+                transactionId);
+        }
     }
 }

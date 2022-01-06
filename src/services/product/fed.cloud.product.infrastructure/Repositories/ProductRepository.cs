@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using fed.cloud.common.Infrastructure;
 using fed.cloud.product.domain.Entities;
+using fed.cloud.product.domain.Exceptions;
 using fed.cloud.product.domain.Repository;
 using Microsoft.EntityFrameworkCore;
 
@@ -58,7 +59,13 @@ namespace fed.cloud.product.infrastructure.Repositories
 
         public async Task<Product> GetByNumberAsync(long number)
         {
-            return await _context.Products.FirstOrDefaultAsync(x => x.GlobalNumber == number);
+            var result = await _context.Products.FirstOrDefaultAsync(x => x.GlobalNumber == number);
+            if (result == null)
+            {
+                throw new ProductIsNotExistException($"product with number {number} is not exist");
+            }
+
+            return result;
         }
 
         public async Task AddPurchaseForProductAsync(Guid id, decimal price, decimal originalPrice, Guid sellerId)

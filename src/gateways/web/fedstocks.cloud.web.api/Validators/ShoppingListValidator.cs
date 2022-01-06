@@ -8,6 +8,7 @@ public class BaseShoppingListValidator<T> : AbstractValidator<T> where T : BaseS
     public BaseShoppingListValidator()
     {
         RuleFor(x => x.Name).NotEmpty();
+        RuleFor(x => x.Seller).NotNull();
         RuleForEach(x => x.Lines).Cascade(CascadeMode.Continue).ChildRules(x =>
         {
             x.RuleFor(y => y.Quantity).GreaterThanOrEqualTo(1);
@@ -15,7 +16,6 @@ public class BaseShoppingListValidator<T> : AbstractValidator<T> where T : BaseS
             x.RuleFor(y => y.ProductBrand).NotEmpty();
             x.RuleFor(y => y.ProductName).NotEmpty();
             x.RuleFor(y => y.ProductNumber).GreaterThanOrEqualTo(1);
-            x.RuleFor(y => y.Seller).NotNull();
             x.RuleFor(y => y.Unit).NotNull();
         });
     }
