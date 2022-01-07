@@ -16,7 +16,10 @@ public class CountryEntityTypeConfiguration : IEntityTypeConfiguration<Country>
 
     public void Configure(EntityTypeBuilder<Country> builder)
     {
-        builder.ToTable("countries", _config.GetSchema());
+        builder.ToTable("countries", _config.GetSchema())
+            .HasMany(c => c.Counties)
+            .WithOne();
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
@@ -33,5 +36,10 @@ public class CountryEntityTypeConfiguration : IEntityTypeConfiguration<Country>
                 c => new { c.Name, c.GlobalId })
             .HasIndex(c => c.SearchVector)
             .HasMethod("GIN");
+
+        builder.Navigation(c => c.Counties)
+            .UsePropertyAccessMode(PropertyAccessMode.Property);
+
+        builder.HasIndex(x => x.GlobalId).IsUnique();
     }
 }

@@ -49,7 +49,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
             .HasColumnName("UnitId")
             .IsRequired();
 
-        builder.HasOne<ProductCategory>()
+        builder.HasOne(x => x.Category)
             .WithMany()
             .HasForeignKey("CategoryId")
             .IsRequired()
@@ -66,5 +66,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
                 p => new {p.Brand, p.Name, p.GlobalNumber})
             .HasIndex(p => p.SearchVector)
             .HasMethod("GIN");
+
+        builder.HasIndex(x => x.GlobalNumber).IsUnique();
     }
 }

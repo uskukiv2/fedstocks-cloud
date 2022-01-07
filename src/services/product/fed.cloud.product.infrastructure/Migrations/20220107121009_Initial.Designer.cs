@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -9,12 +10,13 @@ using fed.cloud.product.infrastructure;
 
 #nullable disable
 
-namespace fed.cloud.product.host.Infrastructure.Migrations
+namespace fed.cloud.product.infrastructure.Migrations
 {
     [DbContext(typeof(ProductContext))]
-    partial class ProductContextModelSnapshot : ModelSnapshot
+    [Migration("20220107121009_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,8 +31,9 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("GlobalId")
-                        .HasColumnType("integer")
+                    b.Property<string>("GlobalId")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("GlobalId");
 
                     b.Property<string>("Name")
@@ -60,9 +63,8 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("CountryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("CountryId");
+                    b.Property<Guid?>("CountryId")
+                        .HasColumnType("uuid");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -95,8 +97,9 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("CategoryId");
 
-                    b.Property<long>("GlobalNumber")
-                        .HasColumnType("bigint")
+                    b.Property<string>("GlobalNumber")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("GlobalNumber");
 
                     b.Property<string>("Manufacturer")
@@ -126,6 +129,9 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("GlobalNumber")
+                        .IsUnique();
 
                     b.HasIndex("SearchVector");
 
@@ -260,13 +266,9 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
 
             modelBuilder.Entity("fed.cloud.product.domain.Entities.County", b =>
                 {
-                    b.HasOne("fed.cloud.product.domain.Entities.Country", "Country")
-                        .WithMany()
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Country");
+                    b.HasOne("fed.cloud.product.domain.Entities.Country", null)
+                        .WithMany("Counties")
+                        .HasForeignKey("CountryId");
                 });
 
             modelBuilder.Entity("fed.cloud.product.domain.Entities.Product", b =>
