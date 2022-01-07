@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <Folder Include="Factories\Implementation\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 
 </Project>

@@ -11,6 +11,6 @@ namespace fed.cloud.product.domain.Repository
     public interface ICountryRepository : IRepository<Country>
     {
         Task<IEnumerable<Country>> TTSearchAsync(string query, CancellationToken token);
-        Task<County> GetCountyOfCountryAsync(Guid country, int countyNumber);
+        Task<County?> GetCountyOfCountryAsync(Guid country, int countyNumber);
     }
 }

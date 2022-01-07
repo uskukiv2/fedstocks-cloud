@@ -32,10 +32,7 @@ namespace fed.cloud.product.infrastructure.Repositories
 
         public void Add(Product entity, CancellationToken token = default)
         {
-            Task.Factory.StartNew( async () =>
-            {
-                await _context.Products.AddAsync(entity, token);
-            }, token);
+            _context.Products.Add(entity);
         }
 
         public void Update(Product entity, CancellationToken token = default)

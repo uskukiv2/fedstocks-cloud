@@ -52,7 +52,7 @@ internal static class ServiceCollectionExtensions
             {
                 opt.UseNpgsql(configuration.GetDatabaseConnectionString(), options =>
                 {
-                    options.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
+                    //options.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
                 });
             });
         service.AddScoped<IUnitOfWork<NpgsqlConnection>>(sp => sp.GetRequiredService<ProductContext>());
