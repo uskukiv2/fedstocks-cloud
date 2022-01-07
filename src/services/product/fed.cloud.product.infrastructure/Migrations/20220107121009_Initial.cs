@@ -5,7 +5,7 @@ using NpgsqlTypes;
 
 #nullable disable
 
-namespace fed.cloud.product.host.Infrastructure.Migrations
+namespace fed.cloud.product.infrastructure.Migrations
 {
     public partial class Initial : Migration
     {
@@ -21,7 +21,7 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    GlobalId = table.Column<int>(type: "text", nullable: false),
+                    GlobalId = table.Column<string>(type: "text", nullable: false),
                     SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: false)
                         .Annotation("Npgsql:TsVectorConfig", "russian")
                         .Annotation("Npgsql:TsVectorProperties", new[] { "Name", "GlobalId" })
@@ -76,7 +76,7 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Number = table.Column<int>(type: "integer", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CountryId = table.Column<Guid>(type: "uuid", nullable: false)
+                    CountryId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -86,8 +86,7 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                         column: x => x.CountryId,
                         principalSchema: "product",
                         principalTable: "countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -99,11 +98,10 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Brand = table.Column<string>(type: "text", nullable: false),
                     Manufacturer = table.Column<string>(type: "text", nullable: true),
-                    GlobalNumber = table.Column<long>(type: "text", nullable: false),
+                    GlobalNumber = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<int>(type: "integer", nullable: false),
                     QuantityRate = table.Column<double>(type: "double precision", nullable: false),
                     UnitId = table.Column<int>(type: "integer", nullable: false),
-                    CategoryId1 = table.Column<int>(type: "integer", nullable: false),
                     SearchVector = table.Column<NpgsqlTsVector>(type: "tsvector", nullable: false)
                         .Annotation("Npgsql:TsVectorConfig", "russian")
                         .Annotation("Npgsql:TsVectorProperties", new[] { "Brand", "Name", "GlobalNumber" })
@@ -117,13 +115,6 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                         principalSchema: "product",
                         principalTable: "productcategories",
                         principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_products_productcategories_CategoryId1",
-                        column: x => x.CategoryId1,
-                        principalSchema: "product",
-                        principalTable: "productcategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_products_productunits_UnitId",
                         column: x => x.UnitId,
@@ -219,10 +210,11 @@ namespace fed.cloud.product.host.Infrastructure.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_products_CategoryId1",
+                name: "IX_products_GlobalNumber",
                 schema: "product",
                 table: "products",
-                column: "CategoryId1");
+                column: "GlobalNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_products_SearchVector",

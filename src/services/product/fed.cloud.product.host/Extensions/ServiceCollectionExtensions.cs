@@ -50,10 +50,7 @@ internal static class ServiceCollectionExtensions
         service.AddEntityFrameworkNpgsql()
             .AddDbContext<ProductContext>(opt =>
             {
-                opt.UseNpgsql(configuration.GetDatabaseConnectionString(), options =>
-                {
-                    options.MigrationsAssembly(typeof(Program).GetTypeInfo().Assembly.GetName().Name);
-                });
+                opt.UseNpgsql(configuration.GetDatabaseConnectionString());
             });
         service.AddScoped<IUnitOfWork<NpgsqlConnection>>(sp => sp.GetRequiredService<ProductContext>());
         return service;

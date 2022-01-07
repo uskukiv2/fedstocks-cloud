@@ -50,6 +50,8 @@ public class CountryRepository : ICountryRepository
 
     public async Task<County> GetCountyOfCountryAsync(Guid country, int countyNumber)
     {
-        return await _context.Counties.FirstOrDefaultAsync(x => x.CountryId == country && x.NumberInCountry == countyNumber);
+        return (await _context.Countries.AsNoTracking().Include(x => x.Counties)
+                .FirstOrDefaultAsync(x => x.Id == country))?.Counties
+            .FirstOrDefault(x => x.NumberInCountry == countyNumber)!;
     }
 }
