@@ -39,11 +39,8 @@ public class IdentityService : IIdentityService
 
     public Guid GetUserSub(HttpContext context)
     {
-        if (!context.Items.TryGetValue("user-id", out var value) || value == null)
-        {
-            return Guid.Empty;
-        }
+        var value = context.Request.Headers.FirstOrDefault(x => x.Key == "x-userid");
 
-        return Guid.Parse(value.ToString());
+        return Guid.Parse(value.Value);
     }
 }

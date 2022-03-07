@@ -7,18 +7,16 @@ namespace fedstocks.cloud.web.api.Middleware;
 /// <summary>
 /// Should be used only for development with no client
 /// </summary>
-public class DevelopmentClientAuthenticationMiddleware
+public class DevelopmentClientAuthenticationMiddleware : IMiddleware
 {
-    private readonly RequestDelegate _next;
     private readonly IIdentityService _service;
 
-    public DevelopmentClientAuthenticationMiddleware(RequestDelegate next, IIdentityService service)
+    public DevelopmentClientAuthenticationMiddleware(IIdentityService service)
     {
-        _next = next;
         _service = service;
     }
     
-    public async Task Invoke(HttpContext context)
+    public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         if (context.Request.Headers.TryGetValue("x-client", out var localClientId))
         {
@@ -30,6 +28,6 @@ public class DevelopmentClientAuthenticationMiddleware
             context.Items.TryAdd("user-id", identityUser.Id);
         }
 
-        await _next(context);
+        await next(context);
     }
 }

@@ -40,7 +40,7 @@ internal static class ServiceCollectionExtensions
 
         service.AddTransient<IShoppingIntegrationEventService, ShoppingIntegrationEventService>();
 
-        var eventSettings = config.GetFullEventSection();
+        var eventSettings = config.GetFullEventsSection();
 
         service.AddSingleton<IRabbitMqClient>(sp =>
         {
