@@ -1,4 +1,5 @@
-﻿using fedstocks.cloud.web.api.Models.Configurations;
+﻿using fedstocks.cloud.web.api.Infrastructure;
+using fedstocks.cloud.web.api.Models.Configurations;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace fedstocks.cloud.web.api.Middleware
@@ -14,7 +15,7 @@ namespace fedstocks.cloud.web.api.Middleware
 
         public async Task InvokeAsync(HttpContext context, RequestDelegate next)
         {
-            var token = context.Request.Headers.FirstOrDefault(x => x.Key == "Authorization");
+            var token = context.Request.Headers.FirstOrDefault(x => x.Key == ConstValues.AuthorizationString);
             if (string.IsNullOrEmpty(token.Value))
             {
                 context.Response.StatusCode = StatusCodes.Status401Unauthorized;
@@ -23,7 +24,7 @@ namespace fedstocks.cloud.web.api.Middleware
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var securityToken = tokenHandler.ReadToken(token.Value.ToString().Split("Bearer ")[1]) as JwtSecurityToken;
+            var securityToken = tokenHandler.ReadToken(token.Value.ToString().Split($"{ConstValues.BearerStartString} ")[1]) as JwtSecurityToken;
             if (securityToken != null)
             {
                 var userClaim = securityToken.Claims.FirstOrDefault(x => x.Type == "id");
@@ -33,7 +34,7 @@ namespace fedstocks.cloud.web.api.Middleware
                     context.Response.Redirect(_configuration.IdentityUrl);
                     return;
                 }
-                context.Request.Headers.Add("x-userid", userClaim.Value);
+                context.Request.Headers.Add(ConstValues.HeaderUserIdName, userClaim.Value);
                 await next(context);
                 return;
             }

@@ -1,4 +1,5 @@
-﻿using fedstocks.cloud.web.api.Models.Configurations;
+﻿using fedstocks.cloud.web.api.Infrastructure;
+using fedstocks.cloud.web.api.Models.Configurations;
 
 namespace fedstocks.cloud.web.api.Middleware
 {
@@ -16,7 +17,7 @@ namespace fedstocks.cloud.web.api.Middleware
             var token = context.Request.Cookies[$".gen_apps.{_identity.AccessTokenName}"];
             if (!string.IsNullOrEmpty(token))
             {
-                context.Request.Headers.Add("Authorization", "Bearer " + token);
+                context.Request.Headers.Add(ConstValues.AuthorizationString, $"{ConstValues.BearerStartString} " + token);
             }
 
             await next(context);

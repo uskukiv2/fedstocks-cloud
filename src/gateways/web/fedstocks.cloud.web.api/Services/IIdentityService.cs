@@ -5,6 +5,5 @@ namespace fedstocks.cloud.web.api.Services;
 
 public interface IIdentityService
 {
-    Task<IdentityUser> FindAndApplyUserAsync(IdentityAccess access);
     Guid GetUserSub(HttpContext context);
 }

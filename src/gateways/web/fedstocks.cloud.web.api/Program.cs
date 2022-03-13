@@ -4,11 +4,9 @@ using fedstocks.cloud.web.api.Models.Configurations;
 using fedstocks.cloud.web.api.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -75,16 +73,7 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseMiddleware<DevelopmentClientAuthenticationMiddleware>();
-//}
-
 app.UseHttpsRedirection();
-
-app.UseMiddleware<AuthorizationTokenSwippingMiddleware>();
-
-app.UseMiddleware<UserAppendingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -94,5 +83,14 @@ app.UseHttpLogging();
 
 app.UseOpenApi();
 app.UseSwaggerUi3();
+
+var routeBuilder = new RouteBuilder(app);
+routeBuilder.MapMiddlewareRoute("/api", appBuilder =>
+{
+    app.UseMiddleware<AuthorizationTokenSwippingMiddleware>();
+    appBuilder.UseMiddleware<UserAppendingMiddleware>();
+});
+
+app.UseRouter(routeBuilder.Build());
 
 app.Run();
