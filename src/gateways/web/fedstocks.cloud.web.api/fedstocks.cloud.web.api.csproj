@@ -13,13 +13,15 @@
     <PackageReference Include="FluentValidation" Version="10.3.6" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
     <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Infrastructure\Middlewares\" />
-    <Folder Include="Models\Sections\" />
+    <Folder Include="Models\Configurations\Sections\" />
     <Folder Include="Grpc\" />
     <Folder Include="Validators\" />
   </ItemGroup>

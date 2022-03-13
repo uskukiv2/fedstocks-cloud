@@ -26,7 +26,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>().BrokerName;
+            return configuration.GetSection("EventsSection").Get<EventsSection>().BrokerName;
         }
         catch
         {
@@ -38,7 +38,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>().LocalEventsSource;
+            return configuration.GetSection("EventsSection").Get<EventsSection>().LocalEventsSource;
         }
         catch
         {
@@ -50,7 +50,7 @@ internal static class ConfigurationExtensions
     {
         try
         {
-            return configuration.GetSection("EventSection").Get<EventsSection>().QueueName;
+            return configuration.GetSection("EventsSection").Get<EventsSection>().QueueName;
         }
         catch
         {
@@ -58,7 +58,7 @@ internal static class ConfigurationExtensions
         }
     }
 
-    internal static EventsSection GetFullEventSection(this ConfigurationManager configuration)
+    internal static EventsSection GetFullEventsSection(this ConfigurationManager configuration)
     {
         try
         {

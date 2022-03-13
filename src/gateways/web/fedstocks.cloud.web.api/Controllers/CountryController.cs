@@ -31,7 +31,8 @@ namespace fedstocks.cloud.web.api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<CountrySummary>>> Search([FromQuery] string query)
         {
-            if (_identityService.GetUserSub(HttpContext) == Guid.Empty)
+            var userId = _identityService.GetUserSub(HttpContext);
+            if (userId == Guid.Empty)
             {
                 return Unauthorized();
             }
@@ -42,7 +43,7 @@ namespace fedstocks.cloud.web.api.Controllers
             }
 
             var countryResults = await _countryService.SearchCountriesAsync(query);
-            if (!countryResults.Any())
+            if (countryResults == null || !countryResults.Any())
             {
                 return NotFound();
             }
