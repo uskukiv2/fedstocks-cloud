@@ -1,9 +1,10 @@
 ﻿using System.Runtime.InteropServices;
+using fed.cloud.communication.Country;
 using fed.cloud.product.host.Protos;
 using fedstocks.cloud.web.api.Helpers;
 using fedstocks.cloud.web.api.Models;
 using Grpc.Core;
-using Country = fedstocks.cloud.web.api.Models.Country;
+using Country = fed.cloud.communication.Country.Country;
 using RemoteCountry = fed.cloud.product.host.Protos.Country;
 
 namespace fedstocks.cloud.web.api.Services.Implementation;

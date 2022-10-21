@@ -29,6 +29,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\services\product\fed.cloud.product.host\fed.cloud.product.host.csproj" />
     <ProjectReference Include="..\..\..\services\shopping\fed.cloud.shopping.api\fed.cloud.shopping.api.csproj" />
+    <ProjectReference Include="..\..\..\shared\fed.communication\fed.cloud.communication\fed.cloud.communication.csproj" />
   </ItemGroup>
 
 </Project>

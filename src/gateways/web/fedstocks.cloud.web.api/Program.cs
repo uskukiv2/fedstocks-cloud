@@ -5,9 +5,11 @@ using fedstocks.cloud.web.api.Validators;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
-
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls(builder.Configuration.GetDefaultUrls());
@@ -44,7 +46,7 @@ builder.Services.AddTransient<AuthorizationTokenSwippingMiddleware>();
 
 builder.Services.AddTransient<UserAppendingMiddleware>();
 
-var identityUrl = builder.Configuration.GetValue<string>("IdentityUrl");
+var identityUrl = identityConfiguration.IdentityUrl;
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("/gen_app"))
     .SetApplicationName("gen_apps");
@@ -64,19 +66,40 @@ builder.Services.AddAuthentication(options =>
         })
         .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
         {
-            options.Authority = identityUrl;
-            options.ForwardSignIn = $"{identityUrl}Login";
-            options.RequireHttpsMetadata = false;
+            var schemeHost = identityUrl.Split("://");
+            var scheme = schemeHost[0];
+            var hostPort = schemeHost[1].Split(":");
+            var host = hostPort[0];
+            var port = hostPort[1].Replace("/", "");
+            //options.Authority = GetUrl(scheme, host, int.Parse(port));
+            options.Audience = "gen_apps_shoppera";
+            options.ForwardSignIn = GetUrl(scheme, host, int.Parse(port), "Login");
+            options.RequireHttpsMetadata = true;
+            options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            {
+                ValidAudiences = new[] { "gen_apps_shoppera" },
+                ValidateAudience = true,
+                ValidateIssuer = true,
+                ValidIssuers = new[] { identityUrl },
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = false,
+            };
         });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("jwt", o =>
+    {
+        o.AuthenticationSchemes.Add(JwtBearerDefaults.AuthenticationScheme);
+        o.Requirements.Add(new DenyAnonymousAuthorizationRequirement());
+    });
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
 
 app.MapControllers();
 app.UseHttpLogging();
@@ -85,12 +108,52 @@ app.UseOpenApi();
 app.UseSwaggerUi3();
 
 var routeBuilder = new RouteBuilder(app);
-routeBuilder.MapMiddlewareRoute("/api", appBuilder =>
+routeBuilder.MapMiddlewareRoute("api/{controller}/{action}", appBuilder =>
 {
-    app.UseMiddleware<AuthorizationTokenSwippingMiddleware>();
+    appBuilder.UseMiddleware<AuthorizationTokenSwippingMiddleware>();
     appBuilder.UseMiddleware<UserAppendingMiddleware>();
+    appBuilder.UseAuthentication();
+    appBuilder.UseStatusCodePages(context =>
+    {
+        var request = context.HttpContext.Request;
+        var response = context.HttpContext.Response;
+        if (response.StatusCode != (int)HttpStatusCode.Unauthorized)
+        {
+            return Task.CompletedTask;
+        }
+
+        var schemeHost = identityUrl.Split("://");
+        var scheme = schemeHost[0];
+        var hostPort = schemeHost[1].Split(":");
+        var host = hostPort[0];
+        var port = hostPort[1].Replace("/", "");
+        response.Redirect(GetUrl(scheme, host, int.Parse(port), $"Login?ReturnUrl={app.Configuration.GetValue<string>("Urls")}"));
+
+        return Task.CompletedTask;
+    });
+    appBuilder.UseRouting();
+    appBuilder.UseAuthorization();
+    appBuilder.UseEndpoints(endpoint =>
+    {
+        endpoint.MapControllers();
+    });
 });
 
 app.UseRouter(routeBuilder.Build());
 
 app.Run();
+
+
+string GetUrl(string scheme, string host, int port, string path = null)
+{
+    var uri = new UriBuilder(scheme, host)
+    {
+        Port = port
+    };
+    if (!string.IsNullOrEmpty(path))
+    {
+        uri.Path = path;
+    }
+
+    return uri.ToString();
+}

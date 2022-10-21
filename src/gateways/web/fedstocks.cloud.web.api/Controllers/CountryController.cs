@@ -1,14 +1,17 @@
 ﻿using System.Net.Mime;
 using System.Text;
+using fed.cloud.communication.Country;
 using fedstocks.cloud.web.api.Models;
 using fedstocks.cloud.web.api.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fedstocks.cloud.web.api.Controllers
 {
     [Produces(MediaTypeNames.Application.Json)]
     [ApiController]
+    [Authorize(Policy = "jwt")]
     [Route("api/[controller]")]
     public class CountryController : ControllerBase
     {

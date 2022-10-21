@@ -1,3 +1,4 @@
+using fed.cloud.communication.Product;
 using fedstocks.cloud.web.api.Models;
 using FluentValidation;
 

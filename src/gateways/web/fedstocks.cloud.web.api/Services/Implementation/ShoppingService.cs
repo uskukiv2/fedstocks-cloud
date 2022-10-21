@@ -1,9 +1,6 @@
-﻿using fed.cloud.product.application.Models;
+﻿using fed.cloud.communication.Shopper;
 using fed.cloud.shopping.api.Protos;
 using fedstocks.cloud.web.api.Helpers;
-using fedstocks.cloud.web.api.Models;
-using Grpc.Core;
-using Newtonsoft.Json;
 using Category = fed.cloud.shopping.api.Protos.Category;
 using Seller = fed.cloud.shopping.api.Protos.Seller;
 using Unit = fed.cloud.shopping.api.Protos.Unit;
@@ -39,9 +36,18 @@ public class ShoppingService : IShoppingService
                 return new ShoppingCheckoutResult
                 {
                     Name = string.Empty,
-                    IsSuccess = false,
                     ShoppingId = shoppingListId,
                     TotalLines = 0
+                };
+            }
+
+            if (!response.Success)
+            {
+                return new ShoppingCheckoutResult()
+                {
+                    Name = response.Name,
+                    ShoppingId = response.Id,
+                    TotalLines = -1
                 };
             }
 
@@ -186,7 +192,6 @@ public class ShoppingService : IShoppingService
         return new ShoppingCheckoutResult
         {
             ShoppingId = response.Id,
-            IsSuccess = response.Success,
             Name = response.Name,
             TotalLines = 1
         };
@@ -226,7 +231,7 @@ public class ShoppingService : IShoppingService
         };
     }
 
-    private static Category MapToRequest(fedstocks.cloud.web.api.Models.Category lineCategory)
+    private static Category MapToRequest(fed.cloud.communication.Category lineCategory)
     {
         return new Category
         {
@@ -236,7 +241,7 @@ public class ShoppingService : IShoppingService
         };
     }
 
-    private static Unit MapToRequest(Models.Unit unit)
+    private static Unit MapToRequest(fed.cloud.communication.Unit unit)
     {
         return new Unit
         {
@@ -252,7 +257,7 @@ public class ShoppingService : IShoppingService
         {
             Id = response.Id,
             Name = response.Name,
-            Seller = new Models.Seller
+            Seller = new fed.cloud.communication.Seller.Seller
             {
                 Id = Guid.Parse(response.Seller.Id),
                 Name = response.Seller.Name,
@@ -277,9 +282,9 @@ public class ShoppingService : IShoppingService
         };
     }
 
-    private static Models.Category MapToDto(Category lineCategory)
+    private static fed.cloud.communication.Category MapToDto(Category lineCategory)
     {
-        return new Models.Category
+        return new fed.cloud.communication.Category
         {
             Id = lineCategory.Id,
             Name = lineCategory.Name,
@@ -287,9 +292,9 @@ public class ShoppingService : IShoppingService
         };
     }
 
-    private static Models.Unit MapToDto(Unit unit)
+    private static fed.cloud.communication.Unit MapToDto(Unit unit)
     {
-        return new Models.Unit
+        return new fed.cloud.communication.Unit
         {
             Id = unit.Id,
             Name = unit.Name,

@@ -2,13 +2,11 @@
 using fedstocks.cloud.web.api.Helpers;
 using fedstocks.cloud.web.api.Models;
 using Google.Protobuf.Collections;
-using Grpc.Core;
-using Newtonsoft.Json;
-using Category = fedstocks.cloud.web.api.Models.Category;
-using Product = fedstocks.cloud.web.api.Models.Product;
-using ProductSummary = fedstocks.cloud.web.api.Models.ProductSummary;
+using Category = fed.cloud.communication.Category;
+using Product = fed.cloud.communication.Product.Product;
+using ProductSummary = fed.cloud.communication.Product.ProductSummary;
 using RemoteProduct = fed.cloud.product.host.Protos.Product;
-using Unit = fedstocks.cloud.web.api.Models.Unit;
+using Unit = fed.cloud.communication.Unit;
 
 namespace fedstocks.cloud.web.api.Services.Implementation;
 

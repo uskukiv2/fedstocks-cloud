@@ -1,8 +1,10 @@
 ﻿using System.Net.Mime;
 using System.Text;
+using fed.cloud.communication.Shopper;
 using fedstocks.cloud.web.api.Models;
 using fedstocks.cloud.web.api.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fedstocks.cloud.web.api.Controllers
@@ -10,6 +12,7 @@ namespace fedstocks.cloud.web.api.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Policy = "jwt")]
     public class ShoppingController : ControllerBase
     {
         private readonly IIdentityService _identityService;
@@ -28,7 +31,6 @@ namespace fedstocks.cloud.web.api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         public async Task<ActionResult<CompletedShoppingList>> NewList([FromBody] NewShoppingList list)
         {
@@ -97,6 +99,7 @@ namespace fedstocks.cloud.web.api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<ActionResult<ShoppingCheckoutResult>> CheckoutList([FromBody] ShoppingCheckoutRequest request)
@@ -118,9 +121,10 @@ namespace fedstocks.cloud.web.api.Controllers
                 return NotFound();
             }
 
-            if (!checkoutResult.IsSuccess)
+            if (checkoutResult.TotalLines == -1)
             {
-                return NoContent();
+                return StatusCode(StatusCodes.Status403Forbidden,
+                    $"For {checkoutResult.ShoppingId}{checkoutResult.Name} is not all lines is checked or checkout is not forced");
             }
 
             return Ok(checkoutResult);

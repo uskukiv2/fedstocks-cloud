@@ -1,12 +1,15 @@
 ﻿using System.Net.Mime;
+using fed.cloud.communication.Seller;
 using fedstocks.cloud.web.api.Models;
 using fedstocks.cloud.web.api.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fedstocks.cloud.web.api.Controllers;
 
 [Produces(MediaTypeNames.Application.Json)]
 [Route("api/[controller]")]
+[Authorize(Policy = "jwt")]
 [ApiController]
 public class SellerController : ControllerBase
 {

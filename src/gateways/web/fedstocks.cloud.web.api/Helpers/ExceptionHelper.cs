@@ -4,7 +4,7 @@ namespace fedstocks.cloud.web.api.Helpers;
 
 public static class ExceptionHelper
 {
-    public static T? HandleExceptionWithGrpc<T>(ILogger logger, Exception ex) where T : new()
+    public static T HandleExceptionWithGrpc<T>(ILogger logger, Exception ex) where T : new()
     {
         if (ex.InnerException?.InnerException is RpcException rex)
         {
