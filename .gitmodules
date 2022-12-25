@@ -1,6 +1,7 @@
 [submodule "src/shared/shared.items"]
 	path = src/shared/shared.items
 	url = https://gitlab.com/Uskuki/gen-shared.git
+	branch = master
 [submodule "src/shared/fed.communication"]
 	path = src/shared/fed.communication
 	url = https://gitlab.com/Uskuki/fedstocks-communication.git

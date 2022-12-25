@@ -1,7 +1,1 @@
-# Integration with Issue Tracker
-#
-# (note that '\' need to be escaped).
 
-[issuetracker "youtrack_tracker"]
-  regex = "#(\\d+)"
-  url = "https://fedstocks.youtrack.cloud/issue/FED-$1"
