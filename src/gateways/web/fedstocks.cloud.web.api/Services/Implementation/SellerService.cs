@@ -1,9 +1,6 @@
 ﻿using fed.cloud.communication.Seller;
 using fed.cloud.product.host.Protos;
 using fedstocks.cloud.web.api.Helpers;
-using fedstocks.cloud.web.api.Models;
-using Grpc.Core;
-using Country = fed.cloud.communication.Country.Country;
 using RemoteSeller = fed.cloud.product.host.Protos.Seller;
 
 namespace fedstocks.cloud.web.api.Services.Implementation;

@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using fed.cloud.product.application.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using fed.cloud.product.application.Models;
 
 namespace fed.cloud.product.application.Queries;
 

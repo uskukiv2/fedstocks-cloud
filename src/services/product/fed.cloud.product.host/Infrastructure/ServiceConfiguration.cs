@@ -1,6 +1,5 @@
 ﻿using fed.cloud.common;
 using fed.cloud.common.Infrastructure;
-using fed.cloud.eventbus.Base;
 
 namespace fed.cloud.product.host.Infrastructure;
 

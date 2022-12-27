@@ -1,5 +1,4 @@
-﻿using System;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.product.domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -63,7 +62,7 @@ public class ProductEntityConfiguration : IEntityTypeConfiguration<Product>
 
         builder.HasGeneratedTsVectorColumn(p => p.SearchVector,
                 _config.Database.VectorConfig,
-                p => new {p.Brand, p.Name, p.GlobalNumber})
+                p => new { p.Brand, p.Name, p.GlobalNumber })
             .HasIndex(p => p.SearchVector)
             .HasMethod("GIN");
 

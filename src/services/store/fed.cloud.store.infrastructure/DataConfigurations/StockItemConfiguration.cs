@@ -1,9 +1,7 @@
-﻿using System.Data;
-using System.Data.Common;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.store.domain.Root.Stock;
 using RepoDb;
-using RepoDb.Interfaces;
+using System.Data;
 
 namespace fed.cloud.store.infrastructure.DataConfigurations
 {

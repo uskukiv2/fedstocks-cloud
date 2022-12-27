@@ -1,15 +1,14 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.product.domain.Abstraction;
 using fed.cloud.product.domain.Entities;
 using fed.cloud.product.infrastructure.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Npgsql;
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.infrastructure;
 
@@ -18,7 +17,7 @@ public class ProductContext : DbContext, IUnitOfWork<NpgsqlConnection>
     private readonly IServiceConfiguration _config;
     private IDbContextTransaction? _currentTransaction;
 
-    public ProductContext(DbContextOptions<ProductContext> options) : base(options) {}
+    public ProductContext(DbContextOptions<ProductContext> options) : base(options) { }
 
     public ProductContext(DbContextOptions<ProductContext> options, IServiceConfiguration config) : base(options)
     {
@@ -38,7 +37,7 @@ public class ProductContext : DbContext, IUnitOfWork<NpgsqlConnection>
 
     public DbTransaction? Transaction => _currentTransaction?.GetDbTransaction();
 
-    public NpgsqlConnection Connection => (NpgsqlConnection) Database.GetDbConnection();
+    public NpgsqlConnection Connection => (NpgsqlConnection)Database.GetDbConnection();
 
     public DbSet<Product> Products { get; set; }
 

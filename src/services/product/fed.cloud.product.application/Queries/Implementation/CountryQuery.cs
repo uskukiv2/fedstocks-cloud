@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.product.application.Models;
 using Npgsql;
 using RepoDb;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.application.Queries.Implementation;
 
@@ -42,7 +42,7 @@ public class CountryQuery : ICountryQuery
             CountyDtos = counties.Select(CreateCountyDto).ToArray()
         };
     }
-    
+
     private static CountyDto CreateCountyDto(dynamic county)
     {
         return new CountyDto

@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
 using fed.cloud.store.domain.Abstract;
 using fed.cloud.store.domain.Extras;
+using System;
+using System.Collections.Generic;
 
 namespace fed.cloud.store.domain.Root.Stock
 {

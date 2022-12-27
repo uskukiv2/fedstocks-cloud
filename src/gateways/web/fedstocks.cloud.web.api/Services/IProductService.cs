@@ -1,5 +1,4 @@
 ﻿using fed.cloud.communication.Product;
-using fedstocks.cloud.web.api.Models;
 
 namespace fedstocks.cloud.web.api.Services;
 

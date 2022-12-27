@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.store.domain.Abstract;
-using fed.cloud.store.domain.Root.Order;
 using fed.cloud.store.domain.Root.Stock;
 using fed.cloud.store.infrastructure.Factories;
 using Npgsql;
 using RepoDb;
-using RepoDb.Enumerations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.infrastructure.Repositories
 {

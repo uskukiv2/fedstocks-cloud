@@ -19,7 +19,7 @@ public static class ExceptionHelper
                     return new T();
             }
         }
-        
+
         logger.LogError(ex, "unexpected exception");
         return default(T);
     }

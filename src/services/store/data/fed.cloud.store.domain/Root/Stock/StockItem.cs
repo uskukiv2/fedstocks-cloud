@@ -1,5 +1,5 @@
-using System;
 using fed.cloud.store.domain.Extras;
+using System;
 
 namespace fed.cloud.store.domain.Root.Stock
 {
@@ -15,7 +15,7 @@ namespace fed.cloud.store.domain.Root.Stock
 
         public int CategoryId { get; set; }
 
-        public  UnitType Unit { get; set; }
+        public UnitType Unit { get; set; }
 
         public Guid StockId { get; set; }
 

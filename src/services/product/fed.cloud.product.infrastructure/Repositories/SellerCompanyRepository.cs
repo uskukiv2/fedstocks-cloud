@@ -1,12 +1,12 @@
-﻿using System;
+﻿using fed.cloud.common.Infrastructure;
+using fed.cloud.product.domain.Entities;
+using fed.cloud.product.domain.Repository;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
-using fed.cloud.product.domain.Entities;
-using fed.cloud.product.domain.Repository;
-using Microsoft.EntityFrameworkCore;
 
 namespace fed.cloud.product.infrastructure.Repositories;
 
@@ -56,7 +56,7 @@ public class SellerCompanyRepository : ISellerCompanyRepository
     }
 
     public async Task<IEnumerable<SellerCompany>> TTSearchAsync(string query, Guid countryId, Guid countyId, CancellationToken token)
-    { 
+    {
         return await _context.Companies
             .Where(x => x.SearchVector.Matches(query) && x.CountryId == countryId && x.CountyId == countyId)
             .ToListAsync(token);

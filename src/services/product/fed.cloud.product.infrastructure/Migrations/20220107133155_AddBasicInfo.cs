@@ -1,9 +1,6 @@
-﻿using System;
-using System.Data.SqlTypes;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System;
 using System.Text;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Storage;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Storage.Internal;
 
 #nullable disable
 
@@ -32,20 +29,20 @@ namespace fed.cloud.product.infrastructure.Migrations
             migrationBuilder.Sql(PrepareSql("product.productcategories", new[] { "Id", "Name", "ParentId" }, 4, "'Bakery products'", 1));
 
             //units
-            migrationBuilder.Sql(PrepareSql("product.productunits", new[] {"Id", "Name", "Rate"}, 1, "'Kilogramms'",
+            migrationBuilder.Sql(PrepareSql("product.productunits", new[] { "Id", "Name", "Rate" }, 1, "'Kilogramms'",
                 1));
-            migrationBuilder.Sql(PrepareSql("product.productunits", new[] {"Id", "Name", "Rate"}, 2, "'Liters'", 1));
-            migrationBuilder.Sql(PrepareSql("product.productunits", new[] {"Id", "Name", "Rate"}, 3, "'Gramms'", 1000));
-            migrationBuilder.Sql(PrepareSql("product.productunits", new[] {"Id", "Name", "Rate"}, 4, "'Peace'", 1));
+            migrationBuilder.Sql(PrepareSql("product.productunits", new[] { "Id", "Name", "Rate" }, 2, "'Liters'", 1));
+            migrationBuilder.Sql(PrepareSql("product.productunits", new[] { "Id", "Name", "Rate" }, 3, "'Gramms'", 1000));
+            migrationBuilder.Sql(PrepareSql("product.productunits", new[] { "Id", "Name", "Rate" }, 4, "'Peace'", 1));
 
             //sellers
             migrationBuilder.Sql(PrepareSql("product.sellercompanies",
-                new[] {"Id", "OriginalName", "CountryId", "CountyId"}, $"'{Guid.NewGuid()}'", "'Pyatorochka'", $"'{countryId}'",
+                new[] { "Id", "OriginalName", "CountryId", "CountyId" }, $"'{Guid.NewGuid()}'", "'Pyatorochka'", $"'{countryId}'",
                 $"'{countyId}'"));
             migrationBuilder.Sql(PrepareSql("product.sellercompanies",
-                new[] {"Id", "OriginalName", "CountryId", "CountyId"}, $"'{Guid.NewGuid()}'", "'Lenta'", $"'{countryId}'", $"'{countyId}'"));
+                new[] { "Id", "OriginalName", "CountryId", "CountyId" }, $"'{Guid.NewGuid()}'", "'Lenta'", $"'{countryId}'", $"'{countyId}'"));
             migrationBuilder.Sql(PrepareSql("product.sellercompanies",
-                new[] {"Id", "OriginalName", "CountryId", "CountyId"}, $"'{Guid.NewGuid()}'", "'Magnit'", $"'{countryId}'",
+                new[] { "Id", "OriginalName", "CountryId", "CountyId" }, $"'{Guid.NewGuid()}'", "'Magnit'", $"'{countryId}'",
                 $"'{countyId}'"));
         }
 

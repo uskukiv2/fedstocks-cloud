@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-using fed.cloud.common.Models;
-using fed.cloud.shopping.api.Models.Configuration;
+﻿using fed.cloud.common.Models;
 using fedstocks.cloud.web.api.Models.Sections;
 
 namespace fedstocks.cloud.web.api.Extensions;

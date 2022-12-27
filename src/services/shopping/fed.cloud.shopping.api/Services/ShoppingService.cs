@@ -4,7 +4,6 @@ using fed.cloud.shopping.api.Protos;
 using fed.cloud.shopping.domain.Entities;
 using fed.cloud.shopping.domain.Repositories;
 using Grpc.Core;
-using Microsoft.AspNetCore.Authentication;
 using Category = fed.cloud.shopping.api.Protos.Category;
 using Seller = fed.cloud.shopping.api.Protos.Seller;
 using Unit = fed.cloud.shopping.domain.Entities.Unit;
@@ -68,7 +67,7 @@ public class ShoppingService : Shopping.ShoppingBase
         }
 
         var transactionId = await _shoppingIntegrationEventService.BeginLocalTransaction();
-        
+
         var currentDate = DateTime.Now.ToUniversalTime();
         var productsPurchaseEvent =
             new AddProductPurchasesEvent(currentDate, shoppingList.Lines.Select(x => MapToBoughtLine(x, shoppingList.Seller.Id)).ToArray());
@@ -204,7 +203,7 @@ public class ShoppingService : Shopping.ShoppingBase
             Id = Guid.NewGuid(),
             IsChecked = arg.Checked,
             Quantity = arg.Quantity,
-            UnitPrice = (decimal) arg.UnitPrice,
+            UnitPrice = (decimal)arg.UnitPrice,
             Unit = MapUnit(arg.Unit),
             ProductName = arg.Name,
             ProductNumber = arg.Number,
@@ -237,7 +236,7 @@ public class ShoppingService : Shopping.ShoppingBase
             Parent = category.Parent != null ? MapToCategory(category.Parent) : null
         };
     }
-    
+
     private static domain.Entities.Category MapToCategory(Category argCategory)
     {
         return new domain.Entities.Category

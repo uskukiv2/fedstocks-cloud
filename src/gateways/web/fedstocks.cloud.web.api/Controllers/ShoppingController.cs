@@ -1,11 +1,10 @@
-﻿using System.Net.Mime;
-using System.Text;
-using fed.cloud.communication.Shopper;
-using fedstocks.cloud.web.api.Models;
+﻿using fed.cloud.communication.Shopper;
 using fedstocks.cloud.web.api.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
+using System.Text;
 
 namespace fedstocks.cloud.web.api.Controllers
 {
@@ -133,7 +132,7 @@ namespace fedstocks.cloud.web.api.Controllers
         //TODO: FED-124 Add ability to remove shopping list
         [HttpDelete("remove")]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        public async Task<ActionResult<bool>>RemoveList()
+        public async Task<ActionResult<bool>> RemoveList()
         {
             return Forbid();
         }
@@ -154,7 +153,7 @@ namespace fedstocks.cloud.web.api.Controllers
             var lists = await _shoppingService.GetShoppingListsAsync(userId);
             if (lists == null)
             {
-                return Problem(statusCode:405);
+                return Problem(statusCode: 405);
             }
             if (!lists.Any())
             {

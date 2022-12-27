@@ -11,12 +11,12 @@ internal static class ApplicationExtensions
     internal static WebApplication ConfigureEventBus(this WebApplication app)
     {
         var eventBus = app.Services.GetRequiredService<IEventBus>();
-        
+
         eventBus.Subscribe<AddProductPurchasesEvent, AddProductPurchasesEventHandler>();
 
         return app;
     }
-    
+
     public static void BeforeBuild(this WebApplication app)
     {
         BuildDatabase(app.Services, app.Logger, app.Configuration, app.Environment.IsDevelopment());

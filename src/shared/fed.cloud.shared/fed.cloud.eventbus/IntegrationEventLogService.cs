@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 
 namespace fed.cloud.eventbus
 {
@@ -30,7 +29,7 @@ namespace fed.cloud.eventbus
             var events = db.Database.GetCollection<IntegrationEventLogEntry>().Query()
                 .Where(x => x.TransactionId == transactionId.ToString())
                 .Where(x => x.State == EventStateType.NotPublished)
-                .Select(x => new { x.EventId, x.EventName, x.CreationTime,x.Content,x.State, x.TimesSent, x.TransactionId, x.IntegrationEvent }).ToList()
+                .Select(x => new { x.EventId, x.EventName, x.CreationTime, x.Content, x.State, x.TimesSent, x.TransactionId, x.IntegrationEvent }).ToList()
                 .Select(x => IntegrationEventLogEntry.Restore(x.Content,
                     x.State,
                     x.CreationTime,
@@ -92,7 +91,13 @@ namespace fed.cloud.eventbus
                 .Where(x => x.EventId == evenId)
                 .Select(x => new
                 {
-                    x.EventId, x.EventName, x.CreationTime, x.Content, x.State, x.TimesSent, x.TransactionId,
+                    x.EventId,
+                    x.EventName,
+                    x.CreationTime,
+                    x.Content,
+                    x.State,
+                    x.TimesSent,
+                    x.TransactionId,
                     x.IntegrationEvent
                 })
                 .ForUpdate()
@@ -102,9 +107,9 @@ namespace fed.cloud.eventbus
                 selectEventLogEntry.State,
                 selectEventLogEntry.CreationTime,
                 selectEventLogEntry.EventId,
-                selectEventLogEntry.EventName, 
+                selectEventLogEntry.EventName,
                 selectEventLogEntry.IntegrationEvent,
-                selectEventLogEntry.TimesSent, 
+                selectEventLogEntry.TimesSent,
                 selectEventLogEntry.TransactionId);
             eventLogEntry.State = eventState;
             db.Update(eventLogEntry);

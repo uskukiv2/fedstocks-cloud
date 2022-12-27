@@ -1,16 +1,15 @@
 ﻿using fed.cloud.eventbus.Base;
 using fed.cloud.eventbus.EventBus.Abstraction;
 using Microsoft.Extensions.Logging;
-using System;
+using Newtonsoft.Json;
+using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
-using System.Threading.Tasks;
-using System.Text;
-using Newtonsoft.Json;
-using Polly;
-using Polly.Retry;
+using System;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace fed.cloud.eventbus.RabbitMq
 {

@@ -1,5 +1,5 @@
-using System;
 using fed.cloud.eventbus.Base;
+using System;
 
 namespace fed.cloud.product.application.IntegrationEvents.Events
 {
@@ -23,9 +23,9 @@ namespace fed.cloud.product.application.IntegrationEvents.Events
         public decimal OriginalPrice { get; set; }
 
         public string Seller { get; set; }
-        
+
         public int UnitId { get; set; }
-        
+
         public int CategoryId { get; set; }
     }
 }

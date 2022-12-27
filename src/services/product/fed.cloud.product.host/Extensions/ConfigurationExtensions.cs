@@ -128,7 +128,7 @@ internal static class ConfigurationExtensions
             return "f_key";
         }
     }
-    
+
     internal static LogLevel GetDefaultLogLevel(this ConfigurationManager configuration)
     {
         return configuration.GetSection("Logging").GetSection("LogLevel").GetValue<LogLevel>("Default");

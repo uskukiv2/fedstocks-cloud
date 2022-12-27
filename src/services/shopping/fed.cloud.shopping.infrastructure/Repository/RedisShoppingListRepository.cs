@@ -45,7 +45,7 @@ public class RedisShoppingListRepository : IShoppingListRepository
     public async Task<ShoppingList?> FullUpdateShoppingListAsync(ShoppingList list)
     {
         var hashEntry = new HashEntry(list.Id.ToString(), JsonConvert.SerializeObject(list));
-        await _cacheClient.Database.HashSetAsync(new RedisKey($"shp:{list.UserId}"), new []{hashEntry});
+        await _cacheClient.Database.HashSetAsync(new RedisKey($"shp:{list.UserId}"), new[] { hashEntry });
 
         return await GetShoppingListAsync(list.UserId, list.Id);
     }

@@ -1,7 +1,7 @@
 ﻿using fed.cloud.product.domain.Abstraction;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
-using NpgsqlTypes;
 
 namespace fed.cloud.product.domain.Entities
 {

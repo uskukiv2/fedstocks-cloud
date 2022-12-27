@@ -3,7 +3,6 @@ using fed.cloud.eventbus.Base;
 using fed.cloud.eventbus.EventBus;
 using fed.cloud.eventbus.EventBus.Abstraction;
 using fed.cloud.eventbus.RabbitMq;
-using fed.cloud.product.host.Extensions;
 using fed.cloud.shopping.api.Application.IntegrationEvents;
 using fed.cloud.shopping.domain.Repositories;
 using fed.cloud.shopping.infrastructure;
@@ -20,7 +19,7 @@ internal static class ServiceCollectionExtensions
         var eventServiceConfiguration =
             new EventServiceConfiguration(config.GetEventBrokerName(), config.GetLocalEventsSource(), string.Empty);
         service.AddSingleton<IEventServiceConfiguration>(eventServiceConfiguration);
-        
+
         return service;
     }
 

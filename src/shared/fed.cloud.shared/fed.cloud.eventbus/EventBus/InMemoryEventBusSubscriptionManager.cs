@@ -4,7 +4,6 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace fed.cloud.eventbus.EventBus
 {
@@ -98,7 +97,7 @@ namespace fed.cloud.eventbus.EventBus
 
             }
 
-            if(!_handlers.TryGetValue(eventName, out var subscribtions))
+            if (!_handlers.TryGetValue(eventName, out var subscribtions))
             {
                 return;
             }

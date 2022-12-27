@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.product.application.Models;
 using Npgsql;
 using RepoDb;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.application.Queries.Implementation;
 
@@ -23,7 +22,7 @@ public class SellerQuery : ISellerQuery
     {
         await using var conn = new NpgsqlConnection(_connection);
 
-        var county = (await conn.QueryAsync("product.counties", new {CountryId = countryId, Number = countyNumber},
+        var county = (await conn.QueryAsync("product.counties", new { CountryId = countryId, Number = countyNumber },
             Field.From("Id", "Name"))).FirstOrDefault();
 
         var counties = await conn.QueryAsync("product.sellers", new { CountryId = countryId, CountyId = county.Id },

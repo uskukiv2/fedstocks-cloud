@@ -1,11 +1,11 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using fed.cloud.store.application.Extensions;
 using fed.cloud.store.application.Models;
 using fed.cloud.store.domain.Root.Order;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.application.Commands;
 

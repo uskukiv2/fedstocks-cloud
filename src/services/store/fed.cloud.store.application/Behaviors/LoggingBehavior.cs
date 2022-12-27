@@ -1,8 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.application.Behaviors;
 

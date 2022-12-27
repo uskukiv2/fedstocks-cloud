@@ -1,13 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using fed.cloud.common.Infrastructure;
 using fed.cloud.product.domain.Entities;
 using fed.cloud.product.domain.Exceptions;
 using fed.cloud.product.domain.Repository;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.infrastructure.Repositories
 {

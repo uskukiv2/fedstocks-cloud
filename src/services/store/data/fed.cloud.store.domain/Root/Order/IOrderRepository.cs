@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using fed.cloud.store.domain.Abstract;
+using System;
 using System.Threading.Tasks;
-using fed.cloud.store.domain.Abstract;
 
 namespace fed.cloud.store.domain.Root.Order
 {

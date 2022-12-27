@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.store.application.Models;
+﻿using fed.cloud.store.application.Models;
 using fed.cloud.store.domain.Root.Order;
 using fed.cloud.store.domain.Root.Stock;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.application.Commands;
 
@@ -64,6 +64,6 @@ public class ProcessCompletedOrderCommandHandler : IRequestHandler<ProcessComple
     {
         return order.Items.Select(orderItem => new NewStockTransactionCommandItem(orderItem.ProductNumber,
             orderItem.ItemName, orderItem.Unit,
-            TransactionOperationType.Update, 0, (int) orderItem.UnitType));
+            TransactionOperationType.Update, 0, (int)orderItem.UnitType));
     }
 }

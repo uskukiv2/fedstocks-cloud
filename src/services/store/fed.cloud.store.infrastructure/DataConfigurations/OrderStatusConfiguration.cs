@@ -1,8 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.Data;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.store.domain.Root.Order;
 using RepoDb;
+using System.Data;
 
 namespace fed.cloud.store.infrastructure.DataConfigurations
 {

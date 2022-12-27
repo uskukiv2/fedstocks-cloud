@@ -15,8 +15,8 @@ public class PurchaseLineDto
     public decimal OriginalPrice { get; set; }
 
     public Guid Seller { get; set; }
-    
+
     public int UnitId { get; set; }
-        
+
     public int CategoryId { get; set; }
 }

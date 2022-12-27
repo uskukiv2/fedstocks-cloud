@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using fed.cloud.eventbus.Base;
 using fed.cloud.product.application.Commands;
 using fed.cloud.product.application.IntegrationEvents.Events;
@@ -9,6 +5,10 @@ using fed.cloud.product.application.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Serilog.Context;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.application.IntegrationEvents.Handlers
 {

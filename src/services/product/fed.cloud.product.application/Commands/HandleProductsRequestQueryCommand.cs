@@ -28,8 +28,8 @@ namespace fed.cloud.product.application.Commands
 
         public HandleProductsRequestQueryCommandHandler(IProductRepository productRepository, ILogger<HandleProductsRequestQueryCommandHandler> logger)
         {
-            _productRepository=productRepository;
-            _logger=logger;
+            _productRepository = productRepository;
+            _logger = logger;
         }
 
         public async Task<IEnumerable<ProductSummaryDto>> Handle(HandleProductsRequestQueryCommand request, CancellationToken cancellationToken)

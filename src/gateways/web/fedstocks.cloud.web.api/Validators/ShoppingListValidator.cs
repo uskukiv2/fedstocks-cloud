@@ -1,5 +1,4 @@
 ﻿using fed.cloud.communication.Shopper;
-using fedstocks.cloud.web.api.Models;
 using FluentValidation;
 
 namespace fedstocks.cloud.web.api.Validators;

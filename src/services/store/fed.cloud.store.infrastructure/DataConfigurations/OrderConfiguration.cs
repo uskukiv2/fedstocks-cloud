@@ -1,8 +1,6 @@
 ﻿using fed.cloud.common.Infrastructure;
-using fed.cloud.store.domain.Extras;
 using fed.cloud.store.domain.Root.Order;
 using RepoDb;
-using RepoDb.Interfaces;
 
 namespace fed.cloud.store.infrastructure.DataConfigurations
 {

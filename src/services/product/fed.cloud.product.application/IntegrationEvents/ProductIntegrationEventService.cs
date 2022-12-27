@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using fed.cloud.eventbus;
+﻿using fed.cloud.eventbus;
 using fed.cloud.eventbus.Base;
 using fed.cloud.eventbus.EventBus.Abstraction;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.application.IntegrationEvents;
 

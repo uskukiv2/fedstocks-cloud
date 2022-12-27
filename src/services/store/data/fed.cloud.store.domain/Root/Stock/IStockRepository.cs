@@ -1,8 +1,8 @@
+using fed.cloud.store.domain.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using fed.cloud.store.domain.Abstract;
 
 namespace fed.cloud.store.domain.Root.Stock
 {

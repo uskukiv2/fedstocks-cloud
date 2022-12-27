@@ -1,29 +1,15 @@
-﻿using System.Reflection;
-using Autofac;
-using Autofac.Builder;
-using Autofac.Extensions.DependencyInjection;
-using fed.cloud.common;
+﻿using fed.cloud.common;
 using fed.cloud.common.Infrastructure;
 using fed.cloud.eventbus;
 using fed.cloud.eventbus.Base;
 using fed.cloud.eventbus.EventBus;
 using fed.cloud.eventbus.EventBus.Abstraction;
 using fed.cloud.eventbus.RabbitMq;
-using fed.cloud.product.application.Behaviors;
-using fed.cloud.product.application.Commands;
 using fed.cloud.product.application.IntegrationEvents;
-using fed.cloud.product.application.IntegrationEvents.Events;
-using fed.cloud.product.application.IntegrationEvents.Handlers;
-using fed.cloud.product.application.Queries;
-using fed.cloud.product.application.Queries.Implementation;
 using fed.cloud.product.domain.Abstraction;
-using fed.cloud.product.domain.Repository;
 using fed.cloud.product.host.Infrastructure;
 using fed.cloud.product.infrastructure;
-using fed.cloud.product.infrastructure.Repositories;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Npgsql;
 using RabbitMQ.Client;
 using ServiceConfiguration = fed.cloud.product.host.Infrastructure.ServiceConfiguration;
@@ -41,7 +27,7 @@ internal static class ServiceCollectionExtensions
         var eventServiceConfiguration =
             new EventServiceConfiguration(config.GetEventBrokerName(), config.GetLocalEventsSource(), string.Empty);
         service.AddSingleton<IEventServiceConfiguration>(eventServiceConfiguration);
-        
+
         return service;
     }
 

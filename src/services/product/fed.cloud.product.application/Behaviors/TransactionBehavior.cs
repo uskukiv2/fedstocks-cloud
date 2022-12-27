@@ -1,12 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.product.domain.Abstraction;
-using fed.cloud.product.domain.Factories;
+﻿using fed.cloud.product.domain.Abstraction;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Serilog.Context;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.application.Behaviors;
 
