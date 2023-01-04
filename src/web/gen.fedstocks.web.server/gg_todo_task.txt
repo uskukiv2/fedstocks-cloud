@@ -1,0 +1,24 @@
+﻿
+NEXT
+----
+[] Implement new design of recipe edit
+----
+
+2022-12-16
+----
+[] Implement recipe viewer
+----
+
+2022-12-06
+----
+[] RecipeEdit. Abillity to save editing result of recipe.
+[] RecipeEdit. Editing exist recipe
+[] Navigation. Investigate how to implement program or external given navigation from json configuration.
+----
+
+2022-11-14
+----
+[x] RecipeEdit. Image file uploader.
+[x] RecipeEdit. Add ability to add ingredients
+[x] RecipeEdit. Add ability to add contents, like articles.
+----

@@ -1,0 +1,85 @@
+﻿@using ReactiveUI;
+@using System.Collections.Specialized;
+@using gen.fedstocks.web.server.Extensions;
+@using gen.fedstocks.web.server.Models;
+@using gen.fedstocks.web.server.Services
+@inherits LayoutComponentBase
+
+@inject ITopbarItemsService TopbarItemsService
+@inject IMessageBus MessageBus
+@inject ISnackbar Snackbar
+@inject CommandIconManager IconManager
+
+<MudThemeProvider Theme="@_currentTheme" />
+<MudDialogProvider />
+<MudSnackbarProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="1">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+        <MudText Typo="Typo.h5" Class="ml-3">Shopper</MudText>
+        <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true" Light="false" Class="mx-4 my-4" />
+        <MudText Typo="Typo.h6">CurrentPage</MudText>
+        <MudSpacer />
+        @foreach (var item in TopbarItemsService.RightMenuItems)
+        {
+            <MudIconButton Color="Color.Inherit" Icon="@GetIconForMenuItem(item)" Command="TopbarItemsService.MenuItemClickedCommand" CommandParameter="@item" />
+        }
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
+        <NavMenu />
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    MudTheme _currentTheme = new MudTheme()
+        {
+            Palette = new Palette()
+            {
+                Background = Colors.Grey.Lighten4
+            }
+        };
+
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private void HandleIncommingSnackbar(SnackbarModel model)
+    {
+        Snackbar.Clear();
+        Snackbar.Add(model.Message, model.SnackBarType.ToMud());
+    }
+
+    private string GetIconForMenuItem(string itemName)
+    {
+        return IconManager.GetIcon(itemName);
+    }
+
+    private void OnRightMenuItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+    {
+        if (args.Action == NotifyCollectionChangedAction.Add || (args.Action == NotifyCollectionChangedAction.Reset && args.OldItems?.Count > 0))
+        {
+            InvokeAsync(StateHasChanged).AndForget();
+        }
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return Task.CompletedTask;
+        }
+
+        MessageBus.Listen<SnackbarModel>(ConstValues.GlobalSnackbar).Subscribe(HandleIncommingSnackbar);
+
+        TopbarItemsService.RightMenuItems.CollectionChanged += OnRightMenuItemsCollectionChanged;
+
+        return Task.CompletedTask;
+    }
+}
