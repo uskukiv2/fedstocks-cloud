@@ -40,7 +40,7 @@ public class TopbarItemsService : ITopbarItemsService
     public ObservableCollection<string> RightMenuItems
     {
         get => _rightMenuItems;
-        private set
+        private init
         {
             _rightMenuItems = value;
             OnPropertyChanged(nameof(RightMenuItems));

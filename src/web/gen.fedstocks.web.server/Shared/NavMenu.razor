@@ -6,18 +6,11 @@
 @using gen.fedstocks.web.server.Services
 @using Microsoft.AspNetCore.Routing.Tree
 
-@inject ICurrentViewModelObservableContainer CurrentViewModelObservable
-@inject IPageManager PageManager
-@inject NavigationManager NavigationManager
-
-<MudNavMenu>
+<MudNavMenu Bordered="true" Class="py-1" Dense="false" Color="Color.Primary">
     <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Rounded.Home">
         Home
     </MudNavLink>
-    <MudNavLink Href="@RouterStrings.RecipeList" Match="NavLinkMatch.All" Icon="@Icons.Material.Rounded.Task">
+    <MudNavLink Href="@RouterStrings.RecipeList" Match="NavLinkMatch.Prefix" Icon="@Icons.Material.Rounded.Task">
         Recipes
-    </MudNavLink>
-    <MudNavLink href="https://docs.microsoft.com/aspnet/">
-        <i class="oi oi-question-mark text-dark"></i> About
     </MudNavLink>
 </MudNavMenu>
