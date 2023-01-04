@@ -3,6 +3,8 @@
 @using gen.fedstocks.web.server.Extensions;
 @using gen.fedstocks.web.server.Models;
 @using gen.fedstocks.web.server.Services
+@using Microsoft.AspNetCore.Mvc
+@using MudBlazor.Utilities
 @inherits LayoutComponentBase
 
 @inject ITopbarItemsService TopbarItemsService
@@ -10,24 +12,35 @@
 @inject ISnackbar Snackbar
 @inject CommandIconManager IconManager
 
-<MudThemeProvider Theme="@_currentTheme" />
+<MudThemeProvider Theme="@CurrentTheme" />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="1">
+    <MudAppBar Elevation="0">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
-        <MudText Typo="Typo.h5" Class="ml-3">Shopper</MudText>
-        <MudDivider Vertical="true" DividerType="DividerType.Middle" FlexItem="true" Light="false" Class="mx-4 my-4" />
-        <MudText Typo="Typo.h6">CurrentPage</MudText>
         <MudSpacer />
         @foreach (var item in TopbarItemsService.RightMenuItems)
         {
-            <MudIconButton Color="Color.Inherit" Icon="@GetIconForMenuItem(item)" Command="TopbarItemsService.MenuItemClickedCommand" CommandParameter="@item" />
+            <MudTooltip Text="@GetLocalization(item)">
+                <MudIconButton Color="Color.Inherit" Icon="@GetIconForMenuItem(item)" Command="TopbarItemsService.MenuItemClickedCommand" CommandParameter="@item" />
+            </MudTooltip>
         }
+        <MudDivider Vertical="true" DividerType="DividerType.Middle" Light="true" class="mx-4 my-4" />
+        <MudTooltip Text="Current user">
+            <MudIconButton Color="Color.Inherit" Icon="@Icons.Material.Rounded.AccountCircle" Size="Size.Medium" />
+        </MudTooltip>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu />
+    <MudDrawer @bind-Open="_drawerOpen" 
+               Elevation="0" 
+               Variant="@DrawerVariant.Responsive" 
+               OpenMiniOnHover="true" 
+               ClipMode="DrawerClipMode.Never"
+               Style="border-right: 1px; border-right-color: gainsboro; border-right-style: solid; animation: none">
+        <MudDrawerHeader Class="text-center">
+            <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">fedstocks</MudText>
+        </MudDrawerHeader>
+        <NavMenu/>
     </MudDrawer>
     <MudMainContent>
         @Body
@@ -35,11 +48,13 @@
 </MudLayout>
 
 @code {
-    MudTheme _currentTheme = new MudTheme()
+    private readonly MudTheme CurrentTheme = new()
         {
             Palette = new Palette()
             {
-                Background = Colors.Grey.Lighten4
+                AppbarBackground = Colors.Shades.White,
+                AppbarText = Colors.Shades.Black,
+                Primary = new MudColor("#116D34")
             }
         };
 
@@ -59,6 +74,11 @@
     private string GetIconForMenuItem(string itemName)
     {
         return IconManager.GetIcon(itemName);
+    }
+
+    private string GetLocalization(string input) //TODO localization
+    {
+        return input;
     }
 
     private void OnRightMenuItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
