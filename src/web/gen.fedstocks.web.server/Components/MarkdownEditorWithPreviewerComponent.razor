@@ -1,0 +1,92 @@
+﻿@using gen.fedstocks.web.server.Models
+@using ReactiveUI
+@using PSC.Blazor.Components.MarkdownEditor
+@using PSC.Blazor.Components.MarkdownEditor.EventsArgs
+
+@inherits ComponentBase
+@code
+{
+    private bool _disabled;
+    private string _oldMardownBody;
+
+    [Parameter] public string ComponentId { get; set; }
+
+    [Parameter] public string MarkdownBody { get; set; }
+
+    [Parameter] public string ParentEditingNameCallback { get; set; }
+
+    [Parameter]
+    public bool Disabled
+    {
+        get => _disabled;
+        set
+        {
+            _disabled = value;
+            StateHasChanged();
+        }
+    }
+
+    [Inject] public IMessageBus MessageService { get; set; }
+
+    public bool IsFocused { get; private set; }
+
+    public string PreviewClass => Disabled ? "disabled" : "enabled";
+
+    private void OnDoubleClick()
+    {
+        if (Disabled)
+        {
+            return;
+        }
+
+        MessageService.SendMessage(new EditingContextModel(ComponentId, true), ParentEditingNameCallback);
+        IsFocused = true;
+        OnGotFocus();
+    }
+
+    private void OnGotFocus()
+    {
+        _oldMardownBody = new string(MarkdownBody);
+    }
+
+    private void OnApply()
+    {
+        MessageService.SendMessage(new EditingContextModel(ComponentId, false), ParentEditingNameCallback);
+        IsFocused = false;
+    }
+
+    private void OnCancel()
+    {
+        MarkdownBody = _oldMardownBody;
+        MessageService.SendMessage(new EditingContextModel(ComponentId, false), ParentEditingNameCallback);
+        IsFocused = false;
+    }
+}
+
+<div>
+    @if (IsFocused)
+    {
+        <div id="markdown_element" class="row">
+            <div class="row d-flex justify-content-center">
+                <MarkdownEditor @bind-Value="MarkdownBody" />
+            </div>
+            <div class="row">
+                <div class="col d-flex justify-content-end">
+                    <button class="btn btn-secondary text-white me-2" @onclick="OnCancel">Cancel</button>
+                    <button class="btn btn-info text-white" @onclick="OnApply">Apply</button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div id="markdown_preview" @ondblclick="OnDoubleClick" class="@PreviewClass">
+            <div id="markdown_preview_1" class="row">
+                <MarkdownPreviewerComponent MarkdownBody="@MarkdownBody" />
+            </div>
+            <div id="markdown_preview_2" class="row text-center hide">
+                <span>Double click to start editing this text</span>
+            </div>
+        </div>
+    }
+</div>

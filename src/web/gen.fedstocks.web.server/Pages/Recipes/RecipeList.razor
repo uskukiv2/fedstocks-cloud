@@ -1,0 +1,23 @@
+﻿@using gen.fedstocks.web.server.Abstract
+
+@inherits FedComponentBase<gen.fed.ui.ViewModels.RecipeListViewModel>
+
+<MudContainer Class="scrollable">
+    <MudGrid>
+        @foreach (var recipe in Recipes)
+        {
+            <MudItem lg="4" md="3">
+                <MudCard>
+                    <MudCardMedia Image="images/house.jpg" Height="150" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">@recipe.Name</MudText>
+                        <MudText Typo="Typo.body2">Short description of recipe</MudText>
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => ViewSelectedRecipe(recipe.Id)">View</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>

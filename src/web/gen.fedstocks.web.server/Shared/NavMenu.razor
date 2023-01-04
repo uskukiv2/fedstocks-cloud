@@ -1,0 +1,23 @@
+﻿@using gen.fedstocks.web.server.Abstract
+@using gen.fed.ui.ViewModels
+@using gen.fedstocks.web.server.Models
+@using gen.fed.ui.Services
+@using gen.fed.ui.Abstract
+@using gen.fedstocks.web.server.Services
+@using Microsoft.AspNetCore.Routing.Tree
+
+@inject ICurrentViewModelObservableContainer CurrentViewModelObservable
+@inject IPageManager PageManager
+@inject NavigationManager NavigationManager
+
+<MudNavMenu>
+    <MudNavLink Href="" Match="NavLinkMatch.All" Icon="@Icons.Material.Rounded.Home">
+        Home
+    </MudNavLink>
+    <MudNavLink Href="@RouterStrings.RecipeList" Match="NavLinkMatch.All" Icon="@Icons.Material.Rounded.Task">
+        Recipes
+    </MudNavLink>
+    <MudNavLink href="https://docs.microsoft.com/aspnet/">
+        <i class="oi oi-question-mark text-dark"></i> About
+    </MudNavLink>
+</MudNavMenu>
