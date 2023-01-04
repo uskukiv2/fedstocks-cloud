@@ -1,7 +1,7 @@
 ﻿using fed.cloud.eventbus.Base;
+using LiteDB;
 using Newtonsoft.Json;
 using System;
-using LiteDB;
 
 namespace fed.cloud.eventbus.Data
 {
@@ -47,15 +47,15 @@ namespace fed.cloud.eventbus.Data
         public string EventName { get; }
 
         public IntegrationEvent IntegrationEvent { get; internal set; }
-        
-        public EventStateType State { get; internal set; } 
-        
+
+        public EventStateType State { get; internal set; }
+
         public int TimesSent { get; internal set; }
-        
+
         public DateTime CreationTime { get; }
-        
+
         public string Content { get; }
-        
+
         public string TransactionId { get; }
 
         public static IntegrationEventLogEntry Restore(string content,

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.eventbus.Base;
+﻿using fed.cloud.eventbus.Base;
 using fed.cloud.store.application.IntegrationEvents;
 using fed.cloud.store.application.IntegrationEvents.Events;
 using fed.cloud.store.application.Models;
 using fed.cloud.store.domain.Root.Stock;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.application.Commands;
 

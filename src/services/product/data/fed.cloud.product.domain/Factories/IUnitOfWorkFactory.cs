@@ -1,5 +1,5 @@
-﻿using System.Data.Common;
-using fed.cloud.product.domain.Abstraction;
+﻿using fed.cloud.product.domain.Abstraction;
+using System.Data.Common;
 
 namespace fed.cloud.product.domain.Factories
 {

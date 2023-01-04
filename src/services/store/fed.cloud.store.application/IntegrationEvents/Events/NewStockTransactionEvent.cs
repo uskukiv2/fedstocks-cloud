@@ -1,5 +1,5 @@
-using System;
 using fed.cloud.eventbus.Base;
+using System;
 
 namespace fed.cloud.store.application.IntegrationEvents.Events;
 

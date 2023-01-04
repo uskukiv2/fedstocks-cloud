@@ -1,9 +1,8 @@
-﻿using System.Net.Mime;
-using fed.cloud.communication.Seller;
-using fedstocks.cloud.web.api.Models;
+﻿using fed.cloud.communication.Seller;
 using fedstocks.cloud.web.api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
 
 namespace fedstocks.cloud.web.api.Controllers;
 
@@ -27,7 +26,7 @@ public class SellerController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<IEnumerable<SellerSummary>>> GetSellers([FromQuery]Guid county, [FromQuery]string query)
+    public async Task<ActionResult<IEnumerable<SellerSummary>>> GetSellers([FromQuery] Guid county, [FromQuery] string query)
     {
         if (_identityService.GetUserSub(HttpContext) == Guid.Empty)
         {

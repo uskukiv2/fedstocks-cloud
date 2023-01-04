@@ -1,5 +1,4 @@
 ﻿using fed.cloud.eventbus.Base;
-using MediatR;
 
 namespace fed.cloud.product.host.Infrastructure;
 
@@ -11,7 +10,7 @@ public class EventHandlerResolver : IHandlerResolver
     {
         _serviceProvider = serviceProvider;
     }
-    
+
     public IIntegrationEventHandler Resolve(string handlerType)
     {
         throw new NotSupportedException("resolver handler by type is not supported yet");
@@ -19,6 +18,6 @@ public class EventHandlerResolver : IHandlerResolver
 
     public IIntegrationEventHandler Resolve(Type handlerType)
     {
-        return (IIntegrationEventHandler) _serviceProvider.GetRequiredService(handlerType);
+        return (IIntegrationEventHandler)_serviceProvider.GetRequiredService(handlerType);
     }
 }

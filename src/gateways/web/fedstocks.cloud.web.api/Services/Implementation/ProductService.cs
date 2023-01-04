@@ -1,6 +1,5 @@
 ﻿using fed.cloud.product.host.Protos;
 using fedstocks.cloud.web.api.Helpers;
-using fedstocks.cloud.web.api.Models;
 using Google.Protobuf.Collections;
 using Category = fed.cloud.communication.Category;
 using Product = fed.cloud.communication.Product.Product;
@@ -79,7 +78,7 @@ public class ProductService : IProductService
             Number = arg.Number
         };
     }
-    
+
     private static Product MapToDto(ProductData response)
     {
         return new Product

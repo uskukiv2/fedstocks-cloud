@@ -101,7 +101,7 @@ public class ShoppingService : IShoppingService
     }
 
     // TODO: FED-124
-    public  Task<bool> DeleteShoppingListAsync(Guid userId, int shoppingListId)
+    public Task<bool> DeleteShoppingListAsync(Guid userId, int shoppingListId)
     {
         return Task.FromResult(false);
     }
@@ -276,7 +276,7 @@ public class ShoppingService : IShoppingService
             ProductName = line.Name,
             IsChecked = line.Checked,
             Quantity = line.Quantity,
-            UnitPrice = (decimal) line.UnitPrice,
+            UnitPrice = (decimal)line.UnitPrice,
             Unit = MapToDto(line.Unit),
             Category = MapToDto(line.Category)
         };

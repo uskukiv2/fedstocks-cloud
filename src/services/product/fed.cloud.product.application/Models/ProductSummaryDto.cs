@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace fed.cloud.product.application.Models
+﻿namespace fed.cloud.product.application.Models
 {
     public class ProductSummaryDto
     {

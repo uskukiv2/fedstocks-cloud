@@ -1,12 +1,12 @@
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using fed.cloud.eventbus.Base;
 using fed.cloud.store.application.IntegrationEvents.Events;
 using fed.cloud.store.domain.Extras;
 using fed.cloud.store.domain.Root.Stock;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.application.IntegrationEvents.EventHandler;
 
@@ -45,7 +45,7 @@ public class StockTransactionRemoveItemEventHandler : IIntegrationEventHandler<S
             var stockItem = stock.StockItems.FirstOrDefault(x => x.Number == @event.ProductNumber)!;
             stock.RemoveStockItem(stockItem.Id);
 
-            await _stockRepository.RemoveStockItems(stock.Id, new[] {stockItem}, CancellationToken.None);
+            await _stockRepository.RemoveStockItems(stock.Id, new[] { stockItem }, CancellationToken.None);
             _logger.LogInformation(
                 $"Event complete {@event.Id} {@event.GetType().Name} completed at: {DateTime.UtcNow}");
         }
@@ -150,7 +150,7 @@ public class StockTransactionAddItemEventHandler : IIntegrationEventHandler<Stoc
             stock.AddStockItem(@event.ProductNumber,
                 @event.ProductName,
                 @event.CategoryId,
-                (UnitType) @event.UnitId,
+                (UnitType)@event.UnitId,
                 @event.Quantity);
 
             _stockRepository.Update(stock);

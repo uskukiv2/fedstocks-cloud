@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace fed.cloud.product.application.Models
+﻿namespace fed.cloud.product.application.Models
 {
     public class ProductDto
     {
@@ -31,18 +27,18 @@ namespace fed.cloud.product.application.Models
     public class UnitDto
     {
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public double Rate { get; set; }
     }
-    
+
     public class CategoryDto
     {
         public int Id { get; set; }
-        
+
         public string Name { get; set; }
-        
+
         public CategoryDto Parent { get; set; }
     }
 }

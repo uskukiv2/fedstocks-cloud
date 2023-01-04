@@ -102,12 +102,12 @@ internal static class ConfigurationExtensions
             return "f_key";
         }
     }
-    
+
     internal static int GetPort(this ConfigurationManager configuration)
     {
         return int.Parse(configuration.GetSection("Port").Value);
     }
-    
+
     internal static LogLevel GetDefaultLogLevel(this ConfigurationManager configuration)
     {
         return configuration.GetSection("Logging").GetSection("LogLevel").GetValue<LogLevel>("Default");

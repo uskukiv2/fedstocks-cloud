@@ -1,12 +1,12 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
+﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.store.domain.Root.Order;
 using fed.cloud.store.infrastructure.Factories;
 using Npgsql;
 using RepoDb;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.store.infrastructure.Repositories
 {
@@ -36,7 +36,7 @@ namespace fed.cloud.store.infrastructure.Repositories
             var query = new QueryField("OrderNumber", orderNumber);
             var order = (await QueryAsync(query, transaction: UnitOfWork.Transaction)).FirstOrDefault()!;
             var orderStatus =
-                (await _orderStatusRepository.QueryAsync("OrderStatuses", new {Id = order.StatusId},
+                (await _orderStatusRepository.QueryAsync("OrderStatuses", new { Id = order.StatusId },
                     CancellationToken.None)).FirstOrDefault()!;
             order.Status = orderStatus;
 

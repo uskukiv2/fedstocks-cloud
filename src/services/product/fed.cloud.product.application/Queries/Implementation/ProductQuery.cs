@@ -1,6 +1,5 @@
 ﻿using fed.cloud.common.Infrastructure;
 using fed.cloud.product.application.Models;
-using fed.cloud.product.domain.Entities;
 using Npgsql;
 using RepoDb;
 using System;
@@ -22,17 +21,17 @@ namespace fed.cloud.product.application.Queries.Implementation
         public async Task<ProductDto> GetProductByNumberAsync(long number)
         {
             await using var conn = new NpgsqlConnection(_connection);
-            var totalCategories = new List<dynamic>(); 
+            var totalCategories = new List<dynamic>();
             var product = (await conn.QueryAsync("product.products", new { GlobalNumber = number.ToString() })).FirstOrDefault();
             if (product == null)
             {
                 throw new InvalidOperationException($"Cannot get product with number {number}");
             }
-            var productUnit = (await conn.QueryAsync("product.productunits", new {Id = product.UnitId})).FirstOrDefault();
+            var productUnit = (await conn.QueryAsync("product.productunits", new { Id = product.UnitId })).FirstOrDefault();
             var nextCategoryId = product.CategoryId;
             while (true)
             {
-                var category = (await conn.QueryAsync("product.productcategories", new {Id = nextCategoryId})).FirstOrDefault();
+                var category = (await conn.QueryAsync("product.productcategories", new { Id = nextCategoryId })).FirstOrDefault();
                 totalCategories.Add(category);
                 if (category.ParentId == null)
                 {
@@ -42,7 +41,7 @@ namespace fed.cloud.product.application.Queries.Implementation
                 nextCategoryId = category.ParentId;
             }
             var productSellerPrices =
-                (await conn.QueryAsync("product.productsellerprices", new {ProductId = product.Id},
+                (await conn.QueryAsync("product.productsellerprices", new { ProductId = product.Id },
                     Field.From("SellerId", "OriginalPrice", "OriginalCurrencyNumber"), top: 10)).ToList();
 
             return !productSellerPrices.Any() ? CreateProductDto(product, productUnit, totalCategories) : CreateProductDto(product, productUnit, totalCategories, productSellerPrices);

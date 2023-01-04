@@ -1,7 +1,7 @@
+using fed.cloud.store.domain.Root.Stock;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using fed.cloud.store.domain.Root.Stock;
 
 namespace fed.cloud.store.application.Queries;
 

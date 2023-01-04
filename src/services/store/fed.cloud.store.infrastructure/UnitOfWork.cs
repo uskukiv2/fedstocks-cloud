@@ -1,10 +1,9 @@
-﻿using System;
+﻿using fed.cloud.common.Infrastructure;
+using fed.cloud.store.domain.Abstract;
+using Npgsql;
+using System;
 using System.Data.Common;
 using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
-using fed.cloud.store.domain.Abstract;
-using Microsoft.Extensions.Options;
-using Npgsql;
 
 namespace fed.cloud.store.infrastructure
 {

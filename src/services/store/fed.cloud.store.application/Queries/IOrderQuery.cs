@@ -1,7 +1,7 @@
+using fed.cloud.store.domain.Root.Order;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using fed.cloud.store.domain.Root.Order;
 
 namespace fed.cloud.store.application.Queries;
 

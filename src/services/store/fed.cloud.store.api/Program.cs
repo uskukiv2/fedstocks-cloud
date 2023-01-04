@@ -1,5 +1,3 @@
-using fed.cloud.store.api.Services;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Additional configuration is required to successfully run gRPC on macOS.

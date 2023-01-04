@@ -20,10 +20,10 @@ namespace fed.cloud.shopping.api.Application.IntegrationEvents.Events
         public decimal OriginalPrice { get; set; }
 
         public Guid Seller { get; set; }
-        
+
         public int UnitId { get; set; }
-        
+
         public int CategoryId { get; set; }
-        
+
     }
 }

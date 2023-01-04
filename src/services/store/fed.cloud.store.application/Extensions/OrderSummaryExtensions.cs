@@ -1,6 +1,6 @@
-using System.Linq;
 using fed.cloud.store.application.Models;
 using fed.cloud.store.domain.Root.Order;
+using System.Linq;
 
 namespace fed.cloud.store.application.Extensions;
 

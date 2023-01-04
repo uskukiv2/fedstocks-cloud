@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using fed.cloud.common.Infrastructure;
+using RepoDb;
+using System.Collections.Generic;
 using System.Data.Common;
 using System.Threading;
 using System.Threading.Tasks;
-using fed.cloud.common.Infrastructure;
-using RepoDb;
 
 namespace fed.cloud.store.infrastructure.Factories
 {

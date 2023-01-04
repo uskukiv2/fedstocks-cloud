@@ -6,5 +6,5 @@ public class Seller
 
     public string Name { get; set; }
 
-    public Guid CountyId { get; set;}
+    public Guid CountyId { get; set; }
 }

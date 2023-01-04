@@ -1,12 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Net.Sockets;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Polly;
-using Polly.Retry;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using System;
+using System.IO;
+using System.Net.Sockets;
 
 namespace fed.cloud.eventbus.RabbitMq
 {
@@ -89,7 +88,7 @@ namespace fed.cloud.eventbus.RabbitMq
             }
         }
 
-        private bool IsClientConnected() => _connection is {IsOpen: true} && !_disposed;
+        private bool IsClientConnected() => _connection is { IsOpen: true } && !_disposed;
 
         public IModel CreateChannel()
         {

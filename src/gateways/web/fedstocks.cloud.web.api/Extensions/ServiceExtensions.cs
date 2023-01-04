@@ -1,9 +1,9 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using fedstocks.cloud.web.api.Grpc;
+﻿using fedstocks.cloud.web.api.Grpc;
 using fedstocks.cloud.web.api.Services;
 using fedstocks.cloud.web.api.Services.Implementation;
-using RemoteProduct = fed.cloud.product.host.Protos.Product;
+using System.Security.Cryptography.X509Certificates;
 using RemoteCountry = fed.cloud.product.host.Protos.Country;
+using RemoteProduct = fed.cloud.product.host.Protos.Product;
 using RemoteSeller = fed.cloud.product.host.Protos.Seller;
 using RemoteShopping = fed.cloud.shopping.api.Protos.Shopping;
 

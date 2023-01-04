@@ -1,16 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Transactions;
-using fed.cloud.product.application.Models;
+﻿using fed.cloud.product.application.Models;
 using fed.cloud.product.domain.Abstraction;
 using fed.cloud.product.domain.Exceptions;
 using fed.cloud.product.domain.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Transactions;
 
 namespace fed.cloud.product.application.Commands;
 
@@ -103,7 +103,7 @@ public class CreateNewPurchaseLinesCommandHandler : INotificationHandler<CreateN
                 _logger.LogError(e, "Unable to create transaction");
                 _unitOfWork.DropTransaction();
             }
-            
+
             _logger.LogTrace($"trying to create new products");
             await _mediator.Send(new CreateNewProductCommand(productsToCreate), cancellationToken);
         }

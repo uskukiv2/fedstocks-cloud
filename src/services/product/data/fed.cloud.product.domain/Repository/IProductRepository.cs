@@ -1,6 +1,6 @@
-﻿using System;
-using fed.cloud.product.domain.Abstraction;
+﻿using fed.cloud.product.domain.Abstraction;
 using fed.cloud.product.domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

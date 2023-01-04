@@ -1,6 +1,5 @@
-﻿using System;
-using fed.cloud.store.domain.Abstract;
-using fed.cloud.store.domain.Extras;
+﻿using fed.cloud.store.domain.Extras;
+using System;
 
 namespace fed.cloud.store.domain.Root.Order
 {

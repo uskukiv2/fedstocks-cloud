@@ -10,7 +10,7 @@ public static class CertHelper
     public static X509Certificate2 GetCertificate(string certPath, string keyPath)
     {
         var sslCert = CreateFromPublicPrivateKey(certPath, keyPath);
-        
+
         return new X509Certificate2(sslCert.Export(X509ContentType.Pkcs12));
     }
 

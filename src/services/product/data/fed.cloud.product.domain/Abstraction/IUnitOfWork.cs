@@ -1,8 +1,5 @@
 ﻿using fed.cloud.common.Infrastructure;
-using System;
-using System.Collections.Generic;
 using System.Data.Common;
-using System.Text;
 
 namespace fed.cloud.product.domain.Abstraction
 {

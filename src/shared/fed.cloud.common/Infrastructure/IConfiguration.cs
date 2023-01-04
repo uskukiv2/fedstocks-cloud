@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace fed.cloud.common.Infrastructure
+﻿namespace fed.cloud.common.Infrastructure
 {
     public interface IConfiguration
     {

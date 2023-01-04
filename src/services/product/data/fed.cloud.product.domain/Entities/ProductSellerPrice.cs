@@ -1,5 +1,5 @@
-using System;
 using fed.cloud.product.domain.Abstraction;
+using System;
 
 namespace fed.cloud.product.domain.Entities
 {

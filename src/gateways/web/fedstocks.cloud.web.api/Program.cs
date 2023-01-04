@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,7 +59,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-        .AddCookie(setup => 
+        .AddCookie(setup =>
         {
             setup.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         })

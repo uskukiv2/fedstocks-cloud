@@ -1,8 +1,8 @@
-﻿using System;
+﻿using fed.cloud.store.domain.Abstract;
+using fed.cloud.store.domain.Extras;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using fed.cloud.store.domain.Abstract;
-using fed.cloud.store.domain.Extras;
 
 namespace fed.cloud.store.domain.Root.Order
 {
@@ -83,7 +83,7 @@ namespace fed.cloud.store.domain.Root.Order
 
         public static Order CreateNewOrder(Guid owner, string receiptNumber, DateTime orderDate)
         {
-            return new Order() 
+            return new Order()
             {
                 Id = Guid.NewGuid(),
                 OrderOwner = owner,

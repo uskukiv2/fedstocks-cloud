@@ -1,11 +1,10 @@
-﻿using System.Net.Mime;
-using System.Text;
-using fed.cloud.communication.Country;
-using fedstocks.cloud.web.api.Models;
+﻿using fed.cloud.communication.Country;
 using fedstocks.cloud.web.api.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mime;
+using System.Text;
 
 namespace fedstocks.cloud.web.api.Controllers
 {
@@ -83,7 +82,7 @@ namespace fedstocks.cloud.web.api.Controllers
             errorsStringBuilder.AppendLine();
             validationResults.Errors.ForEach(x =>
                 errorsStringBuilder.AppendLine(
-                    (string?) $"{x.PropertyName} - {x.ErrorCode} {x.ErrorMessage} with {x.AttemptedValue}"));
+                    (string?)$"{x.PropertyName} - {x.ErrorCode} {x.ErrorMessage} with {x.AttemptedValue}"));
 
             return BadRequest(errorsStringBuilder.ToString());
         }

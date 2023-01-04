@@ -1,12 +1,11 @@
+using fed.cloud.common.Helpers;
+using fed.cloud.shopping.api.Extensions;
+using fed.cloud.shopping.api.Services;
+using Microsoft.AspNetCore.Authentication.Certificate;
 using System.Net;
 using System.Security.Authentication;
 using System.Security.Claims;
 using System.Security.Cryptography.X509Certificates;
-using fed.cloud.common.Helpers;
-using fed.cloud.shopping.api.Extensions;
-using fed.cloud.shopping.api.Grpc;
-using fed.cloud.shopping.api.Services;
-using Microsoft.AspNetCore.Authentication.Certificate;
 
 var builder = WebApplication.CreateBuilder(args);
 var cert = CertHelper.GetCertificate(builder.Configuration.GetServicesCertPath(), builder.Configuration.GetServiceKeyCertPath());
@@ -17,7 +16,7 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     {
         listenOptions.SslProtocols = SslProtocols.Tls13;
     });
-    
+
     serverOptions.Listen(IPAddress.Loopback, builder.Configuration.GetPort(), listenOptions =>
     {
         listenOptions.UseHttps(cert);
@@ -51,13 +50,13 @@ builder.Services.AddAuthentication(CertificateAuthenticationDefaults.Authenticat
                 var claims = new[]
                 {
                     new Claim(
-                        ClaimTypes.NameIdentifier, 
+                        ClaimTypes.NameIdentifier,
                         context.ClientCertificate.Subject,
-                        ClaimValueTypes.String, 
+                        ClaimValueTypes.String,
                         context.Options.ClaimsIssuer),
                     new Claim(ClaimTypes.Name,
                         context.ClientCertificate.Subject,
-                        ClaimValueTypes.String, 
+                        ClaimValueTypes.String,
                         context.Options.ClaimsIssuer)
                 };
 

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using fed.cloud.product.application.Models;
+﻿using fed.cloud.product.application.Models;
 using fed.cloud.product.domain.Abstraction;
 using fed.cloud.product.domain.Entities;
 using fed.cloud.product.domain.Repository;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace fed.cloud.product.application.Commands;
 
@@ -18,7 +18,7 @@ public class CreateNewProductCommand : IRequest
     {
         PurchaseLineDtos = purchaseLineDtos;
     }
-    
+
     public IEnumerable<PurchaseLineDto> PurchaseLineDtos { get; }
 }
 
@@ -52,10 +52,10 @@ public class CreateNewProductCommandHandler : IRequestHandler<CreateNewProductCo
                     CategoryId = lineDto.CategoryId
                 };
                 _productRepository.Add(product, cancellationToken);
-                
+
                 await _unitOfWork.CommitAsync();
-                await _unitOfWork.BeginAsync(); 
-                
+                await _unitOfWork.BeginAsync();
+
                 var originalProduct = await _productRepository.GetByNumberAsync(lineDto.Number);
                 if (await _sellerCompanyRepository.IsCompanyExistsAsync(lineDto.Seller))
                 {
@@ -68,7 +68,7 @@ public class CreateNewProductCommandHandler : IRequestHandler<CreateNewProductCo
                 _logger.LogError(e, e.Message);
             }
         }
-        
+
         return Unit.Value;
     }
 }

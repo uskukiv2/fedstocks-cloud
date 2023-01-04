@@ -1,5 +1,4 @@
-﻿using System.Reflection.Metadata;
-using fed.cloud.product.application.Commands;
+﻿using fed.cloud.product.application.Commands;
 using fed.cloud.product.application.Models;
 using fed.cloud.product.application.Queries;
 using fed.cloud.product.host.Protos;
