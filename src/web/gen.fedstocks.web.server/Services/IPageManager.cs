@@ -1,4 +1,4 @@
-﻿using gen.fed.ui.Abstract;
+﻿using gen.fed.application.Abstract;
 using gen.fedstocks.web.server.Abstract;
 using Microsoft.AspNetCore.Components;
 

@@ -1,0 +1,24 @@
+﻿@using ReactiveUI
+@using gen.fedstocks.web.server.Models
+
+<h6>Can't find page</h6>
+<p>Redirecting to Home page...</p>
+
+@code {
+    [Inject] public IMessageBus MessageBus { get; set; }
+
+    [Inject] public NavigationManager Navigation { get; set; }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        MessageBus.SendMessage(new SnackbarModel()
+        {
+            Message = "Can't find page",
+            SnackBarType = SnackbarType.Error
+        });
+
+        Navigation.NavigateTo("", true);
+
+        return base.OnAfterRenderAsync(firstRender);
+    }
+}

@@ -1,7 +1,5 @@
-using gen.fed.ui.Extensions;
-using gen.fedstocks.web.server.Data;
+using gen.fed.application.Extensions;
 using gen.fedstocks.web.server.Extensions;
-using gen.fedstocks.web.server.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var types = GetAssemblyTypes();
@@ -10,16 +8,10 @@ var types = GetAssemblyTypes();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddSingleton<WeatherForecastService>();
-
-builder.Services.AddUI(types);
+builder.Services.AddApplication(types);
 
 builder.Services.AddFed();
-
-builder.Services.AddSingleton<IPageManager, PageManager>();
-builder.Services.AddSingleton<ITitleService, TitleService>();
-
-builder.Services.AddScoped<ITopbarItemsService, TopbarItemsService>();
+builder.Services.AddDatabase(builder.Configuration);
 
 var app = builder.Build();
 

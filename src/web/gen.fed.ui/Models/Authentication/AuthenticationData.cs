@@ -1,7 +1,7 @@
-﻿namespace gen.fed.ui.Models.Authentication
+﻿namespace gen.fed.application.Models.Authentication
 {
     public class AuthenticationData
     {
-        public string Number { get; set; }
+        public int Number { get; set; }
     }
 }

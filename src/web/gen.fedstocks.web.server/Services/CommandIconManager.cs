@@ -1,5 +1,4 @@
 ﻿using gen.fedstocks.web.server.Models;
-using Microsoft.Extensions.Options;
 using MudBlazor;
 
 namespace gen.fedstocks.web.server.Services

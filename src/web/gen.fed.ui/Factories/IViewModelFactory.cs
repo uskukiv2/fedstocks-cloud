@@ -1,6 +1,6 @@
-﻿using gen.fed.ui.Abstract;
+﻿using gen.fed.application.Abstract;
 
-namespace gen.fed.ui.Factories;
+namespace gen.fed.application.Factories;
 
 public interface IViewModelFactory
 {

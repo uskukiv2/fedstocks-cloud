@@ -1,6 +1,5 @@
-﻿
-using gen.fed.ui;
-using gen.fed.ui.Models.Authentication;
+﻿using gen.fed.application;
+using gen.fed.application.Models.Authentication;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace gen.fedstocks.web.server.Services
@@ -20,7 +19,7 @@ namespace gen.fedstocks.web.server.Services
 
             return new AuthenticationData
             {
-                Number = result.User.Identity?.Name ?? string.Empty
+                Number = int.TryParse(result.User.Identity?.Name, out var number) ? number : 0
             };
         }
     }

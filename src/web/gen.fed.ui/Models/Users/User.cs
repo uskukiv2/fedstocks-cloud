@@ -1,4 +1,4 @@
-﻿namespace gen.fed.ui.Models.Users
+﻿namespace gen.fed.application.Models.Users
 {
     public class UserDto
     {

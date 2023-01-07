@@ -1,4 +1,4 @@
-﻿namespace gen.fed.ui.Models;
+﻿namespace gen.fed.application.Models;
 
 public class ViewModelNavigationInfo
 {

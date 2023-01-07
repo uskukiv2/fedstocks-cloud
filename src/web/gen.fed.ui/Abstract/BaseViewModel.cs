@@ -1,8 +1,8 @@
-using ReactiveUI;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ReactiveUI;
 
-namespace gen.fed.ui.Abstract;
+namespace gen.fed.application.Abstract;
 
 public abstract class BaseViewModel : IReactiveObject
 {

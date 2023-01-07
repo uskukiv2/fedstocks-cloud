@@ -1,7 +1,7 @@
-﻿using gen.fed.ui.Abstract;
-using gen.fed.ui.Models.Users;
+﻿using gen.fed.application.Abstract;
+using gen.fed.application.Models.Users;
 
-namespace gen.fed.ui.Services
+namespace gen.fed.application.Services
 {
     public interface IAuthorizationProxy : IService
     {

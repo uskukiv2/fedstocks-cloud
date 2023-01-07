@@ -1,11 +1,11 @@
-﻿using DynamicData;
-using DynamicData.Binding;
-using gen.fed.ui.Abstract;
-using ReactiveUI;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Reactive.Linq;
+using DynamicData;
+using DynamicData.Binding;
+using gen.fed.application.Abstract;
+using ReactiveUI;
 
-namespace gen.fed.ui.Services.Implementation;
+namespace gen.fed.application.Services.Implementation;
 
 public class NavigationState : ICurrentViewModelObservableContainer
 {

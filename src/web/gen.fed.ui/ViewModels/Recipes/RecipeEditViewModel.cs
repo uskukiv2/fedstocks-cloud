@@ -1,13 +1,13 @@
 ﻿#nullable enable
-using gen.fed.ui.Abstract;
-using gen.fed.ui.Models.Recipes;
-using gen.fed.ui.Services;
-using PropertyChanged;
-using ReactiveUI;
 using System.Reactive;
 using System.Windows.Input;
+using gen.fed.application.Abstract;
+using gen.fed.application.Models.Recipes;
+using gen.fed.application.Services;
+using PropertyChanged;
+using ReactiveUI;
 
-namespace gen.fed.ui.ViewModels.Recipes;
+namespace gen.fed.application.ViewModels.Recipes;
 
 [AddINotifyPropertyChangedInterface]
 public class RecipeEditViewModel : BaseViewModel

@@ -1,6 +1,6 @@
-﻿using gen.fed.ui.Models.Authentication;
+﻿using gen.fed.application.Models.Authentication;
 
-namespace gen.fed.ui
+namespace gen.fed.application
 {
     public interface IAuthenticationProvider
     {

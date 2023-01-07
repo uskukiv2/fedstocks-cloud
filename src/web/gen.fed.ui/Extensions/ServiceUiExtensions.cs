@@ -1,19 +1,19 @@
 using gen.common.Extensions;
-using gen.fed.ui.Abstract;
-using gen.fed.ui.Factories;
-using gen.fed.ui.Factories.Impl;
-using gen.fed.ui.Services;
-using gen.fed.ui.Services.Implementation;
+using gen.fed.application.Abstract;
+using gen.fed.application.Factories;
+using gen.fed.application.Factories.Impl;
+using gen.fed.application.Services;
+using gen.fed.application.Services.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 using ReactiveUI;
 using Splat;
 using Splat.Microsoft.Extensions.DependencyInjection;
 
-namespace gen.fed.ui.Extensions;
+namespace gen.fed.application.Extensions;
 
 public static class ServiceUiExtensions
 {
-    public static IServiceCollection AddUI(this IServiceCollection service, IReadOnlyCollection<Type> allTypes)
+    public static IServiceCollection AddApplication(this IServiceCollection service, IReadOnlyCollection<Type> allTypes)
     {
         RegisterReactive(service);
 
@@ -45,13 +45,14 @@ public static class ServiceUiExtensions
         RegisterCommonServices(service, allTypes);
 
         RegisterFactories(service);
+
+        RegisterScopedServices(service, allTypes);
     }
 
     private static void RegisterFactories(IServiceCollection service)
     {
         service.AddSingleton<IViewModelFactory, ViewModelFactory>();
     }
-
 
     private static void RegisterCommonServices(IServiceCollection service, IReadOnlyCollection<Type> allTypes)
     {
@@ -87,6 +88,19 @@ public static class ServiceUiExtensions
     private static void RegisterAuthenticationService(IServiceCollection service)
     {
         service.AddScoped<IApplicationService, ApplicationService>();
+    }
+
+    private static void RegisterScopedServices(IServiceCollection service, IReadOnlyCollection<Type> allTypes)
+    {
+        var baseType = typeof(IScopedService);
+        var foundTypes = allTypes.DescendantOf(baseType).Where(x => x.IsInterface);
+        foreach (var type in foundTypes)
+        {
+            var classType =
+                allTypes.SingleOrDefault(x => !x.IsInterface && !x.IsAbstract && x.GetInterface(type.Name) != null)!;
+
+            service.AddScoped(type, classType);
+        }
     }
 
     private static void RegisterAuthenticationProvider(IServiceCollection service, IReadOnlyCollection<Type> allTypes)
