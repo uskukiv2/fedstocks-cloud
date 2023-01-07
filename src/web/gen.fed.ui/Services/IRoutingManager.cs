@@ -1,4 +1,4 @@
-﻿namespace gen.fed.ui.Services;
+﻿namespace gen.fed.application.Services;
 
 public interface IRoutingManager
 {

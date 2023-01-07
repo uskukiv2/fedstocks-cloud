@@ -10,6 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.12">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
     <PackageReference Include="MudBlazor" Version="6.1.4" />
     <PackageReference Include="MudBlazor.Extensions" Version="1.7.11" />
@@ -21,11 +30,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\gen.fed.ui\gen.fed.ui.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Data\Navigation\" />
+    <ProjectReference Include="..\data\gen.fed.web.domain\gen.fed.web.domain.csproj" />
+    <ProjectReference Include="..\gen.fed.ui\gen.fed.application.csproj" />
+    <ProjectReference Include="..\gen.fed.web.infrastructure\gen.fed.web.infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

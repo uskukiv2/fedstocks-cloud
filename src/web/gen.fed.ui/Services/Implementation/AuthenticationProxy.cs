@@ -1,6 +1,6 @@
-﻿using gen.fed.ui.Models.Users;
+﻿using gen.fed.application.Models.Users;
 
-namespace gen.fed.ui.Services.Implementation
+namespace gen.fed.application.Services.Implementation
 {
     internal class AuthorizationProxy : IAuthorizationProxy
     {

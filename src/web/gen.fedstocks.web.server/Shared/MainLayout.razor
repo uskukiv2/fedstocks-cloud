@@ -3,7 +3,6 @@
 @using gen.fedstocks.web.server.Extensions;
 @using gen.fedstocks.web.server.Models;
 @using gen.fedstocks.web.server.Services
-@using Microsoft.AspNetCore.Mvc
 @using MudBlazor.Utilities
 @inherits LayoutComponentBase
 
@@ -14,7 +13,6 @@
 
 <MudThemeProvider Theme="@CurrentTheme" />
 <MudDialogProvider />
-<MudSnackbarProvider />
 
 <MudLayout>
     <MudAppBar Elevation="0">
@@ -65,12 +63,6 @@
         _drawerOpen = !_drawerOpen;
     }
 
-    private void HandleIncommingSnackbar(SnackbarModel model)
-    {
-        Snackbar.Clear();
-        Snackbar.Add(model.Message, model.SnackBarType.ToMud());
-    }
-
     private string GetIconForMenuItem(string itemName)
     {
         return IconManager.GetIcon(itemName);
@@ -83,7 +75,7 @@
 
     private void OnRightMenuItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
     {
-        if (args.Action == NotifyCollectionChangedAction.Add || (args.Action == NotifyCollectionChangedAction.Reset && args.OldItems?.Count > 0))
+        if (args.Action == NotifyCollectionChangedAction.Add || (args.Action == NotifyCollectionChangedAction.Reset && (args.OldItems?.Count > 0 || args.OldItems == null)))
         {
             InvokeAsync(StateHasChanged).AndForget();
         }
@@ -95,8 +87,6 @@
         {
             return Task.CompletedTask;
         }
-
-        MessageBus.Listen<SnackbarModel>(ConstValues.GlobalSnackbar).Subscribe(HandleIncommingSnackbar);
 
         TopbarItemsService.RightMenuItems.CollectionChanged += OnRightMenuItemsCollectionChanged;
 

@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\shared\shared.items\gen.common\gen.common.csproj" />
+      <ProjectReference Include="..\data\gen.fed.web.domain\gen.fed.web.domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>

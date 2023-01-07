@@ -1,6 +1,8 @@
-﻿namespace gen.fed.ui.Abstract;
+﻿namespace gen.fed.application.Abstract;
 
 public interface IService
 {
 
 }
+
+public interface IScopedService { }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace gen.fed.ui.Models.Recipes;
+namespace gen.fed.application.Models.Recipes;
 
 public class RecipeDto
 {

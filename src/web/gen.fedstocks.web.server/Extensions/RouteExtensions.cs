@@ -1,5 +1,4 @@
-﻿using gen.fed.ui.ViewModels;
-using gen.fed.ui.ViewModels.Recipes;
+﻿using gen.fed.application.ViewModels.Recipes;
 using gen.fedstocks.web.server.Models;
 
 namespace gen.fedstocks.web.server.Extensions;

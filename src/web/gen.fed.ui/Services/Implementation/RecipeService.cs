@@ -1,7 +1,6 @@
-﻿using gen.fed.ui.Models.Recipes;
-using System.Security.Cryptography.X509Certificates;
+﻿using gen.fed.application.Models.Recipes;
 
-namespace gen.fed.ui.Services.Implementation;
+namespace gen.fed.application.Services.Implementation;
 
 public class RecipeService : IRecipeService
 {

@@ -1,6 +1,6 @@
-﻿using gen.fed.ui.Abstract;
+﻿using gen.fed.application.Abstract;
 
-namespace gen.fed.ui.Services;
+namespace gen.fed.application.Services;
 
 public interface ICurrentViewModelObservableContainer
 {

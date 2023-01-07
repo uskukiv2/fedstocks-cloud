@@ -1,4 +1,4 @@
-﻿namespace gen.fed.ui.Models.Applications;
+﻿namespace gen.fed.application.Models.Applications;
 
 public class ApplicationUser
 {

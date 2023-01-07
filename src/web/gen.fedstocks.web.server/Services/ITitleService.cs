@@ -1,4 +1,4 @@
-﻿using gen.fed.ui.Models;
+﻿using gen.fed.application.Models;
 using gen.fedstocks.web.server.Abstract;
 
 namespace gen.fedstocks.web.server.Services;

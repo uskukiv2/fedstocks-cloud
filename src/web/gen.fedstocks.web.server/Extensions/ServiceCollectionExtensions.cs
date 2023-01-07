@@ -1,7 +1,15 @@
-﻿using gen.fed.ui.Services;
+﻿using gen.fed.application.Services;
+using gen.fed.web.domain.Abstract;
+using gen.fed.web.domain.Factories;
+using gen.fed.web.domain.Repositories;
+using gen.fed.web.infrastructure;
+using gen.fed.web.infrastructure.Factories;
+using gen.fed.web.infrastructure.Repositories;
 using gen.fedstocks.web.server.Services;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor;
 using MudBlazor.Services;
+using Npgsql;
 
 namespace gen.fedstocks.web.server.Extensions;
 
@@ -9,23 +17,61 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddFed(this IServiceCollection services)
     {
-        AddUIRoutingManager(services);
-        AddMud(services);
-        AddIconManager(services);
+        RegisterServices(services);
+
+        RegisterRepositories(services);
+
+        RegisterFactories(services);
+
+        RegisterRoutingManager(services);
+
+        RegisterMudBlazor(services);
+
+        RegisterIconManager(services);
+
         return services;
     }
 
-    private static void AddIconManager(IServiceCollection service)
+    public static IServiceCollection AddDatabase(this IServiceCollection service, ConfigurationManager config)
+    {
+        service.AddEntityFrameworkNpgsql()
+            .AddDbContext<ServiceContext>(options =>
+            {
+                options.UseNpgsql(config.GetConnectionString("default"));
+            });
+        service.AddScoped<IUnitOfWork<NpgsqlConnection>>(sp => sp.GetRequiredService<ServiceContext>());
+        return service;
+    }
+
+    private static void RegisterRepositories(IServiceCollection services)
+    {
+        services.AddScoped<IUserRepository, UserRepository>();
+    }
+
+    private static void RegisterFactories(IServiceCollection services)
+    {
+        services.AddSingleton<IUnitOfWorkFactory, UnitOfWorkFactory>();
+    }
+
+    private static void RegisterServices(IServiceCollection services)
+    {
+        services.AddSingleton<IPageManager, PageManager>();
+        services.AddSingleton<ITitleService, TitleService>();
+
+        services.AddScoped<ITopbarItemsService, TopbarItemsService>();
+    }
+
+    private static void RegisterIconManager(IServiceCollection service)
     {
         service.AddSingleton<CommandIconManager>();
     }
 
-    private static void AddUIRoutingManager(IServiceCollection services)
+    private static void RegisterRoutingManager(IServiceCollection services)
     {
         services.AddSingleton<IRoutingManager>(sp => new RoutingManager(RouteExtensions.GetRoutes()));
     }
 
-    private static void AddMud(IServiceCollection services)
+    private static void RegisterMudBlazor(IServiceCollection services)
     {
         services.AddMudServices(config =>
         {

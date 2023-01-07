@@ -1,12 +1,42 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using ReactiveUI
+@using gen.fedstocks.web.server.Models
+@using gen.fedstocks.web.server.Extensions
+
+@inject ISnackbar Snackbar
+@inject IMessageBus MessageBus
+
+<MudSnackbarProvider />
+
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
     </Found>
     <NotFound>
-        <PageTitle>Not found</PageTitle>
-        <LayoutView Layout="@typeof(MainLayout)">
-            <p role="alert">Sorry, there's nothing at this address.</p>
-        </LayoutView>
+        <PageNotFound />
     </NotFound>
 </Router>
+
+@code
+{
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return Task.CompletedTask;
+        }
+
+        if (!MessageBus.IsRegistered(typeof(SnackbarModel)))
+        {
+            MessageBus.Listen<SnackbarModel>().Subscribe(HandleIncomingSnackbar);
+        }
+        
+        return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private void HandleIncomingSnackbar(SnackbarModel model)
+    {
+        Snackbar.Clear();
+        Snackbar.Add(model.Message, model.SnackBarType.ToMud());
+    }
+}

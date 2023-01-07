@@ -1,7 +1,7 @@
-﻿using gen.fed.ui.Abstract;
+﻿using gen.fed.application.Abstract;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace gen.fed.ui.Factories.Impl;
+namespace gen.fed.application.Factories.Impl;
 
 public class ViewModelFactory : IViewModelFactory
 {

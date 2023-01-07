@@ -1,5 +1,5 @@
-﻿using gen.fed.ui.Models.Recipes;
-using gen.fed.ui.ViewModels.Recipes;
+﻿using gen.fed.application.Models.Recipes;
+using gen.fed.application.ViewModels.Recipes;
 using gen.fedstocks.web.server.Abstract;
 using gen.fedstocks.web.server.Models;
 using Microsoft.AspNetCore.Components;
