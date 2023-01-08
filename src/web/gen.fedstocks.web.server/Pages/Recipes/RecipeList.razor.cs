@@ -12,9 +12,7 @@ namespace gen.fedstocks.web.server.Pages.Recipes;
 public partial class RecipeList : FedComponentBase<RecipeListViewModel>
 {
     [Inject] public IMessageBus MessageBus { get; set; }
-
-    public ObservableCollection<RecipeDto> Recipes => ViewModel.Recipes;
-
+    
     private void AddNewRecipeHandler()
     {
         Navigation.NavigateTo(RouterStrings.RecipeNew);
@@ -32,7 +30,7 @@ public partial class RecipeList : FedComponentBase<RecipeListViewModel>
             new()
             {
                 Item = CommandNames.AddCommandName,
-                Command = AddNewRecipeHandler
+                Command = AddNewRecipeHandler,
             }
         };
     }
