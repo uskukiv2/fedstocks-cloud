@@ -54,8 +54,16 @@ namespace gen.fedstocks.web.server.Pages.Recipes
         private void OnCancelCommand()
         {
             IsEditMode = false;
-            UpdateMenu();
-            StateHasChanged();
+            if (RecipeId > 0)
+            {
+                UpdateMenu();
+                Init(true);
+                StateHasChanged();
+            }
+            else
+            {
+                Navigation.NavigateTo(RouterStrings.RecipeList);
+            }
         }
 
         private IEnumerable<(string, Action)> GetMenuItemsForViewMode()
@@ -90,19 +98,6 @@ namespace gen.fedstocks.web.server.Pages.Recipes
             }
 
             CurrentRecipe = ViewModel.CurrentRecipe;
-        }
-
-        private void OnMarkdownValueChanged(int id, string changedValue)
-        {
-            if (string.IsNullOrEmpty(changedValue))
-            {
-                return;
-            }
-
-            if (CurrentRecipe.Preparations.Any(x => x.Id == id))
-            {
-                CurrentRecipe.Preparations.FirstOrDefault(x => x.Id == id)!.Content = changedValue;
-            }
         }
 
         private void OnAddIngredientClicked()

@@ -1,7 +1,6 @@
 ﻿using System.Reactive;
 using System.Windows.Input;
 using gen.fed.application.Abstract;
-using gen.fed.application.Models.Navigation;
 using gen.fed.application.Services;
 using PropertyChanged;
 using ReactiveUI;

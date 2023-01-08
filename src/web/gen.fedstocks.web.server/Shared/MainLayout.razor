@@ -15,7 +15,7 @@
 <MudDialogProvider />
 
 <MudLayout>
-    <MudAppBar Elevation="0">
+    <MudAppBar Elevation="0" Style="border-bottom: 1px; border-bottom-color: gainsboro; border-bottom-style: solid;">
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudSpacer />
         @foreach (var item in TopbarItemsService.RightMenuItems)
@@ -41,7 +41,9 @@
         <NavMenu/>
     </MudDrawer>
     <MudMainContent>
-        @Body
+        <MudContainer>
+            @Body
+        </MudContainer>
     </MudMainContent>
 </MudLayout>
 
@@ -50,7 +52,8 @@
         {
             Palette = new Palette()
             {
-                AppbarBackground = Colors.Shades.White,
+                AppbarBackground = Colors.Grey.Lighten4,
+                Background = Colors.Grey.Lighten4,
                 AppbarText = Colors.Shades.Black,
                 Primary = new MudColor("#116D34")
             }

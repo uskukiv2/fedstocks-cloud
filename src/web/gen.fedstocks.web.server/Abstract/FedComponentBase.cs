@@ -1,6 +1,12 @@
-﻿using gen.fed.application.Abstract;
+﻿using System.ComponentModel;
+using System.Reactive;
+using System.Reactive.Linq;
+using DynamicData.Binding;
+using gen.fed.application.Abstract;
 using gen.fedstocks.web.server.Services;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MudBlazor;
 using ReactiveUI;
 using ReactiveUI.Blazor;
 
@@ -8,15 +14,11 @@ namespace gen.fedstocks.web.server.Abstract
 {
     public abstract class FedComponentBase<T> : ReactiveComponentBase<T>, IPageContextMenu where T : BaseViewModel
     {
+        [Inject] protected T ViewModel { get; set; }
 
-        [Inject]
-        protected T ViewModel { get; set; }
+        [Inject] protected ITopbarItemsService TopbarItemsService { get; set; }
 
-        [Inject]
-        protected ITopbarItemsService TopbarItemsService { get; set; }
-
-        [Inject]
-        protected NavigationManager Navigation { get; set; }
+        [Inject] protected NavigationManager Navigation { get; set; }
 
         public IEnumerable<(string Item, Action Command)> MenuItems { get; private set; }
 
@@ -26,7 +28,8 @@ namespace gen.fedstocks.web.server.Abstract
 
             if (MenuItems != null && MenuItems.Any())
             {
-                TopbarItemsService.AddMenuItems(MenuItems.Select(x => x.Item)).WhereNotNull().Subscribe(HandleCommandClicked);
+                TopbarItemsService.AddMenuItems(MenuItems.Select(x => x.Item)).WhereNotNull()
+                    .Subscribe(HandleCommandClicked);
             }
         }
 
@@ -42,6 +45,7 @@ namespace gen.fedstocks.web.server.Abstract
             await ViewModel.InitAsync();
 
             UpdateMenu();
+            StateHasChanged();
         }
 
         protected virtual void HandleCommandClicked(string itemName)
