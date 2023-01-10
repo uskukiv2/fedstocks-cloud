@@ -2,8 +2,12 @@
 using gen.fed.application.ViewModels.Recipes;
 using gen.fedstocks.web.server.Abstract;
 using gen.fedstocks.web.server.Models;
+using gen.fedstocks.web.server.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using MudBlazor;
+using Newtonsoft.Json.Converters;
 using PropertyChanged;
 
 namespace gen.fedstocks.web.server.Pages.Recipes
@@ -12,18 +16,20 @@ namespace gen.fedstocks.web.server.Pages.Recipes
     [Route(RouterStrings.RecipeNew)]
     public partial class RecipeDetails : FedComponentBase<RecipeEditViewModel>, IEditable
     {
-        [Parameter] public int RecipeId { get; set; } = 0;
+        private Random _random;
+        
+        [Parameter] public int RecipeId { get; set; }
 
-        [AlsoNotifyFor(nameof(CurrentRecipe))]
-        public RecipeDto CurrentRecipe { get; set; } = new RecipeDto();
+        [Inject] public IDialogService DialogService { get; set; }
 
-        public EditContext EditContext { get; private set; }
+        [AlsoNotifyFor(nameof(CurrentRecipe))] public RecipeDto CurrentRecipe { get; set; } = new();
 
-        public int TotalRecipeContents { get; private set; } = 0;
+        [AlsoNotifyFor(nameof(EditContext))] public EditContext EditContext { get; private set; }
 
-        public int TotalTags { get; private set; } = 4;
+        [AlsoNotifyFor(nameof(TotalRecipeContents))]
+        public int TotalRecipeContents => CurrentRecipe.Preparations.Count;
 
-        public bool IsEditMode { get; set; }
+        [AlsoNotifyFor(nameof(IsEditMode))] public bool IsEditMode { get; set; }
 
         public IEnumerable<IngredientUnitType> IngredientUnitTypes { get; private set; }
 
@@ -94,7 +100,6 @@ namespace gen.fedstocks.web.server.Pages.Recipes
             {
                 IsEditMode = false;
                 ViewModel.LoadRecipeCommand.Execute(RecipeId);
-                TotalRecipeContents = ViewModel.CurrentRecipe.Preparations.Count;
             }
 
             CurrentRecipe = ViewModel.CurrentRecipe;
@@ -110,6 +115,23 @@ namespace gen.fedstocks.web.server.Pages.Recipes
             ViewModel.AddPreparationToRecipeCommand.Execute(null);
         }
 
+        private async Task AddTag()
+        {
+            var result = await (await DialogService.ShowAsync<DialogInputComponent>("Type tag name", new DialogOptions()
+            {
+                Position = DialogPosition.Center,
+                CloseButton = false,
+                CloseOnEscapeKey = true
+            })).Result;
+            
+            if (result.Cancelled)
+            {
+                return;
+            }
+
+            ViewModel.AddTagCommand.Execute((string)result.Data).Subscribe();
+        }
+
         protected override IEnumerable<(string, Action)> GetMenuItems()
         {
             return !IsEditMode ? GetMenuItemsForViewMode() : GetMenuItemsForEditMode();
@@ -121,6 +143,8 @@ namespace gen.fedstocks.web.server.Pages.Recipes
 
             Init();
 
+            _random = new Random(RecipeId);
+            
             IngredientUnitTypes = Enum.GetValues<IngredientUnitType>();
 
             return base.OnAfterRenderAsync(isFirstRender);

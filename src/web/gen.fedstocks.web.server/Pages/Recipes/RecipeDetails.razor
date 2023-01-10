@@ -1,4 +1,5 @@
 ﻿@using gen.fedstocks.web.server.Abstract;
+@using Microsoft.EntityFrameworkCore.Metadata.Internal
 
 @inherits FedComponentBase<gen.fed.application.ViewModels.Recipes.RecipeEditViewModel>
 
@@ -6,10 +7,16 @@
     <MudStack Class="mt-4">
         <MudContainer MaxWidth="MaxWidth.Medium">
             <MudPaper class="py-4 px-10" Elevation="0">
-                <MudContainer Class="mt-5 mb-5">
+                <MudContainer>
                     @if (IsEditMode)
                     {
-                        <MudTextField @bind-Value="@CurrentRecipe.Name" For="@(() => CurrentRecipe.Name)" Variant="Variant.Outlined" Label="Recipe name"/>
+                        <MudStack Spacing="3" AlignItems="AlignItems.Stretch">
+                            @if (RecipeId < 1)
+                            {
+                                <MudText Typo="Typo.body1" Align="Align.Center">It will be your new recipe</MudText>
+                            }
+                            <MudTextField @bind-Value="@CurrentRecipe.Name" For="@(() => CurrentRecipe.Name)" Variant="Variant.Outlined" Label="Recipe name" Class="mb-5"/>
+                        </MudStack>
                     }
                     else
                     {
@@ -23,12 +30,35 @@
         <MudContainer MaxWidth="MaxWidth.Medium">
             <MudPaper Class="py-4 px-10" Elevation="0">
                 <MudStack Class="mt-0 mb-0" Row="true" Spacing="4" Justify="Justify.Center" AlignItems="AlignItems.Center">
-                    <MudTooltip Text="Total steps">
-                        <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="1">
-                            <MudIcon Icon="@Icons.Material.Rounded.DoneAll"></MudIcon>
-                            <b>@TotalRecipeContents</b>
+                    @if (IsEditMode)
+                    {
+                        <MudStack Class="w-25" Row="true" Spacing="1" Justify="Justify.Center" AlignItems="AlignItems.Center">
+                            <MudNumericField Min="0" Max="10" Label="Hours" FullWidth="false" MaxLength="2" Variant="Variant.Outlined"/>
+                            <MudNumericField Min="0" Max="59" Label="Minutes" FullWidth="false" MaxLength="2" Variant="Variant.Outlined"/>
                         </MudStack>
-                    </MudTooltip>
+                        <MudStack Row="true" Spacing="1" Justify="Justify.SpaceAround" AlignItems="AlignItems.Center">
+                            @foreach (var tag in CurrentRecipe.Tags)
+                            {
+                                <MudChip Size="Size.Medium" Text="@tag" Command="ViewModel.RemoveTagCommand" CommandParameter="@tag" Icon="@Icons.Material.Rounded.Clear"/>
+                            }
+                            <MudChip Size="Size.Medium" OnClick="AddTag" Icon="@Icons.Material.Outlined.Add" Text="Add"/>
+                        </MudStack>
+                    }
+                    else
+                    {
+                        <MudTooltip Placement="Placement.Bottom" Text="Cooking time">
+                            <MudStack Row="true" Spacing="1">
+                                <MudIcon Icon="@Icons.Material.Rounded.Timer"/>
+                                <MudText>10:20</MudText>
+                            </MudStack>
+                        </MudTooltip>
+                        <MudStack Spacing="2" Row="true">
+                            @foreach (var tag in CurrentRecipe.Tags)
+                            {
+                                <MudChip Size="Size.Medium" Text="@tag"/>
+                            }
+                        </MudStack>
+                    }
                 </MudStack>
             </MudPaper>
         </MudContainer>
@@ -36,28 +66,15 @@
             <MudStack Spacing="3">
                 <MudPaper Elevation="0">
                     <MudStack Spacing="2" Class="px-4 py-2">
-                        @if (IsEditMode)
-                        {
-                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                <MudText Typo="Typo.body1">
-                                    <b>Ingredients</b>
-                                </MudText>
-                                <MudIconButton Icon="@Icons.Material.Rounded.Add" OnClick="OnAddIngredientClicked"/>
-                            </MudStack>
-                        }
-                        else
-                        {
-                            <MudText Typo="Typo.body1" Class="pt-2">
-                                <b>Ingredients</b>
-                            </MudText>
-                        }
+                        <MudText Typo="Typo.body1" Class="pt-2" Align="Align.Center">
+                            <b>Ingredients</b>
+                        </MudText>
                         <MudStack Class="pb-2">
                             @foreach (var ingredient in CurrentRecipe.Ingredients)
                             {
                                 @if (IsEditMode)
                                 {
                                     <MudStack Row="true" AlignItems="AlignItems.Center" Spacing="2" Justify="Justify.SpaceEvenly">
-                                        @*Class="mx-4 my-2"*@
                                         <MudTextField @bind-Value="@ingredient.Name" For="@(() => ingredient.Name)" Label="Enter ingredient name" Variant="Variant.Outlined"/>
                                         <MudSelect @bind-Value="ingredient.UnitName" For="@(() => ingredient.UnitName)" Label="Choose unit type" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
                                             @foreach (var unitType in IngredientUnitTypes)
@@ -68,13 +85,9 @@
                                         <MudNumericField @bind-Value="@ingredient.Quantity" For="@(() => ingredient.Quantity)" Min="0" Max="10" Label="Enter a double" Format="F1" Variant="Variant.Outlined"/>
                                         @if (ViewModel.IsPossibleToRemoveIngredient)
                                         {
-                                            <MudIconButton Icon="@Icons.Material.Rounded.Delete" Color="Color.Error"/>
+                                            <MudIconButton Icon="@Icons.Material.Rounded.Clear" Color="Color.Error" Command="ViewModel.RemoveIngredientFromRecipeCommand" CommandParameter="@ingredient"/>
                                         }
                                     </MudStack>
-                                    @if (CurrentRecipe.Ingredients.IndexOf(ingredient) + 1 != CurrentRecipe.Ingredients.Count)
-                                    {
-                                        <MudDivider Light="true"/>
-                                    }
                                 }
                                 else
                                 {
@@ -91,41 +104,49 @@
                                     </MudStack>
                                 }
                             }
+                            @if (IsEditMode)
+                            {
+                                <MudButton Class="mx-auto px-5" Size="Size.Small" Color="Color.Primary" Command="@ViewModel.AddIngredientToRecipeCommand" Variant="Variant.Text" StartIcon="@Icons.Material.Rounded.Add">Add ingredient</MudButton>
+                            }
                         </MudStack>
                     </MudStack>
                 </MudPaper>
                 <MudPaper Elevation="0">
                     <MudStack Spacing="2" Class="px-4 py-2">
-                        @if (IsEditMode)
-                        {
-                            <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
-                                <MudText Typo="Typo.body1">
-                                    <b>Preparation</b>
-                                </MudText>
-                                <MudIconButton Icon="@Icons.Material.Rounded.Add" OnClick="OnAddPreparationClicked"/>
-                            </MudStack>
-                        }
-                        else
-                        {
-                            <MudText Typo="Typo.body1" Class="pt-2">
-                                <b>Preparation</b>
-                            </MudText>
-                        }
+                        <MudText Typo="Typo.body1" Class="pt-2" Align="Align.Center">
+                            <b>Preparation</b>
+                        </MudText>
                         <MudStack Spacing="2" class="pb-2">
                             @foreach (var preparationStep in CurrentRecipe.Preparations)
                             {
                                 <MudStack Spacing="1">
-                                    <MudText Typo="Typo.body1" Align="Align.Left">
-                                        <b>@preparationStep.NumberOfOrder</b> / @TotalRecipeContents
-                                    </MudText>
-                                    <MudTextField T="string"
-                                                  Label="@(IsEditMode ? "Preparation content" : "")"
-                                                  @bind-Value="preparationStep.Content"
-                                                  ReadOnly="@(!IsEditMode)"
-                                                  Lines="15" FullWidth="true"
-                                                  Adornment="Adornment.End"
-                                                  Variant="Variant.Outlined"/>
+                                    <MudStack Row="true" Justify="Justify.SpaceBetween" AlignItems="AlignItems.Center">
+                                        <MudText Typo="Typo.body1" Align="Align.Left">
+                                            Step <b>@preparationStep.NumberOfOrder</b> / @TotalRecipeContents
+                                        </MudText>
+                                        @if (ViewModel.IsPossibleToRemovePreparation)
+                                        {
+                                            <MudIconButton Icon="@Icons.Material.Rounded.Clear" Color="Color.Error" Command="@ViewModel.RemovePreparationFromRecipeCommand" CommandParameter="@preparationStep"/>
+                                        }
+                                    </MudStack>
+                                    <MudStack Row="true" Justify="Justify.SpaceEvenly">
+                                        <MudImage Src="images/dummy_image_recipe_2510.png"></MudImage>
+                                        <MudContainer MaxWidth="MaxWidth.Small">
+                                            <MudTextField T="string"
+                                                          Label="@(IsEditMode ? "Instruction to preparation" : "")"
+                                                          @bind-Value="preparationStep.Content"
+                                                          ReadOnly="@(!IsEditMode)"
+                                                          Lines="8" FullWidth="false"
+                                                          MaxLength="5000"
+                                                          Adornment="Adornment.End"
+                                                          Variant="Variant.Outlined"/>
+                                        </MudContainer>
+                                    </MudStack>
                                 </MudStack>
+                            }
+                            @if (IsEditMode)
+                            {
+                                <MudButton Class="mx-auto px-5" FullWidth="false" Size="Size.Small" Color="Color.Primary" StartIcon="@Icons.Material.Rounded.Add" Command="@ViewModel.AddPreparationToRecipeCommand">Add preparation</MudButton>
                             }
                         </MudStack>
                     </MudStack>

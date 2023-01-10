@@ -13,6 +13,9 @@ public class RecipeDto
     [StringLength(100), MinLength(10)]
     public string Name { get; set; } = string.Empty;
 
+    [Range(0, 5), MinLength(0), MaxLength(5)]
+    public ObservableCollection<string> Tags { get; set; } = new();
+
     [Required, Range(2, 20), MinLength(2)]
     public ObservableCollection<RecipeIngredientDto> Ingredients { get; set; } = new();
 
