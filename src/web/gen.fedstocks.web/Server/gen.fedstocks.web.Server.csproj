@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="Pages\Error.cshtml" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="6.0.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\data\gen.fed.web.domain\gen.fed.web.domain.csproj" />
+		<ProjectReference Include="..\..\gen.fed.web.infrastructure\gen.fed.web.infrastructure.csproj" />
+		<ProjectReference Include="..\..\gen.fed.web.server.application\gen.fed.web.server.application.csproj" />
+		<ProjectReference Include="..\Client\gen.fedstocks.web.Client.csproj" />
+		<ProjectReference Include="..\Shared\gen.fedstocks.web.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Controllers\" />
+	</ItemGroup>
+
+
+</Project>

@@ -1,0 +1,28 @@
+﻿@using System.Text.RegularExpressions
+<MudDialog>
+    <DialogContent>
+        <MudTextField T="string" @bind-Value="Input" Required="true" Variant="Variant.Outlined" Validation="@(new Func<string, IEnumerable<string>>(ShouldBeLettersOnly))"></MudTextField>
+    </DialogContent>
+    <DialogActions>
+            <MudButton OnClick="Cancel">Cancel</MudButton>
+            <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+        </DialogActions>
+</MudDialog>
+
+@code
+{
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    
+    public string Input { get; set; }
+    
+    void Submit() => MudDialog.Close(DialogResult.Ok(Input));
+    void Cancel() => MudDialog.Cancel();
+
+    IEnumerable<string> ShouldBeLettersOnly(string input)
+    {
+        if (!string.IsNullOrEmpty(input) && !Regex.IsMatch(input, @"^[a-zA-Z]+$"))
+        {
+            yield return "input shouldn't be contain any digit or special characters";
+        }
+    }
+}

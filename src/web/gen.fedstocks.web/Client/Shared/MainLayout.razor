@@ -1,0 +1,93 @@
+﻿@using System.Collections.Specialized;
+@using gen.fedstocks.web.Client.Services
+@using MudBlazor.Utilities
+@inherits LayoutComponentBase
+
+@inject ITopbarItemsService TopbarItemsService
+@inject CommandIconManager IconManager
+
+<MudThemeProvider Theme="@CurrentTheme" />
+<MudDialogProvider />
+
+<MudLayout>
+    <MudAppBar Elevation="0" Style="border-bottom: 1px; border-bottom-color: gainsboro; border-bottom-style: solid;">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(new Action<object>(e => DrawerToggle()))" />
+        <MudSpacer />
+        @foreach (var item in TopbarItemsService.RightMenuItems)
+        {
+            <MudTooltip Text="@GetLocalization(item)">
+                <MudIconButton Color="Color.Inherit" Icon="@GetIconForMenuItem(item)" Command="TopbarItemsService.MenuItemClickedCommand" CommandParameter="@item" />
+            </MudTooltip>
+        }
+        <MudDivider Vertical="true" DividerType="DividerType.Middle" Light="false" class="mx-4 my-4" />
+        <MudTooltip Text="Current user">
+            <MudIconButton Color="Color.Inherit" Icon="@Icons.Material.Rounded.AccountCircle" Size="Size.Medium" />
+        </MudTooltip>
+    </MudAppBar>
+    <MudDrawer @bind-Open="_drawerOpen" 
+               Elevation="0" 
+               Variant="@DrawerVariant.Responsive" 
+               OpenMiniOnHover="true" 
+               ClipMode="DrawerClipMode.Never"
+               Style="border-right: 1px; border-right-color: gainsboro; border-right-style: solid; animation: none">
+        <MudDrawerHeader Class="text-center">
+            <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">fedstocks</MudText>
+        </MudDrawerHeader>
+        <NavMenu/>
+    </MudDrawer>
+    <MudMainContent>
+        <MudContainer>
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+@code {
+    private readonly MudTheme CurrentTheme = new()
+        {
+            Palette = new Palette()
+            {
+                AppbarBackground = Colors.Grey.Lighten4,
+                Background = Colors.Grey.Lighten4,
+                AppbarText = Colors.Shades.Black,
+                Primary = new MudColor("#116D34")
+            }
+        };
+
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+
+    private string GetIconForMenuItem(string itemName)
+    {
+        return IconManager.GetIcon(itemName);
+    }
+
+    private string GetLocalization(string input) //TODO localization
+    {
+        return input;
+    }
+
+    private void OnRightMenuItemsCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+    {
+        if (args.Action == NotifyCollectionChangedAction.Add || (args.Action == NotifyCollectionChangedAction.Reset && (args.OldItems?.Count > 0 || args.OldItems == null)))
+        {
+            InvokeAsync(StateHasChanged).AndForget();
+        }
+    }
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            return Task.CompletedTask;
+        }
+
+        TopbarItemsService.RightMenuItems.CollectionChanged += OnRightMenuItemsCollectionChanged;
+
+        return Task.CompletedTask;
+    }
+}

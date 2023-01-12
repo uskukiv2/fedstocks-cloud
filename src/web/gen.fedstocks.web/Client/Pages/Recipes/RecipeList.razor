@@ -1,0 +1,38 @@
+﻿@using gen.fedstocks.web.Client.Abstract
+
+@inherits FedComponentBase<gen.fedstocks.web.Client.Application.ViewModels.Recipes.RecipeListViewModel>
+
+<MudContainer Class="pa-2">
+    @if (ViewModel.Recipes.Count > 0)
+    {
+        <MudGrid>
+            @foreach (var recipe in ViewModel.Recipes)
+            {
+                <MudItem lg="3" sm="2">
+                    <MudCard>
+                        <MudCardMedia Image="images/dummy_image_recipe_2510.png" Height="150"/>
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@recipe.Name</MudText>
+                            <MudText Typo="Typo.body2">Short description of recipe</MudText>
+                        </MudCardContent>
+                        <MudCardActions>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => ViewSelectedRecipe(recipe.Id)">View</MudButton>
+                        </MudCardActions>
+                    </MudCard>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+    else
+    {
+        <MudContainer MaxWidth="MaxWidth.Small" Class="d-flex align-center flex-grow-1 gap-4 vh-100">
+            <MudStack AlignItems="AlignItems.Center" Class="py-8 d-flex flex-1">
+                <MudPaper Elevation="0" Class="pa-4">
+                    <MudText Align="Align.Center" Typo="Typo.body1">
+                        There is no recipes yet. Let be first who create it!
+                    </MudText>
+                </MudPaper>
+            </MudStack>
+        </MudContainer>
+    }
+</MudContainer>

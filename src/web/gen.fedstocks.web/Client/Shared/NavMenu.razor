@@ -1,0 +1,52 @@
+﻿@using System.Reactive
+@using gen.fedstocks.web.Client.Models
+@using gen.fedstocks.web.Client.Abstract;
+
+@inherits FedComponentBase<gen.fedstocks.web.Client.Application.ViewModels.NavigationViewModel>
+
+<MudNavMenu Bordered="true" Class="py-1" Dense="false" Color="Color.Primary">
+
+    <MudNavLink Disabled="true"><b>General</b></MudNavLink>
+    <MudNavLink Href="@RouterStrings.Home" Icon="@Icons.Material.Rounded.Home" Match="NavLinkMatch.All"> Home</MudNavLink>
+
+    <MudNavLink Disabled="true" Class="mt-5"><b>Shopping</b></MudNavLink>
+    <MudNavLink Href="@RouterStrings.Shopping.ShopperList" Icon="@Icons.Material.Rounded.ShoppingBag" Match="NavLinkMatch.All">Shoppers</MudNavLink>
+    <MudNavLink Href="@RouterStrings.Shopping.ProductList" Icon="@Icons.Material.Rounded.ShoppingBasket" Match="NavLinkMatch.All">Products</MudNavLink>
+
+    <MudNavLink Disabled="true" class="mt-5"><b>Store</b></MudNavLink>
+    <MudNavLink Href="@RouterStrings.Store.OrderList" Icon="@Icons.Material.Rounded.ReceiptLong" Match="NavLinkMatch.All">Orders</MudNavLink>
+    <MudNavLink Href="@RouterStrings.Store.StockList" Icon="@Icons.Material.Rounded.Inventory2" Match="NavLinkMatch.All">Stocks</MudNavLink>
+    
+    <MudNavLink Class="mt-5" Disabled="true"><b>Community</b></MudNavLink>
+    <MudNavLink Href="@RouterStrings.RecipeList" Icon="@Icons.Material.Rounded.RestaurantMenu" Match="NavLinkMatch.All">Recipes</MudNavLink>
+    
+    @if (ViewModel.IsUserHasIntegrations)
+    {
+        <MudNavLink Class="mt-5" Disabled="true"><b>Integrations</b></MudNavLink>
+        @* Integrations *@
+    }
+
+    @if (ViewModel.IsUserAdmin)
+    {
+        <MudNavLink Class="mt-5" Disabled="true"><b>Admin</b></MudNavLink>
+        <MudNavLink Href="@RouterStrings.Admin.SellerList" Match="NavLinkMatch.All">Sellers</MudNavLink>
+        <MudNavLink Href="@RouterStrings.Admin.ProductList" Match="NavLinkMatch.All">Products</MudNavLink>
+    }
+</MudNavMenu>
+
+@code {
+    private bool _isHasIntegrations = false;
+    private bool _isAdmin = false;
+
+    protected override async Task OnAfterRenderAsync(bool isFirstRender)
+    {
+        if (!isFirstRender)
+        {
+            return;
+        }
+
+        ViewModel.ReloadDataCommand.Execute(null);
+
+        StateHasChanged();
+    }
+}
