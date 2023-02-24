@@ -5,12 +5,7 @@ namespace gen.fedstocks.web.Client.Application.Services;
 
 public interface IRecipeService : IService
 {
-    Task<int> GetNextIngredientIdAsync(int id);
-    Task<int> GetNextPreparationIdAsync(int id);
-    Task<RecipeDto> GetRecipeAsync(int userId, int recipeId);
-    Task<IEnumerable<RecipeDto>> GetRecipesAsync(int userId);
-    Task<bool> IsPossibleToEditRecipeAsync(int userId, int id);
+    Task<RecipeDto?> GetRecipeAsync(int userId, int recipeId);
+    Task<IEnumerable<RecipeDto>> GetRecipesAsync(int userId, int recipePageSize, int skipRecipe);
     Task<int> SaveChangesAsync(RecipeDto currentRecipe, int userId);
-
-    bool IsExist(int id);
 }

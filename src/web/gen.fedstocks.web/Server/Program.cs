@@ -4,11 +4,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+builder.Services.AddLogging(cfg =>
+{
+    cfg.SetMinimumLevel(LogLevel.Trace);
+    cfg.AddDebug();
+    cfg.AddConsole();
+});
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddFed();
+builder.Services.AddReverseProxy()
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
 
@@ -35,5 +44,10 @@ app.UseRouting();
 app.MapRazorPages();
 app.MapControllers();
 app.MapFallbackToFile("index.html");
+
+app.UseEndpoints(end =>
+{
+    end.MapReverseProxy();
+});
 
 app.Run();

@@ -1,0 +1,59 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "fed.cloud.menu.api.Protos";
+
+import "google/protobuf/duration.proto";
+
+import "google/protobuf/empty.proto";
+
+package recipe;
+
+service Recipe {
+  rpc GetRecipes(RecipesRequest) returns (RecipesResponse);
+  rpc GetRecipesByQuery(RecipesByQueryRequest) returns (RecipesResponse);
+  rpc AddOrUpdateRecipe(UpdateRecipeRequest) returns (RecipeResponse);
+  rpc DeleteRecipe(DeleteRecipeRequest) returns (google.protobuf.Empty);
+}
+
+message RecipesRequest {
+  string parent = 1;
+  int32 page_size = 2;
+  int32 skip = 3;
+}
+
+message RecipesByQueryRequest {
+  string query = 1;
+}
+
+message RecipesResponse {
+  repeated RecipeModel recipes = 1;
+  int32 next_skip = 2;
+}
+
+message RecipeModel {
+  string id = 1; // uuid
+  string name = 2;
+  string tags = 3;
+  google.protobuf.Duration cooking_time = 4;
+  string content = 5;
+  repeated RecipeIngredientModel RecipeIngredients = 6;
+}
+
+message RecipeIngredientModel{
+  int32 product_number = 1;
+  string name = 2;
+  double quantity = 3;
+  int32 unit_number = 4;
+}
+
+message UpdateRecipeRequest {
+  RecipeModel recipe = 1;
+}
+
+message RecipeResponse {
+  RecipeModel recipe = 1;
+}
+
+message DeleteRecipeRequest {
+  string id = 1;
+}

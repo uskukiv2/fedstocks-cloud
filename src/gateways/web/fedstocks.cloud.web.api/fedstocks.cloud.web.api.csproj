@@ -10,24 +10,28 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.3.6" />
-    <PackageReference Include="FluentValidation.AspNetCore" Version="10.3.6" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.2" />
-    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.14.0" />
-    <PackageReference Include="NSwag.AspNetCore" Version="13.15.5" />
+    <PackageReference Include="FluentValidation" Version="11.5.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.0" />
+    <PackageReference Include="Mapster" Version="7.3.0" />
+    <PackageReference Include="Mapster.Async" Version="2.0.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.14" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="6.0.14" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="NSwag.AspNetCore" Version="13.18.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Infrastructure\Factories" />
     <Folder Include="Infrastructure\Middlewares\" />
-    <Folder Include="Models\Configurations\Sections\" />
     <Folder Include="Grpc\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\services\product\fed.cloud.product.host\fed.cloud.product.host.csproj" />
+    <ProjectReference Include="..\..\..\services\recipe\fed.cloud.menu.api\fed.cloud.menu.api.csproj" />
     <ProjectReference Include="..\..\..\services\shopping\fed.cloud.shopping.api\fed.cloud.shopping.api.csproj" />
     <ProjectReference Include="..\..\..\shared\fed.communication\fed.cloud.communication\fed.cloud.communication.csproj" />
   </ItemGroup>
