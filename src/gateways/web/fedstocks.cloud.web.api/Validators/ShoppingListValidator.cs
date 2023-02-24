@@ -21,7 +21,7 @@ public class BaseShoppingListValidator<T> : AbstractValidator<T> where T : BaseS
     }
 }
 
-public class NewShoppingListValidator : AbstractValidator<NewShoppingList>
+public class NewShoppingListValidator : BaseShoppingListValidator<NewShoppingList>
 {
     public NewShoppingListValidator()
     {
@@ -29,7 +29,7 @@ public class NewShoppingListValidator : AbstractValidator<NewShoppingList>
     }
 }
 
-public class CompletedShoppingListValidator : AbstractValidator<CompletedShoppingList>
+public class CompletedShoppingListValidator : BaseShoppingListValidator<CompletedShoppingList>
 {
     public CompletedShoppingListValidator()
     {

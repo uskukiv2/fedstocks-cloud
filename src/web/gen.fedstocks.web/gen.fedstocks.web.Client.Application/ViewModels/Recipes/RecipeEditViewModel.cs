@@ -2,6 +2,7 @@
 using System.Reactive;
 using System.Windows.Input;
 using gen.fedstocks.web.Client.Application.Abstract;
+using gen.fedstocks.web.Client.Application.Models.Products;
 using gen.fedstocks.web.Client.Application.Models.Recipes;
 using gen.fedstocks.web.Client.Application.Services;
 using PropertyChanged;
@@ -13,6 +14,7 @@ namespace gen.fedstocks.web.Client.Application.ViewModels.Recipes;
 public class RecipeEditViewModel : BaseViewModel
 {
     private readonly IRecipeService _recipeService;
+    private readonly IProductService _productService;
     private readonly IApplicationService _applicationService;
     private readonly int? _totalIngredientByDefault;
     private readonly int? _totalPreparationsByDefault;
@@ -26,21 +28,23 @@ public class RecipeEditViewModel : BaseViewModel
     private ReactiveCommand<RecipePreparationDto, Unit>? _removePreparationFromRecipeCommand;
     private ReactiveCommand<string, Unit>? _addTagCommand;
     private ReactiveCommand<string, Unit>? _removeTagCommand;
+    private ReactiveCommand<Unit, IEnumerable<UnitDto>>? _getUnitsCommand;
 
-    public RecipeEditViewModel(IRecipeService recipeService, IApplicationService applicationService)
+    public RecipeEditViewModel(IRecipeService recipeService, IApplicationService applicationService,
+        IProductService productService)
     {
         _recipeService = recipeService;
         _applicationService = applicationService;
+        _productService = productService;
         _totalIngredientByDefault = 2;
         _totalPreparationsByDefault = 2;
-        IngredientUnitTypeValues = GetIngredientUnitTypeValues();
     }
 
     [AlsoNotifyFor(nameof(CurrentRecipe))]
-    public RecipeDto CurrentRecipe { get; private set; }
+    public RecipeDto? CurrentRecipe { get; private set; }
 
     [AlsoNotifyFor(nameof(IngredientUnitTypeValues))]
-    public IEnumerable<KeyValuePair<int, string>> IngredientUnitTypeValues { get; set; }
+    public IEnumerable<KeyValuePair<int, string>>? IngredientUnitTypeValues { get; set; }
 
     [AlsoNotifyFor(nameof(IsPossibleToRemoveIngredient))]
     public bool IsPossibleToRemoveIngredient => CurrentRecipe.Ingredients.Count > _totalIngredientByDefault;
@@ -76,11 +80,8 @@ public class RecipeEditViewModel : BaseViewModel
 
     public ReactiveCommand<string, Unit> RemoveTagCommand => _removeTagCommand ??= _removeTagCommand = ReactiveCommand.Create<string>(RemoveTag);
 
-    private IEnumerable<KeyValuePair<int, string>> GetIngredientUnitTypeValues()
-    {
-        return from int value in Enum.GetValues(typeof(IngredientUnitType))
-               select new KeyValuePair<int, string>(value, Enum.GetName(typeof(IngredientUnitType), value)!);
-    }
+    public ReactiveCommand<Unit, IEnumerable<UnitDto>> GetUnitsCommand =>
+        _getUnitsCommand ??= _getUnitsCommand = ReactiveCommand.CreateFromTask(GetUnitsAsync);
 
     private async Task CreateNewRecipe()
     {
@@ -91,7 +92,7 @@ public class RecipeEditViewModel : BaseViewModel
     private async Task<int> SaveRecipeChanges()
     {
         var currentUser = await _applicationService.GetCurrentUserAccountAsync();
-        return await _recipeService.SaveChangesAsync(CurrentRecipe, currentUser.UserId).ConfigureAwait(false);
+        return await _recipeService.SaveChangesAsync(CurrentRecipe!, currentUser.UserId);
     }
 
     private async Task LoadRecipe(int recipeId)
@@ -99,8 +100,7 @@ public class RecipeEditViewModel : BaseViewModel
         var currentUser = await _applicationService.GetCurrentUserAccountAsync();
 
         CurrentRecipe = await _recipeService.GetRecipeAsync(currentUser.UserId, recipeId);
-        CurrentRecipe.Preparations.OrderBy(x => x.NumberOfOrder);
-        IsPossibleToEditRecipe = await _recipeService.IsPossibleToEditRecipeAsync(currentUser.UserId, CurrentRecipe.Id);
+        IsPossibleToEditRecipe = true;
     }
 
     private async Task AddDefaultIngredients()
@@ -113,37 +113,26 @@ public class RecipeEditViewModel : BaseViewModel
 
     private async Task AddIngredient()
     {
-        int nextIngredientId;
-        if (_recipeService.IsExist(CurrentRecipe.Id))
-        {
-            nextIngredientId = await _recipeService.GetNextIngredientIdAsync(CurrentRecipe.Id);
-        }
-        else
-        {
-            nextIngredientId = CurrentRecipe.Ingredients.Count + 1;
-        }
+        var nextIngredientId = CurrentRecipe!.Ingredients.Count + 1;
 
-        CurrentRecipe.Ingredients.Add(new RecipeIngredientDto(nextIngredientId));
+        CurrentRecipe.Ingredients.Add(new RecipeIngredientDto(nextIngredientId, Guid.Empty));
         DoPropertyChanged(nameof(CurrentRecipe));
     }
 
     private async Task AddPreparation()
     {
-        int nextPreparationId;
-        if (_recipeService.IsExist(CurrentRecipe.Id))
+        var nextPreparationId = CurrentRecipe.Ingredients.Count + 1;
+        CurrentRecipe.Preparations.Add(new RecipePreparationDto
         {
-            nextPreparationId = await _recipeService.GetNextPreparationIdAsync(CurrentRecipe.Id);
-        }
-        else
-        {
-            nextPreparationId = CurrentRecipe.Ingredients.Count + 1;
-        }
-        CurrentRecipe.Preparations.Add(new RecipePreparationDto(nextPreparationId)
-        {
-            NumberOfOrder = CurrentRecipe.Preparations.Count + 1,
+            Id = nextPreparationId
         });
 
         DoPropertyChanged(nameof(CurrentRecipe));
+    }
+
+    private async Task<IEnumerable<UnitDto>> GetUnitsAsync()
+    {
+        return await _productService.GetAvailableUnitsAsync();
     }
 
     private void RemoveIngredient(RecipeIngredientDto ingredient)

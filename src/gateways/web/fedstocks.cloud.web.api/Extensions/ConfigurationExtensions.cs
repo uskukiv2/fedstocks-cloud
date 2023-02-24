@@ -1,5 +1,4 @@
 ﻿using fed.cloud.common.Models;
-using fedstocks.cloud.web.api.Models.Sections;
 
 namespace fedstocks.cloud.web.api.Extensions;
 
@@ -9,52 +8,16 @@ internal static class ConfigurationExtensions
     {
         return configuration.GetSection("Urls").Value;
     }
-
-    internal static string GetProductServiceUriString(this ConfigurationManager configuration)
+    
+    internal static string? GetServiceUri(this ConfigurationManager conf, string service)
     {
         try
         {
-            return configuration.GetSection("RemoteServices").Get<RemoteServices>().ProductServiceUri;
+            return conf.GetSection("Microservices")?[service];
         }
-        catch
+        catch (Exception e)
         {
-            return "https://localhost:9085/";
-        }
-    }
-
-    internal static string GetCountryServiceUriString(this ConfigurationManager configuration)
-    {
-        try
-        {
-            return configuration.GetSection("RemoteServices").Get<RemoteServices>().CountryServiceUri;
-        }
-        catch
-        {
-            return "https://localhost:9085/";
-        }
-    }
-
-    internal static string GetSellerServiceUriString(this ConfigurationManager configuration)
-    {
-        try
-        {
-            return configuration.GetSection("RemoteServices").Get<RemoteServices>().SellerServiceUri;
-        }
-        catch
-        {
-            return "https://localhost:9085/";
-        }
-    }
-
-    internal static string GetShoppingServiceUriString(this ConfigurationManager configuration)
-    {
-        try
-        {
-            return configuration.GetSection("RemoteServices").Get<RemoteServices>().ShoppingServiceUri;
-        }
-        catch
-        {
-            return "https://localhost:9086/";
+            return "https://localhost:9999";
         }
     }
 

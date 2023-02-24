@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Mapster" Version="7.3.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
       <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
       <PackageReference Include="ReactiveUI" Version="18.4.1" />
       <PackageReference Include="ReactiveUI.Fody" Version="18.4.1" />
@@ -15,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\shared\fed.communication\fed.cloud.communication\fed.cloud.communication.csproj" />
       <ProjectReference Include="..\..\..\shared\shared.items\gen.common\gen.common.csproj" />
     </ItemGroup>
 

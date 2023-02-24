@@ -1,4 +1,6 @@
-﻿using gen.fedstocks.web.Client.Abstract;
+﻿using System.Reactive;
+using gen.fedstocks.web.Client.Abstract;
+using gen.fedstocks.web.Client.Application.Models.Products;
 using gen.fedstocks.web.Client.Application.Models.Recipes;
 using gen.fedstocks.web.Client.Application.ViewModels.Recipes;
 using gen.fedstocks.web.Client.Models;
@@ -27,7 +29,7 @@ namespace gen.fedstocks.web.Client.Pages.Recipes
 
         [AlsoNotifyFor(nameof(IsEditMode))] public bool IsEditMode { get; set; }
 
-        public IEnumerable<IngredientUnitType> IngredientUnitTypes { get; private set; }
+        public IEnumerable<UnitDto> IngredientUnitTypes { get; private set; }
 
         private void OnEditStartedCommand()
         {
@@ -129,7 +131,10 @@ namespace gen.fedstocks.web.Client.Pages.Recipes
 
             Init();
 
-            IngredientUnitTypes = Enum.GetValues<IngredientUnitType>();
+            ViewModel.GetUnitsCommand.Execute(Unit.Default).Subscribe(x =>
+            {
+                IngredientUnitTypes = x;
+            });
 
             return base.OnAfterRenderAsync(isFirstRender);
         }

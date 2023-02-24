@@ -1,5 +1,4 @@
 using fedstocks.cloud.web.api.Extensions;
-using fedstocks.cloud.web.api.Middleware;
 using fedstocks.cloud.web.api.Models.Configurations;
 using fedstocks.cloud.web.api.Validators;
 using FluentValidation;
@@ -9,6 +8,9 @@ using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.HttpLogging;
 using System.Net;
+using fedstocks.cloud.web.api.Infrastructure.Middlewares;
+using Grpc.Core;
+using Microsoft.AspNetCore.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls(builder.Configuration.GetDefaultUrls());
@@ -31,19 +33,19 @@ builder.Services.AddLogging(x =>
 builder.Services.AddSingleton<IdentityConfiguration>(sp => identityConfiguration);
 
 builder.Services.AddCustomServices();
+builder.Services.AddRouting(x => x.LowercaseUrls = true);
 builder.Services.AddControllers();
 builder.Services.AddHttpLogging(x =>
 {
-    x.LoggingFields = HttpLoggingFields.All;
+    x.LoggingFields = builder.Environment.IsDevelopment() 
+        ? HttpLoggingFields.All : HttpLoggingFields.RequestMethod;
 });
 builder.Services.AddGrpcClients(builder.Configuration);
-builder.Services.AddFluentValidation();
-builder.Services.AddValidatorsFromAssembly(typeof(NewShoppingListValidator).Assembly, includeInternalTypes: true);
+builder.Services.AddMiddlewares();
+builder.Services.AddValidation();
+builder.Services.AddMapper();
+
 builder.Services.AddSwaggerDocument();
-
-builder.Services.AddTransient<AuthorizationTokenSwippingMiddleware>();
-
-builder.Services.AddTransient<UserAppendingMiddleware>();
 
 var identityUrl = identityConfiguration.IdentityUrl;
 builder.Services.AddDataProtection()
@@ -135,6 +137,30 @@ routeBuilder.MapMiddlewareRoute("api/{controller}/{action}", appBuilder =>
     appBuilder.UseEndpoints(endpoint =>
     {
         endpoint.MapControllers();
+    });
+});
+
+app.UseExceptionHandler(exApp =>
+{
+    exApp.Run(async context =>
+    {
+        var exceptionHandler = context.Features.Get<IExceptionHandlerFeature>();
+        if (exceptionHandler?.Error.InnerException?.InnerException is RpcException rex)
+        {
+            switch (rex.StatusCode)
+            {
+                case StatusCode.Unavailable:
+                    context.Response.StatusCode = StatusCodes.Status503ServiceUnavailable;
+                    break;
+                case StatusCode.Unauthenticated:
+                    context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                    break;
+            }
+
+            return;
+        }
+
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
     });
 });
 
