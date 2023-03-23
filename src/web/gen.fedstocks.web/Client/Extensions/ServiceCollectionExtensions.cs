@@ -1,4 +1,7 @@
-﻿using gen.fedstocks.web.Client.Services;
+﻿using gen.fedstocks.web.Client.Application.Mappings;
+using gen.fedstocks.web.Client.Services;
+using Mapster;
+using MapsterMapper;
 using MudBlazor;
 using MudBlazor.Services;
 
@@ -14,7 +17,15 @@ public static class ServiceCollectionExtensions
 
         RegisterIconManager(services);
 
+        RegisterMapper(services);
+
         return services;
+    }
+
+    private static void RegisterMapper(IServiceCollection services)
+    {
+        services.AddTransient<IMapper, Mapper>();
+        TypeAdapterConfig.GlobalSettings.Scan(typeof(RecipeRegister).Assembly);
     }
 
     private static void RegisterServices(IServiceCollection services)

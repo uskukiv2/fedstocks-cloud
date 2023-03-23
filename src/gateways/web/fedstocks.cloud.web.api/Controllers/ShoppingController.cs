@@ -11,7 +11,7 @@ namespace fedstocks.cloud.web.api.Controllers
     [Produces(MediaTypeNames.Application.Json)]
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "jwt")]
+    [Authorize(Policy = "shopping")]
     public class ShoppingController : ControllerBase
     {
         private readonly IIdentityService _identityService;

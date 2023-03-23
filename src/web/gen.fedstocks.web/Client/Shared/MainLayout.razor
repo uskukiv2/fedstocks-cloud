@@ -1,8 +1,12 @@
 ﻿@using System.Collections.Specialized;
+@using gen.fedstocks.web.Client.Resources
 @using gen.fedstocks.web.Client.Services
 @using MudBlazor.Utilities
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inherits LayoutComponentBase
 
+@inject NavigationManager Navigation
+@inject SignOutSessionStateManager SignOutManager
 @inject ITopbarItemsService TopbarItemsService
 @inject CommandIconManager IconManager
 
@@ -11,7 +15,14 @@
 
 <MudLayout>
     <MudAppBar Elevation="0" Style="border-bottom: 1px; border-bottom-color: gainsboro; border-bottom-style: solid;">
-        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(new Action<object>(e => DrawerToggle()))" />
+        <AuthorizeView>
+            <Authorized>
+                <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@(_ => DrawerToggle())" />
+            </Authorized>
+            <NotAuthorized>
+                <MudIcon Icon="@FedIcons.Logos.Brand" Color="Color.Primary" Size="Size.Large" ViewBox="0 0 116 20" Style="font-size: 7rem;" />
+            </NotAuthorized>
+        </AuthorizeView>
         <MudSpacer />
         @foreach (var item in TopbarItemsService.RightMenuItems)
         {
@@ -20,20 +31,37 @@
             </MudTooltip>
         }
         <MudDivider Vertical="true" DividerType="DividerType.Middle" Light="false" class="mx-4 my-4" />
-        <MudTooltip Text="Current user">
-            <MudIconButton Color="Color.Inherit" Icon="@Icons.Material.Rounded.AccountCircle" Size="Size.Medium" />
-        </MudTooltip>
+        <AuthorizeView>
+            <Authorized>
+                <MudTooltip Text="@context.User.Identity.Name">
+                    <MudMenu Icon="@Icons.Material.Rounded.AccountCircle" Color="Color.Inherit" Size="Size.Medium" AnchorOrigin="Origin.BottomCenter">
+                        <MudMenuItem OnClick="NavigateToProfile">Profile</MudMenuItem>
+                        <MudDivider />
+                        <MudMenuItem OnClick="BeginSignOut">Logout</MudMenuItem>
+                    </MudMenu>
+                </MudTooltip>
+            </Authorized>
+            <NotAuthorized>
+                <MudTooltip Text="Login">
+                    <MudIconButton Href="Authentication/login" Icon="@Icons.Material.Rounded.Login" Color="Color.Inherit" Size="Size.Medium" />
+                </MudTooltip>
+            </NotAuthorized>
+        </AuthorizeView>
     </MudAppBar>
-    <MudDrawer @bind-Open="_drawerOpen" 
-               Elevation="0" 
+    <MudDrawer @bind-Open="_drawerOpen"
+               Elevation="0"
                Variant="@DrawerVariant.Responsive" 
                OpenMiniOnHover="true" 
                ClipMode="DrawerClipMode.Never"
                Style="border-right: 1px; border-right-color: gainsboro; border-right-style: solid; animation: none">
-        <MudDrawerHeader Class="text-center">
-            <MudText Typo="Typo.h5" Align="Align.Center" Color="Color.Primary">fedstocks</MudText>
+        <MudDrawerHeader>
+            <MudIcon Icon="@FedIcons.Logos.Brand" Color="Color.Primary" ViewBox="0 0 116 20" Style="font-size: 7rem;" />
         </MudDrawerHeader>
-        <NavMenu/>
+        <AuthorizeView>
+            <Authorized>
+                <NavMenu />
+            </Authorized>
+        </AuthorizeView>
     </MudDrawer>
     <MudMainContent>
         <MudContainer>
@@ -54,7 +82,7 @@
             }
         };
 
-    bool _drawerOpen = true;
+    bool _drawerOpen;
 
     void DrawerToggle()
     {
@@ -77,6 +105,17 @@
         {
             InvokeAsync(StateHasChanged).AndForget();
         }
+    }
+
+    private async Task NavigateToProfile()
+    {
+        Navigation.NavigateTo("http://localhost:8080/realms/fed/account/#/personal-info");
+    }
+
+    private async Task BeginSignOut()
+    {
+        await SignOutManager.SetSignOutState();
+        Navigation.NavigateTo("authentication/logout");
     }
 
     protected override Task OnAfterRenderAsync(bool firstRender)
