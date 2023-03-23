@@ -45,40 +45,7 @@ builder.Services.AddLogging(x =>
         //TODO: FED-129 Implement remote logging service
     }
 });
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
-    .AddCertificate(o =>
-    {
-        o.AllowedCertificateTypes =
-            builder.Environment.IsDevelopment() ? CertificateTypes.SelfSigned : CertificateTypes.Chained;
 
-        o.RevocationMode = builder.Environment.IsDevelopment() ? X509RevocationMode.NoCheck : X509RevocationMode.Online;
-
-        o.Events = new CertificateAuthenticationEvents
-        {
-            OnCertificateValidated = context =>
-            {
-                var claims = new[]
-                {
-                    new Claim(
-                        ClaimTypes.NameIdentifier,
-                        context.ClientCertificate.Subject,
-                        ClaimValueTypes.String,
-                        context.Options.ClaimsIssuer),
-                    new Claim(ClaimTypes.Name,
-                        context.ClientCertificate.Subject,
-                        ClaimValueTypes.String,
-                        context.Options.ClaimsIssuer)
-                };
-
-                context.Principal = new ClaimsPrincipal(
-                    new ClaimsIdentity(claims, context.Scheme.Name));
-                context.Success();
-
-                return Task.CompletedTask;
-            }
-        };
-    });
 RepoDb.PostgreSqlBootstrap.Initialize();
 builder.Services.AddServiceConfigurations(config);
 builder.Services.AddCustomDbContext(config);
@@ -110,9 +77,6 @@ app.BeforeBuild();
 // Configure the HTTP request pipeline.
 
 app.UseRouting();
-
-app.UseAuthorization();
-app.UseAuthentication();
 
 app.UseEndpoints(endpoint =>
 {

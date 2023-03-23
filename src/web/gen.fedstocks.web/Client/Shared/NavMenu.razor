@@ -7,7 +7,7 @@
 <MudNavMenu Bordered="true" Class="py-1" Dense="false" Color="Color.Primary">
 
     <MudNavLink Disabled="true"><b>General</b></MudNavLink>
-    <MudNavLink Href="@RouterStrings.Home" Icon="@Icons.Material.Rounded.Home" Match="NavLinkMatch.All"> Home</MudNavLink>
+    <MudNavLink Href="@RouterStrings.Home" Icon="@Icons.Material.Rounded.Home" Match="NavLinkMatch.All">Home</MudNavLink>
 
     <MudNavLink Disabled="true" Class="mt-5"><b>Shopping</b></MudNavLink>
     <MudNavLink Href="@RouterStrings.Shopping.ShopperList" Icon="@Icons.Material.Rounded.ShoppingBag" Match="NavLinkMatch.All">Shoppers</MudNavLink>
@@ -37,6 +37,8 @@
 @code {
     private bool _isHasIntegrations = false;
     private bool _isAdmin = false;
+
+    [CascadingParameter] Task<AuthenticationState>? AuthenticationState { get; set; }
 
     protected override async Task OnAfterRenderAsync(bool isFirstRender)
     {

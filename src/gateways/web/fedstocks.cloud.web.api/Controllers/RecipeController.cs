@@ -16,7 +16,7 @@ namespace fedstocks.cloud.web.api.Controllers;
 
 [Produces(MediaTypeNames.Application.Json)]
 [Route("api/[controller]")]
-// [Authorize(Policy = "jwt")]
+[Authorize(Policy = "menu")]
 [ApiController]
 public class RecipeController : ControllerBase
 {

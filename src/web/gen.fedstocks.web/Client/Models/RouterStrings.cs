@@ -20,6 +20,11 @@ public static class RouterStrings
     /// <remarks>Use <see cref="RecipeViewParsable"/> for navigating between pages instead</remarks>
     public const string Recipe = "recipe/{RecipeId:int}";
     public const string RecipeParsable = "recipe/{0}";
+    
+    public class User
+    {
+        public const string AuthenticationAction = "authentication/{action}";
+    }
 
     public class Shopping
     {

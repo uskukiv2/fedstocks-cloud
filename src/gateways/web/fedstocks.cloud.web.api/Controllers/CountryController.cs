@@ -10,7 +10,7 @@ namespace fedstocks.cloud.web.api.Controllers
 {
     [Produces(MediaTypeNames.Application.Json)]
     [ApiController]
-    [Authorize(Policy = "jwt")]
+    [Authorize(Policy = "shopping")]
     [Route("api/[controller]")]
     public class CountryController : ControllerBase
     {
